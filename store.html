@@ -10,19 +10,23 @@
         
         .brand-container { text-align: center; margin-bottom: 20px; }
         
-        /* Naya Lamba Logo */
-        .brand-img {
-            width: 250px;
-            mix-blend-mode: multiply; 
-            margin-bottom: 5px;
-        }
+        .brand-img { width: 250px; mix-blend-mode: multiply; margin-bottom: 5px; }
         
         .brand-subtitle { color: #555; font-size: 18px; margin-top: 0px; letter-spacing: 1px; }
 
         .app-card { background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 450px; width: 100%; }
         .app-icon { width: 90px; height: 90px; border-radius: 20px; object-fit: cover; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .app-info h3 { margin: 0 0 10px 0; color: #222; font-size: 24px; }
-        .app-info p { margin: 0 0 20px 0; color: #666; font-size: 14px; line-height: 1.5; }
+        .app-info p { margin: 0 0 15px 0; color: #666; font-size: 14px; line-height: 1.5; }
+
+        /* Downloads Counter Style */
+        .stats-container { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; width: 100%; }
+        .stat-box { background: #f8f9fa; padding: 10px 15px; border-radius: 10px; border: 1px solid #eee; }
+        .stat-box span { display: block; font-size: 14px; color: #555; margin-bottom: 5px; }
+        .stat-box strong { font-size: 20px; color: #00A859; }
+        
+        /* Admin Edit Button (Secret) */
+        .edit-btn { display: none; background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; margin-top: 5px; }
         
         .download-btn { display: block; width: 100%; padding: 12px 20px; background-color: #FFC107; color: #000; text-decoration: none; border-radius: 25px; font-weight: bold; font-size: 16px; border: none; cursor: pointer; transition: background 0.3s; }
         .download-btn:hover { background-color: #FFB300; }
@@ -35,19 +39,34 @@
 <body>
 
     <div class="brand-container">
-        <!-- Yahan naya logo laga hai -->
         <img src="IMG_20261006_211924.png" alt="SEAOX" class="brand-img">
         <p class="brand-subtitle">Powered Apps</p>
     </div>
 
     <div class="app-card">
-        <!-- Yahan Tractor Book ka logo hai -->
         <img src="IMG_20260930_225659.png" alt="App Logo" class="app-icon">
         
         <div class="app-info">
             <h3>Tractor Book</h3>
             <p>An app is now available for all tractor owners to keep track of their accounts right on their mobile phones. Download it and give its features a try!</p>
             
+            <!-- Download Counter Section -->
+            <div class="stats-container">
+                <!-- Public ko yeh dikhega (Fake/Custom Count) -->
+                <div class="stat-box">
+                    <span>Downloads</span>
+                    <strong id="public-download-count">500</strong> 
+                    <!-- Admin ka secret edit button -->
+                    <button class="edit-btn" id="admin-edit-btn" onclick="editDownloads()">Edit</button>
+                </div>
+                
+                <!-- Yeh sirf aapko dikhega (Real Count) -->
+                <div class="stat-box" id="real-stats-box" style="display: none; border-color: #00A859;">
+                    <span>Real Downloads (Admin)</span>
+                    <strong id="real-download-count">Loading...</strong>
+                </div>
+            </div>
+
             <button id="downloadBtn" class="download-btn" onclick="startDownload()">Download Now</button>
 
             <div id="progressContainer" class="progress-container">
@@ -58,6 +77,58 @@
     </div>
 
     <script>
+        // ==========================================
+        // 1. PUBLIC COUNTER & ADMIN EDIT SYSTEM
+        // ==========================================
+        
+        // Default public number (Jo sabko dikhega)
+        let publicCount = localStorage.getItem('seaox_public_downloads') || 195;
+        document.getElementById('public-download-count').innerText = publicCount;
+
+        // Agar URL mein ?admin=true hai (yaani aap ho), toh secret button aur real stats dikhao
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('admin')) {
+            document.getElementById('admin-edit-btn').style.display = 'inline-block';
+            document.getElementById('real-stats-box').style.display = 'block';
+            fetchRealDownloads(); // Genuine count fetch karo
+        }
+
+        // Edit Button Function
+        function editDownloads() {
+            let newCount = prompt("Enter new public download count (Public ko yeh dikhega):", publicCount);
+            if (newCount !== null && !isNaN(newCount)) {
+                publicCount = newCount;
+                localStorage.setItem('seaox_public_downloads', publicCount); // Aapke phone mein save karega
+                document.getElementById('public-download-count').innerText = publicCount;
+                alert("Public count updated to " + publicCount + " (Sirf aapke phone pe. Sabko dikhane ke liye code change karein).");
+            }
+        }
+
+        // ==========================================
+        // 2. GENUINE DOWNLOAD COUNT (GitHub API)
+        // ==========================================
+        async function fetchRealDownloads() {
+            try {
+                // GitHub API se release ka data fetch kar rahe hain
+                const response = await fetch('https://api.github.com/repos/rocksatyamkashyap2010-alt/seaox.-in/releases/tags/v1.0');
+                const data = await response.json();
+                
+                // Apni APK file ka naam dhondo
+                const apkFile = data.assets.find(asset => asset.name === 'TractorBook-1.0.0.1.apk');
+                
+                if (apkFile) {
+                    document.getElementById('real-download-count').innerText = apkFile.download_count;
+                } else {
+                    document.getElementById('real-download-count').innerText = "0";
+                }
+            } catch (error) {
+                document.getElementById('real-download-count').innerText = "Error";
+            }
+        }
+
+        // ==========================================
+        // 3. DOWNLOAD SYSTEM (Jo pehle se tha)
+        // ==========================================
         async function startDownload() {
             const btn = document.getElementById('downloadBtn');
             const progressContainer = document.getElementById('progressContainer');
