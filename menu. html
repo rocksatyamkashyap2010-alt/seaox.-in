@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEAOX - Menu</title>
+    <!-- Aapka Favicon (Tab wala logo) -->
     <link rel="icon" type="image/jpeg" href="IMG_20261019_105230.jpg">
     <style>
         body {
@@ -24,7 +24,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         .logo-container {
             display: flex;
@@ -38,12 +38,12 @@
             object-fit: cover;
         }
         .logo-text {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
             color: #111;
         }
         .menu-icon {
-            font-size: 30px;
+            font-size: 32px;
             color: #333;
             cursor: pointer;
         }
@@ -52,7 +52,7 @@
         .app-box {
             width: 100%;
             max-width: 450px;
-            height: 350px;
+            height: 380px;
             background-color: #FFD700; /* Yellow */
             border-radius: 20px;
             display: flex;
@@ -68,11 +68,11 @@
             transform: scale(0.98);
         }
         .app-icon {
-            font-size: 80px;
+            font-size: 90px;
             margin-bottom: 10px;
         }
         .app-text {
-            font-size: 50px;
+            font-size: 55px;
             font-weight: 900;
             color: #111;
             letter-spacing: 2px;
@@ -119,15 +119,14 @@
         <div class="menu-icon">☰</div>
     </div>
 
-    <!-- APP Button (Yeh Store par le jayega) -->
+    <!-- Yellow APP Button (Yeh Store par le jayega) -->
     <a href="store.html" class="app-box">
         <div class="app-icon">📱</div>
         <div class="app-text">APP</div>
     </a>
 
-    <!-- Let's Talk Button (Yeh Email kholega) -->
-    <!-- seox129@gmail.com
-    <a href="mailto:hello@seaox.in?subject=Website/App Development Inquiry" class="contact-box">
+    <!-- Green Let's Talk Button (Yeh aapka Gmail kholega) -->
+    <a href="mailto:seaox129@gmail.com?subject=Website/App Development Inquiry" class="contact-box">
         <div class="contact-icon">💬</div>
         <div class="contact-text">
             Want to build a website, app, or software?<br>
