@@ -4,128 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEAOX - Menu</title>
-    <!-- Aapka Favicon (Tab wala logo) -->
     <link rel="icon" type="image/jpeg" href="IMG_20261019_105230.jpg">
     <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        body { margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #ffffff; display: flex; flex-direction: column; align-items: center; }
+        
+        /* Top Header */
+        .header { width: 100%; max-width: 450px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        
+        /* Logo Image Setting */
+        .logo-img { 
+            width: 140px; 
+            mix-blend-mode: multiply; /* White background hatayega */
         }
-
-        /* Top Header (Logo and Menu) */
-        .header {
-            width: 100%;
-            max-width: 450px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .logo-img {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-        .logo-text {
-            font-size: 26px;
-            font-weight: bold;
-            color: #111;
-        }
-        .menu-icon {
-            font-size: 32px;
-            color: #333;
-            cursor: pointer;
-        }
+        
+        .menu-icon { font-size: 32px; color: #333; cursor: pointer; }
 
         /* Yellow App Box */
-        .app-box {
-            width: 100%;
-            max-width: 450px;
-            height: 380px;
-            background-color: #FFD700; /* Yellow */
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-decoration: none;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-        .app-box:active {
-            transform: scale(0.98);
-        }
-        .app-icon {
-            font-size: 90px;
-            margin-bottom: 10px;
-        }
-        .app-text {
-            font-size: 55px;
-            font-weight: 900;
-            color: #111;
-            letter-spacing: 2px;
-        }
+        .app-box { width: 100%; max-width: 450px; height: 380px; background-color: #FFD700; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .app-box:active { transform: scale(0.98); }
+        .app-icon { font-size: 90px; margin-bottom: 10px; }
+        .app-text { font-size: 55px; font-weight: 900; color: #111; letter-spacing: 2px; }
 
         /* Green Contact Box */
-        .contact-box {
-            width: 100%;
-            max-width: 450px;
-            background-color: #00A859; /* Green */
-            border-radius: 20px;
-            padding: 20px;
-            box-sizing: border-box;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-        .contact-box:active {
-            transform: scale(0.98);
-        }
-        .contact-icon {
-            font-size: 50px;
-            color: white;
-        }
-        .contact-text {
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            line-height: 1.4;
-        }
+        .contact-box { width: 100%; max-width: 450px; background-color: #00A859; border-radius: 20px; padding: 20px; box-sizing: border-box; display: flex; align-items: center; gap: 15px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .contact-box:active { transform: scale(0.98); }
+        .contact-icon { font-size: 50px; color: white; }
+        .contact-text { color: white; font-size: 18px; font-weight: bold; line-height: 1.4; }
     </style>
 </head>
 <body>
-
-    <!-- Header -->
     <div class="header">
-        <div class="logo-container">
-            <img src="IMG_20261019_105230.jpg" alt="Seaox Logo" class="logo-img">
-            <span class="logo-text">Seaox</span>
-        </div>
+        <!-- Yahan aapki image use hui hai -->
+        <img src="IMG_20261019_105230.jpg" alt="SEAOX Logo" class="logo-img">
         <div class="menu-icon">☰</div>
     </div>
 
-    <!-- Yellow APP Button (Yeh Store par le jayega) -->
     <a href="store.html" class="app-box">
         <div class="app-icon">📱</div>
         <div class="app-text">APP</div>
     </a>
 
-    <!-- Green Let's Talk Button (Yeh aapka Gmail kholega) -->
     <a href="mailto:seaox129@gmail.com?subject=Website/App Development Inquiry" class="contact-box">
         <div class="contact-icon">💬</div>
         <div class="contact-text">
@@ -133,6 +51,5 @@
             Let's talk!
         </div>
     </a>
-
 </body>
 </html>
