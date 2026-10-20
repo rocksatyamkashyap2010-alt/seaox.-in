@@ -1,12 +1,16 @@
-     <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEAOX - Receipt Generator</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
-    <!-- Library for PDF Generation -->
+    
+    <!-- PDF Generation Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- QR Code Generator Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
     <style>
         body { margin: 0; padding: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; }
         .header { max-width: 800px; margin: 0 auto 20px auto; display: flex; align-items: center; }
@@ -31,22 +35,19 @@
         .btn-generate { background: #6B46C1; width: 100%; margin-top: 25px; padding: 15px; font-size: 18px; }
         .btn-generate:hover { background: #553c9a; }
 
-        /* 🖨️ PDF Template Styles (Fixed for html2pdf) */
+        /* 🖨️ PDF Template Styles */
         #pdf-template { 
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 800px; /* Fixed A4 width */
-            min-height: 1122px; /* A4 Height */
+            display: none; /* Default mein chhupa rahega */
+            width: 800px; 
             background: #ffffff; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             color: #333; 
             box-sizing: border-box;
             padding: 40px;
-            /* Isko hide rakhne ka safe tarika taaki library scan kar sake */
-            z-index: -9999; 
-            opacity: 0.01; 
-            pointer-events: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 9999;
         }
         
         .pdf-header { display: flex; justify-content: space-between; border-bottom: 3px solid #FFC107; padding-bottom: 20px; margin-bottom: 20px; }
@@ -65,8 +66,8 @@
         
         .pdf-footer-area { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 20px; }
         
-        .pdf-qr-section { text-align: center; border: 1px dashed #ccc; padding: 10px; border-radius: 8px; width: 130px; }
-        .pdf-qr-section img { width: 100px; height: 100px; margin-bottom: 5px; }
+        .pdf-qr-section { text-align: center; border: 1px dashed #ccc; padding: 10px; border-radius: 8px; width: 130px; background: white; }
+        #qrcode { display: flex; justify-content: center; margin-bottom: 5px; }
         .pdf-qr-section p { margin: 0; font-size: 11px; font-weight: bold; color: #555; }
 
         .pdf-totals { width: 45%; font-size: 14px; margin-left: auto; }
@@ -134,7 +135,7 @@
         </table>
         <button class="btn btn-add" onclick="addRow()">+ Add Item</button>
 
-        <button class="btn btn-generate" onclick="generatePDF()">📄 Generate Receipt (PDF)</button>
+        <button class="btn btn-generate" onclick="preparePDF()">📄 Generate Receipt (PDF)</button>
     </div>
 
     <!-- ========================================== -->
@@ -183,7 +184,7 @@
         <div class="pdf-footer-area">
             <!-- UPI QR Code Section -->
             <div class="pdf-qr-section" id="qr-section" style="display: none;">
-                <img id="pdf-qr-img" src="" alt="Scan to Pay" crossorigin="anonymous">
+                <div id="qrcode"></div>
                 <p>Scan & Pay Exact Amount</p>
             </div>
 
@@ -232,9 +233,9 @@
             });
         }
 
-        // PDF Generate karne ka function
-        function generatePDF() {
-            // 1. Form se data uthana aur PDF template mein daalna
+        // PDF Generate karne ka Main Function
+        function preparePDF() {
+            // 1. Form se data uthana
             const shopName = document.getElementById('shopName').value || "SHOP NAME";
             document.getElementById('pdf-shop-name-display').innerHTML = shopName.replace(" ", "<br><span>") + "</span>";
             document.getElementById('pdf-shop-address').innerText = document.getElementById('shopAddress').value || "-";
@@ -249,7 +250,7 @@
             document.getElementById('pdf-inv-no').innerText = document.getElementById('invNo').value || "-";
             document.getElementById('pdf-inv-date').innerText = document.getElementById('invDate').value || "-";
 
-            // 2. Items Table bharna & Total nikalna
+            // 2. Items Table aur Total
             const pdfItemsBody = document.getElementById('pdf-items-body');
             pdfItemsBody.innerHTML = '';
             let totalAmount = 0;
@@ -275,48 +276,53 @@
 
             document.getElementById('pdf-grand-total').innerText = totalAmount.toFixed(2);
 
-            // 3. UPI QR Code Generate karna
+            // 3. UPI QR Code (Using local library, no network issues)
             const upiId = document.getElementById('shopUpi').value;
             const qrSection = document.getElementById('qr-section');
-            const qrImg = document.getElementById('pdf-qr-img');
+            const qrcodeDiv = document.getElementById('qrcode');
             
+            qrcodeDiv.innerHTML = ''; // Clear old QR
+
             if(upiId.trim() !== "" && totalAmount > 0) {
                 const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(shopName)}&am=${totalAmount.toFixed(2)}&cu=INR`;
-                const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiUrl)}`;
                 
-                // QR image load hone ka wait karo, phir PDF banao
-                qrImg.src = qrApiUrl;
+                // QR Code generate karo
+                new QRCode(qrcodeDiv, {
+                    text: upiUrl,
+                    width: 100,
+                    height: 100,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+                
                 qrSection.style.display = 'block';
-                
-                qrImg.onload = function() {
-                    generatePDFFile();
-                };
             } else {
                 qrSection.style.display = 'none';
-                generatePDFFile();
             }
-        }
 
-        // Final PDF Generation Function
-        function generatePDFFile() {
+            // 4. PDF Generation Process
             const element = document.getElementById('pdf-template');
             
-            // Temporarily make it visible for rendering, but keep it behind
-            element.style.opacity = '1';
-            element.style.zIndex = '-9999';
+            // Show the element for capture (make it visible and put it on top)
+            element.style.display = 'block';
+            element.style.zIndex = '99999';
+            
+            // Wait for 500ms so the QR code library can draw the canvas properly
+            setTimeout(() => {
+                const opt = {
+                    margin:       0,
+                    filename:     'seaox.pdf',
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2, useCORS: true, scrollY: 0, windowWidth: 800 },
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
 
-            const opt = {
-                margin:       0,
-                filename:     'seaox.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, scrollY: 0, windowWidth: 800 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                // Hide it back after generation
-                element.style.opacity = '0.01'; 
-            });
+                html2pdf().set(opt).from(element).save().then(() => {
+                    // Hide it after PDF is generated
+                    element.style.display = 'none';
+                });
+            }, 500);
         }
     </script>
 </body>
