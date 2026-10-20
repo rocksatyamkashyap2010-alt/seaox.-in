@@ -14,97 +14,96 @@
         .menu-icon { font-size: 32px; color: #333; cursor: pointer; padding: 5px; }
 
         /* Yellow App Box */
-        .app-box { width: 100%; max-width: 450px; height: 380px; background-color: #FFD700; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .app-box { width: 100%; max-width: 450px; height: 400px; background-color: #FFD700; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; }
         .app-box:active { transform: scale(0.98); }
         
-        /* Square Phone Frame Design */
-        .app-icon { margin-bottom: 15px; display: flex; justify-content: center; }
+        /* Realistic iPhone 16 Frame Design */
+        .app-icon { margin-bottom: 20px; display: flex; justify-content: center; }
         
         .iphone-frame {
-            width: 170px;
-            height: 170px; /* Square size */
-            background: #1a1a1a; 
-            border-radius: 30px;
-            border: 3px solid #444; 
+            width: 130px;
+            height: 260px; /* Tall iPhone Shape */
+            background: #1a1a1a; /* Titanium Black */
+            border-radius: 22px;
+            border: 4px solid #333; /* Outer Bezel */
             box-shadow: 
                 inset 0 0 10px rgba(0,0,0,0.8), 
-                0 10px 20px rgba(0,0,0,0.3),
-                0 0 0 2px #222;
+                0 15px 25px rgba(0,0,0,0.3),
+                0 0 0 1px #555;
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Side Buttons for Square Phone */
-        .iphone-frame::before { 
+        /* iPhone Side Buttons */
+        .iphone-frame::before { /* Volume buttons */
             content: '';
             position: absolute;
             left: -6px;
-            top: 40px;
-            width: 3px;
+            top: 50px;
+            width: 2px;
             height: 15px;
             background: #444;
             border-radius: 3px 0 0 3px;
             box-shadow: 0 25px 0 #444, 0 50px 0 #444;
         }
-        .iphone-frame::after { 
+        .iphone-frame::after { /* Power button */
             content: '';
             position: absolute;
             right: -6px;
-            top: 50px;
-            width: 3px;
+            top: 60px;
+            width: 2px;
             height: 30px;
             background: #444;
             border-radius: 0 3px 3px 0;
         }
 
-        /* Screen with Overflow Hidden */
+        /* Screen inside iPhone */
         .phone-screen {
-            width: 152px;
-            height: 152px;
-            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-            border-radius: 24px;
+            width: 114px;
+            height: 244px;
+            background: linear-gradient(180deg, #111, #222); /* Dark iOS background */
+            border-radius: 18px;
             overflow: hidden; 
             position: relative;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 6px;
-            padding: 22px 8px 8px 8px; 
+            grid-template-columns: repeat(3, 1fr); /* 3 Columns */
+            gap: 8px;
+            padding: 28px 10px 10px 10px; /* Top padding for Island */
             box-sizing: border-box;
         }
 
-        /* Dynamic Island */
+        /* Dynamic Island (iPhone 16 Notch) */
         .phone-screen::before {
             content: '';
             position: absolute;
-            top: 6px;
+            top: 8px;
             left: 50%;
             transform: translateX(-50%);
-            width: 35px;
-            height: 10px;
+            width: 45px;
+            height: 12px;
             background: #000;
             border-radius: 15px;
             z-index: 10;
             box-shadow: inset 0 0 2px rgba(255,255,255,0.1);
         }
 
-        /* Mini Apps */
+        /* Square App Icons */
         .mini-app {
             width: 100%;
-            height: 100%;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            aspect-ratio: 1 / 1; /* Makes them perfect squares */
+            border-radius: 8px; /* Rounded square like iOS */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        /* Tractor Book App (Middle) */
+        /* Tractor Book App (Center) */
         .real-app {
             background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.6); /* Glow effect */
             z-index: 5;
             border: 1px solid #eee;
             padding: 1px;
@@ -113,10 +112,10 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            border-radius: 5px;
+            border-radius: 7px;
         }
 
-        .app-text { font-size: 50px; font-weight: 900; color: #111; letter-spacing: 2px; margin-top: 10px; }
+        .app-text { font-size: 50px; font-weight: 900; color: #111; letter-spacing: 2px; margin-top: 5px; }
 
         /* Green Contact Box */
         .contact-box { width: 100%; max-width: 450px; background-color: #00A859; border-radius: 20px; padding: 20px; box-sizing: border-box; display: flex; align-items: center; gap: 15px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; margin-bottom: 20px; }
@@ -151,7 +150,7 @@
 
     <a href="store.html" class="app-box">
         <div class="app-icon">
-            <!-- Square Phone Frame -->
+            <!-- Realistic iPhone 16 Frame -->
             <div class="iphone-frame">
                 <div class="phone-screen">
                     <!-- Row 1 -->
@@ -159,10 +158,10 @@
                     <div class="mini-app" style="background: #448AFF;"></div>
                     <div class="mini-app" style="background: #69F0AE;"></div>
                     
-                    <!-- Row 2 (Middle) -->
+                    <!-- Row 2 -->
                     <div class="mini-app" style="background: #FFD740;"></div>
                     
-                    <!-- Aapki App (Center) -->
+                    <!-- Tractor Book App (Center) -->
                     <div class="mini-app real-app">
                         <img src="IMG_20260930_225659.png" alt="Tractor Book">
                     </div>
@@ -173,6 +172,11 @@
                     <div class="mini-app" style="background: #00E5FF;"></div>
                     <div class="mini-app" style="background: #FF9100;"></div>
                     <div class="mini-app" style="background: #2979FF;"></div>
+                    
+                    <!-- Row 4 (Bottom Dock) -->
+                    <div class="mini-app" style="background: #00C853; border-radius: 50%;"></div>
+                    <div class="mini-app" style="background: #D50000; border-radius: 50%;"></div>
+                    <div class="mini-app" style="background: #2962FF; border-radius: 50%;"></div>
                 </div>
             </div>
         </div>
