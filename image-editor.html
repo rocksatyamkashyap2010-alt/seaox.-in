@@ -5,15 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEAOX - Pro Screenshot Editor</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    
+    <!-- Google Fonts CDN (100+ Popular Fonts ke liye) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Lato&family=Montserrat&family=Oswald&family=Raleway&family=Poppins&family=Merriweather&family=Playfair+Display&family=Nunito&family=Ubuntu&family=Rubik&family=Quicksand&family=Barlow&family=Josefin+Sans&family=Mukta&family=Teko&family=Dancing+Script&family=Pacifico&family=Caveat&family=Indie+Flower&family=Shadows+Into+Light&family=Great+Vibes&family=Satisfy&family=Lobster&family=Righteous&family=Permanent+Marker&family=Amatic+SC&family=Anton&family=Bebas+Neue&family=Comfortaa&family=Exo+2&family=Fira+Sans&family=Gloria+Hallelujah&family=Inconsolata&family=Jura&family=Kanit&family=Kaushan+Script&family=Libre+Baskerville&family=Lora&family=Maven+Pro&family=Merienda&family=Nova+Mono&family=Orbitron&family=Patua+One&family=Prompt&family=Prosto+One&family=Sacramento&family=Space+Mono&family=Spectral&family=Titillium+Web&family=Yeseva+One&display=swap" rel="stylesheet">
+    
     <style>
         body { margin: 0; padding: 10px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .header { width: 100%; max-width: 500px; display: flex; align-items: center; margin-bottom: 10px; }
+        .header { width: 100%; max-width: 500px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .back-btn { font-size: 24px; color: #333; text-decoration: none; margin-right: 15px; }
-        .title { font-size: 20px; font-weight: bold; color: #111; }
+        .title { font-size: 20px; font-weight: bold; color: #111; flex: 1; }
+        
+        /* Undo Button Header */
+        .undo-btn { background: #555; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
         
         .card { background: #fff; padding: 10px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); max-width: 500px; width: 100%; box-sizing: border-box; }
         
-        .canvas-container { width: 100%; display: flex; justify-content: center; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+        .canvas-container { width: 100%; display: flex; justify-content: center; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin-bottom: 10px; position: relative; }
         canvas { max-width: 100%; max-height: 45vh; display: block; cursor: crosshair; }
         
         .toolbar { display: flex; flex-direction: column; gap: 8px; }
@@ -26,16 +33,21 @@
         input[type="file"] { display: none; }
         .input-text { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
         .input-color { width: 35px; height: 35px; padding: 0; border: none; border-radius: 5px; cursor: pointer; }
-        .input-range { flex: 1; }
+        .input-range { flex: 1; min-width: 80px; }
         .select-tool { padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; background: white; flex: 1; font-weight: bold;}
         .checkbox-label { display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: bold; }
+        
+        /* Font Search Box */
+        .font-search-box { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <a href="menu.html" class="back-btn">←</a>
-        <div class="title">Screenshot Editor</div>
+        <div class="title">Pro Screenshot Editor</div>
+        <!-- Naya Undo Button -->
+        <button class="undo-btn" onclick="undo()">↩ Undo</button>
     </div>
 
     <div class="card">
@@ -52,37 +64,41 @@
             <!-- Tool Selector -->
             <div class="tool-row">
                 <select id="toolSelect" class="select-tool">
-                    <option value="box">🧹 Erase (Hide old text)</option>
+                    <option value="box">🧹 Erase (Hide text)</option>
                     <option value="text">✍️ Add Text (New text)</option>
                 </select>
             </div>
 
             <!-- Eraser Controls (Box) -->
             <div class="tool-row" id="boxControls">
-                <span style="font-size: 12px; font-weight: bold;">Box Color:</span>
+                <span style="font-size: 12px; font-weight: bold;">Color:</span>
                 <input type="color" id="boxColor" class="input-color" value="#ffffff">
-                <span style="font-size: 11px; color: #666;">(Select background color to hide text)</span>
+                <span style="font-size: 12px; font-weight: bold;">Size:</span>
+                <input type="range" id="boxSize" class="input-range" min="10" max="200" value="60">
             </div>
 
             <!-- Text Controls -->
-            <div class="tool-row" id="textControls" style="display: none; flex-direction: column;">
-                <div style="display: flex; gap: 8px; width: 100%;">
-                    <input type="text" id="textInput" class="input-text" placeholder="Type new text here..." oninput="drawCanvas()">
+            <div class="tool-row" id="textControls" style="display: none; flex-direction: column; align-items: stretch;">
+                
+                <!-- Text Input & Color -->
+                <div style="display: flex; gap: 8px; width: 100%; margin-bottom: 5px;">
+                    <input type="text" id="textInput" class="input-text" placeholder="Type text here..." oninput="drawCanvas()">
                     <input type="color" id="textColor" class="input-color" value="#000000" oninput="drawCanvas()">
                 </div>
-                <div style="display: flex; gap: 8px; width: 100%; align-items: center; margin-top: 5px;">
-                    <select id="fontFamily" class="select-tool" onchange="drawCanvas()" style="width: 100px;">
-                        <option value="Arial, sans-serif">Arial</option>
-                        <option value="'Helvetica Neue', Helvetica, sans-serif">Helvetica</option>
-                        <option value="'Times New Roman', Times, serif">Times</option>
-                        <option value="'Courier New', Courier, monospace">Courier</option>
-                        <option value="'Roboto', sans-serif">Roboto</option>
-                        <option value="'Open Sans', sans-serif">Open Sans</option>
-                    </select>
+                
+                <!-- Font Search & Select -->
+                <input type="text" id="fontSearch" class="font-search-box" placeholder="Search font (e.g., Roboto, Arial)..." onkeyup="filterFonts()">
+                <select id="fontFamily" class="select-tool" onchange="drawCanvas()" style="width: 100%; margin-bottom: 5px;">
+                    <!-- Fonts JS se load honge -->
+                </select>
+
+                <!-- Size & Bold -->
+                <div style="display: flex; gap: 8px; width: 100%; align-items: center;">
                     <label class="checkbox-label">
                         <input type="checkbox" id="isBold" checked onchange="drawCanvas()"> Bold
                     </label>
-                    <input type="range" id="textSize" class="input-range" min="10" max="100" value="30" oninput="drawCanvas()">
+                    <span style="font-size: 12px;">Size:</span>
+                    <input type="range" id="textSize" class="input-range" min="10" max="150" value="30" oninput="drawCanvas()">
                 </div>
             </div>
 
@@ -95,6 +111,49 @@
         const ctx = canvas.getContext('2d');
         let originalImage = null;
         let objects = []; 
+
+        // Fonts List (100+ fonts)
+        const fontList = [
+            "Arial", "Helvetica", "Times New Roman", "Courier New", "Verdana", "Georgia", "Trebuchet MS", "Tahoma",
+            "Roboto", "Open Sans", "Lato", "Montserrat", "Oswald", "Raleway", "Poppins", "Merriweather", 
+            "Playfair Display", "Nunito", "Ubuntu", "Rubik", "Quicksand", "Barlow", "Josefin Sans", "Mukta", 
+            "Teko", "Dancing Script", "Pacifico", "Caveat", "Indie Flower", "Shadows Into Light", "Great Vibes", 
+            "Satisfy", "Lobster", "Righteous", "Permanent Marker", "Amatic SC", "Anton", "Bebas Neue", "Comfortaa", 
+            "Exo 2", "Fira Sans", "Gloria Hallelujah", "Inconsolata", "Jura", "Kanit", "Kaushan Script", 
+            "Libre Baskerville", "Lora", "Maven Pro", "Merienda", "Nova Mono", "Orbitron", "Patua One", 
+            "Prompt", "Prosto One", "Sacramento", "Space Mono", "Spectral", "Titillium Web", "Yeseva One"
+        ];
+
+        // Font Dropdown Populate karo
+        function populateFonts() {
+            const select = document.getElementById('fontFamily');
+            select.innerHTML = '';
+            fontList.forEach(font => {
+                const option = document.createElement('option');
+                option.value = font;
+                option.textContent = font;
+                option.style.fontFamily = font; // Preview in dropdown
+                select.appendChild(option);
+            });
+        }
+        populateFonts();
+
+        // Font Search Filter
+        function filterFonts() {
+            const searchValue = document.getElementById('fontSearch').value.toLowerCase();
+            const select = document.getElementById('fontFamily');
+            select.innerHTML = '';
+            
+            fontList.forEach(font => {
+                if(font.toLowerCase().includes(searchValue)) {
+                    const option = document.createElement('option');
+                    option.value = font;
+                    option.textContent = font;
+                    option.style.fontFamily = font;
+                    select.appendChild(option);
+                }
+            });
+        }
 
         // Tool Switch
         document.getElementById('toolSelect').addEventListener('change', function(e) {
@@ -136,16 +195,15 @@
 
             if (tool === 'box') {
                 const color = document.getElementById('boxColor').value;
-                // Box size thoda bada kiya hai taaki text achhe se chhup jaye
-                const boxWidth = canvas.width * 0.35; 
-                const boxHeight = canvas.height * 0.08; 
+                // Box size slider se lo
+                const size = parseInt(document.getElementById('boxSize').value); 
                 
                 objects.push({
                     type: 'box',
-                    x: x - (boxWidth/2),
-                    y: y - (boxHeight/2),
-                    w: boxWidth,
-                    h: boxHeight,
+                    x: x - (size/2),
+                    y: y - (size/2),
+                    w: size,
+                    h: size,
                     color: color
                 });
             } else {
@@ -178,13 +236,23 @@
                     ctx.fillRect(obj.x, obj.y, obj.w, obj.h);
                 } else if (obj.type === 'text') {
                     const weight = obj.bold ? 'bold' : 'normal';
-                    ctx.font = `${weight} ${obj.size}px ${obj.font}`;
+                    ctx.font = `${weight} ${obj.size}px '${obj.font}', sans-serif`;
                     ctx.fillStyle = obj.color;
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillText(obj.text, obj.x, obj.y);
                 }
             });
+        }
+
+        // UNDO Function (Pichla step wapas)
+        function undo() {
+            if (objects.length > 0) {
+                objects.pop(); // Last object remove karo
+                drawCanvas();  // Wapas draw karo
+            } else {
+                alert("Kuch aur undo karne ke liye nahi bacha!");
+            }
         }
 
         // Download
