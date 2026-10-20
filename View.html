@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEAOX - Visual</title>
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <style>
+        body { margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #111; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; color: white; }
+        .header { position: absolute; top: 20px; text-align: center; width: 100%; }
+        .logo-img { width: 120px; filter: brightness(0) invert(1); } /* Logo white color mein */
+        .image-container { max-width: 90%; max-height: 80vh; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(255,255,255,0.1); display: none; }
+        img { width: 100%; height: auto; display: block; object-fit: contain; }
+        .error-msg { font-size: 18px; color: #ff5252; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="IMG_20261006_211924.png" alt="SEAOX" class="logo-img">
+    </div>
+
+    <div id="error" class="error-msg"></div>
+    <div id="imageBox" class="image-container">
+        <img id="displayImage" src="" alt="Shared Image">
+    </div>
+
+    <script>
+        // URL se image ka link nikalo
+        const urlParams = new URLSearchParams(window.location.search);
+        const imageUrl = urlParams.get('img');
+
+        if (imageUrl) {
+            document.getElementById('displayImage').src = imageUrl;
+            document.getElementById('imageBox').style.display = 'block';
+        } else {
+            document.getElementById('error').innerText = "No image found! Please scan a valid QR code.";
+        }
+    </script>
+</body>
+</html>
