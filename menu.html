@@ -17,73 +17,73 @@
         .app-box { width: 100%; max-width: 450px; height: 380px; background-color: #FFD700; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; }
         .app-box:active { transform: scale(0.98); }
         
-        /* iPhone 16 Frame Design */
-        .app-icon { margin-bottom: 20px; display: flex; justify-content: center; perspective: 1000px; }
+        /* Square Phone Frame Design */
+        .app-icon { margin-bottom: 15px; display: flex; justify-content: center; }
         
         .iphone-frame {
-            width: 120px;
-            height: 240px;
-            background: #1a1a1a; /* Titanium Black color */
-            border-radius: 28px;
-            border: 3px solid #444; /* Bezel */
+            width: 170px;
+            height: 170px; /* Square size */
+            background: #1a1a1a; 
+            border-radius: 30px;
+            border: 3px solid #444; 
             box-shadow: 
                 inset 0 0 10px rgba(0,0,0,0.8), 
-                0 15px 25px rgba(0,0,0,0.3),
-                0 0 0 2px #222; /* Outer frame */
+                0 10px 20px rgba(0,0,0,0.3),
+                0 0 0 2px #222;
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Side Buttons */
-        .iphone-frame::before { /* Volume up/down and action button */
+        /* Side Buttons for Square Phone */
+        .iphone-frame::before { 
             content: '';
             position: absolute;
             left: -6px;
-            top: 60px;
+            top: 40px;
             width: 3px;
-            height: 18px;
+            height: 15px;
             background: #444;
             border-radius: 3px 0 0 3px;
             box-shadow: 0 25px 0 #444, 0 50px 0 #444;
         }
-        .iphone-frame::after { /* Power button */
+        .iphone-frame::after { 
             content: '';
             position: absolute;
             right: -6px;
-            top: 80px;
+            top: 50px;
             width: 3px;
-            height: 35px;
+            height: 30px;
             background: #444;
             border-radius: 0 3px 3px 0;
         }
 
         /* Screen with Overflow Hidden */
         .phone-screen {
-            width: 104px;
-            height: 224px;
+            width: 152px;
+            height: 152px;
             background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-            border-radius: 23px;
-            overflow: hidden; /* Yeh app ko bahar nikalne se rokega */
+            border-radius: 24px;
+            overflow: hidden; 
             position: relative;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(3, 1fr);
-            gap: 8px;
-            padding: 25px 10px 10px 10px; /* Top padding for Dynamic Island */
+            gap: 6px;
+            padding: 22px 8px 8px 8px; 
             box-sizing: border-box;
         }
 
-        /* Dynamic Island (iPhone 16 notch) */
+        /* Dynamic Island */
         .phone-screen::before {
             content: '';
             position: absolute;
-            top: 8px;
+            top: 6px;
             left: 50%;
             transform: translateX(-50%);
-            width: 40px;
-            height: 12px;
+            width: 35px;
+            height: 10px;
             background: #000;
             border-radius: 15px;
             z-index: 10;
@@ -94,7 +94,7 @@
         .mini-app {
             width: 100%;
             height: 100%;
-            border-radius: 8px;
+            border-radius: 6px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
@@ -107,16 +107,16 @@
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
             z-index: 5;
             border: 1px solid #eee;
-            padding: 2px;
+            padding: 1px;
         }
         .real-app img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            border-radius: 6px;
+            border-radius: 5px;
         }
 
-        .app-text { font-size: 55px; font-weight: 900; color: #111; letter-spacing: 2px; margin-top: 5px; }
+        .app-text { font-size: 50px; font-weight: 900; color: #111; letter-spacing: 2px; margin-top: 10px; }
 
         /* Green Contact Box */
         .contact-box { width: 100%; max-width: 450px; background-color: #00A859; border-radius: 20px; padding: 20px; box-sizing: border-box; display: flex; align-items: center; gap: 15px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; margin-bottom: 20px; }
@@ -151,7 +151,7 @@
 
     <a href="store.html" class="app-box">
         <div class="app-icon">
-            <!-- iPhone 16 Frame -->
+            <!-- Square Phone Frame -->
             <div class="iphone-frame">
                 <div class="phone-screen">
                     <!-- Row 1 -->
