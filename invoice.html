@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEAOX - Invoice Generator</title>
+    <title>SEAOX - Receipt Generator</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     <!-- Library for PDF Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -14,7 +15,7 @@
         .title { font-size: 22px; font-weight: bold; color: #111; }
 
         .form-container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .section-title { background: #f8f9fa; padding: 10px; border-left: 4px solid #FFC107; font-weight: bold; margin-bottom: 15px; border-radius: 4px; }
+        .section-title { background: #f8f9fa; padding: 10px; border-left: 4px solid #FFC107; font-weight: bold; margin-bottom: 15px; border-radius: 4px; margin-top: 20px; }
         
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .input-group { display: flex; flex-direction: column; margin-bottom: 10px; }
@@ -26,72 +27,81 @@
         th { background: #f4f4f4; }
         .item-input { width: 100%; box-sizing: border-box; padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
         
-        .btn { padding: 12px 20px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; color: white; transition: 0.3s; }
-        .btn-add { background: #00A859; width: auto; margin-top: 0; }
-        .btn-generate { background: #1877F2; }
-        .btn-generate:hover { background: #0b5cbe; }
+        .btn { padding: 12px 20px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; color: white; transition: 0.3s; }
+        .btn-add { background: #00A859; margin-top: 5px; }
+        .btn-generate { background: #6B46C1; width: 100%; margin-top: 25px; padding: 15px; font-size: 18px; }
+        .btn-generate:hover { background: #553c9a; }
 
-        /* 🖨️ PDF Template Styles (Yeh sirf PDF mein dikhega) */
-        #pdf-template { display: none; width: 800px; padding: 40px; background: white; font-family: 'Segoe UI', sans-serif; color: #333; }
-        .pdf-header { display: flex; justify-content: space-between; border-bottom: 3px solid #FFC107; padding-bottom: 20px; margin-bottom: 20px; }
-        .pdf-logo { font-size: 32px; font-weight: 900; color: #111; margin: 0; }
-        .pdf-logo span { color: #FFC107; }
-        .pdf-shop-details { text-align: right; font-size: 12px; line-height: 1.5; }
+        /* 🖨️ PDF Template Styles */
+        #pdf-template { 
+            display: none; 
+            width: 780px; 
+            padding: 40px; 
+            background: white; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            color: #333; 
+            box-sizing: border-box;
+        }
         
-        .pdf-meta { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .pdf-header { display: flex; justify-content: space-between; border-bottom: 3px solid #FFC107; padding-bottom: 20px; margin-bottom: 20px; }
+        .pdf-logo { font-size: 32px; font-weight: 900; color: #111; margin: 0; line-height: 1.1; }
+        .pdf-logo span { color: #FFC107; }
+        .pdf-shop-details { text-align: right; font-size: 12px; line-height: 1.6; }
+        
+        .pdf-meta { display: flex; justify-content: space-between; margin-bottom: 30px; }
         .pdf-meta-box { background: #f9f9f9; padding: 15px; border-radius: 8px; width: 45%; font-size: 13px; line-height: 1.8; border-left: 4px solid #FFC107; }
-        .pdf-meta-box strong { color: #111; }
+        .pdf-meta-box strong { color: #111; font-size: 14px; }
         
         .pdf-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px; }
-        .pdf-table th { background: #FFC107; color: #111; padding: 10px; border: 1px solid #ddd; text-align: left; }
+        .pdf-table th { background: #FFC107; color: #111; padding: 12px; border: 1px solid #ddd; text-align: left; font-weight: bold; }
         .pdf-table td { padding: 10px; border: 1px solid #ddd; }
         .pdf-table .text-right { text-align: right; }
         
-        .pdf-totals { width: 40%; float: right; font-size: 14px; }
-        .pdf-totals-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
-        .pdf-totals-row.grand-total { background: #FFC107; font-weight: bold; font-size: 16px; border: none; padding: 10px; border-radius: 4px; }
+        .pdf-footer-area { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 20px; }
         
-        .pdf-footer { clear: both; margin-top: 50px; text-align: center; font-size: 12px; color: #777; border-top: 1px solid #ddd; padding-top: 20px; }
-        .pdf-thankyou { font-size: 18px; font-weight: bold; color: #111; margin-bottom: 5px; }
+        .pdf-qr-section { text-align: center; border: 1px dashed #ccc; padding: 10px; border-radius: 8px; }
+        .pdf-qr-section img { width: 100px; height: 100px; margin-bottom: 5px; }
+        .pdf-qr-section p { margin: 0; font-size: 11px; font-weight: bold; color: #555; }
+
+        .pdf-totals { width: 45%; font-size: 14px; }
+        .pdf-totals-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .pdf-totals-row.grand-total { background: #FFC107; font-weight: bold; font-size: 18px; border: none; padding: 12px; border-radius: 4px; margin-top: 5px; }
+        
+        .pdf-thankyou { margin-top: 40px; text-align: center; font-size: 16px; color: #555; border-top: 1px solid #ddd; padding-top: 15px; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <a href="menu.html" class="back-btn">←</a>
-        <div class="title">Invoice / Receipt Generator</div>
+        <div class="title">Receipt Generator</div>
     </div>
 
     <div class="form-container">
-        <!-- Design Selector -->
-        <div class="input-group" style="margin-bottom: 20px;">
-            <label>Select Design</label>
-            <select><option value="1">Design 1 (Classic Yellow)</option></select>
-        </div>
-
         <!-- 1. Business Details -->
         <div class="section-title">1. Business Details</div>
         <div class="grid-2">
-            <div class="input-group"><label>Shop Name *</label><input type="text" id="shopName" value="MASTER ENTERPRISES"></div>
-            <div class="input-group"><label>Mobile No. *</label><input type="text" id="shopMobile" value="+91 98765 43210"></div>
-            <div class="input-group"><label>Address *</label><input type="text" id="shopAddress" value="Dhamour Road, Shree ka Purwa, District - Amethi (U.P.)"></div>
-            <div class="input-group"><label>Email</label><input type="text" id="shopEmail" value="masterenterprises@gmail.com"></div>
+            <div class="input-group"><label>Shop Name *</label><input type="text" id="shopName" placeholder="Enter Shop Name"></div>
+            <div class="input-group"><label>Mobile No. *</label><input type="text" id="shopMobile" placeholder="Enter Mobile Number"></div>
+            <div class="input-group"><label>Address *</label><input type="text" id="shopAddress" placeholder="Enter Full Address"></div>
+            <div class="input-group"><label>Email</label><input type="text" id="shopEmail" placeholder="Enter Email"></div>
+            <div class="input-group" style="grid-column: span 2;"><label>UPI ID / GPay Number (For QR Code)</label><input type="text" id="shopUpi" placeholder="e.g. 9876543210@paytm or shop@okaxis"></div>
         </div>
 
         <!-- 2. Invoice Details -->
-        <div class="section-title">2. Invoice Details</div>
+        <div class="section-title">2. Receipt Details</div>
         <div class="grid-2">
-            <div class="input-group"><label>Invoice No. *</label><input type="text" id="invNo" value="ME/2025/001"></div>
-            <div class="input-group"><label>Invoice Date *</label><input type="date" id="invDate"></div>
+            <div class="input-group"><label>Receipt No. *</label><input type="text" id="invNo" value="SEAOX/001"></div>
+            <div class="input-group"><label>Date *</label><input type="date" id="invDate"></div>
         </div>
 
         <!-- 3. Customer Details -->
         <div class="section-title">3. Customer Details</div>
         <div class="grid-2">
-            <div class="input-group"><label>Customer Name *</label><input type="text" id="custName" placeholder="Ramesh Kumar"></div>
-            <div class="input-group"><label>Mobile No. *</label><input type="text" id="custMobile" placeholder="9876543210"></div>
-            <div class="input-group"><label>Address</label><input type="text" id="custAddress" placeholder="Shree ka Purwa, Amethi"></div>
-            <div class="input-group"><label>State</label><input type="text" id="custState" placeholder="Uttar Pradesh"></div>
+            <div class="input-group"><label>Customer Name *</label><input type="text" id="custName" placeholder="Enter Customer Name"></div>
+            <div class="input-group"><label>Mobile No. *</label><input type="text" id="custMobile" placeholder="Enter Mobile Number"></div>
+            <div class="input-group"><label>Address</label><input type="text" id="custAddress" placeholder="Enter Customer Address"></div>
+            <div class="input-group"><label>State</label><input type="text" id="custState" placeholder="Enter State"></div>
         </div>
 
         <!-- 4. Item Details -->
@@ -109,40 +119,25 @@
             <tbody>
                 <tr>
                     <td>1</td>
-                    <td><input type="text" class="item-input item-desc" value="Farma Chali (9 inch)"></td>
-                    <td><input type="number" class="item-input item-qty" value="5" oninput="calcTotal()"></td>
-                    <td><input type="number" class="item-input item-rate" value="30.00" oninput="calcTotal()"></td>
-                    <td class="item-amount">150.00</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><input type="text" class="item-input item-desc" value="Farma Chali (14 inch)"></td>
-                    <td><input type="number" class="item-input item-qty" value="3" oninput="calcTotal()"></td>
-                    <td><input type="number" class="item-input item-rate" value="50.00" oninput="calcTotal()"></td>
-                    <td class="item-amount">150.00</td>
+                    <td><input type="text" class="item-input item-desc" placeholder="Item Name"></td>
+                    <td><input type="number" class="item-input item-qty" value="1" oninput="calcTotal()"></td>
+                    <td><input type="number" class="item-input item-rate" value="0" oninput="calcTotal()"></td>
+                    <td class="item-amount">0.00</td>
                 </tr>
             </tbody>
         </table>
         <button class="btn btn-add" onclick="addRow()">+ Add Item</button>
 
-        <!-- 5. Totals -->
-        <div class="section-title" style="margin-top: 20px;">5. Totals</div>
-        <div style="display: flex; justify-content: space-between; align-items: center; background: #f9f9f9; padding: 15px; border-radius: 8px;">
-            <h3 style="margin: 0; color: #555;">Total Amount:</h3>
-            <h2 style="margin: 0; color: #00A859;" id="grandTotalDisplay">₹ 580.00</h2>
-        </div>
-
-        <button class="btn btn-generate" onclick="generatePDF()">📄 Generate Invoice (PDF)</button>
+        <button class="btn btn-generate" onclick="generatePDF()">📄 Generate Receipt (PDF)</button>
     </div>
 
     <!-- ========================================== -->
-    <!-- HIDDEN PDF TEMPLATE (Yeh HTML se PDF banega) -->
+    <!-- HIDDEN PDF TEMPLATE -->
     <!-- ========================================== -->
     <div id="pdf-template">
         <div class="pdf-header">
             <div>
-                <h1 class="pdf-logo">MASTER<br><span>ENTERPRISES</span></h1>
-                <div style="font-size: 10px; color: #555; margin-top: 5px;">QUALITY PRODUCTS | BETTER SERVICE | YOUR TRUST OUR STRENGTH</div>
+                <h1 class="pdf-logo" id="pdf-shop-name-display">SHOP<br><span>NAME</span></h1>
             </div>
             <div class="pdf-shop-details">
                 <div>📍 <span id="pdf-shop-address"></span></div>
@@ -154,16 +149,15 @@
         <div class="pdf-meta">
             <div class="pdf-meta-box">
                 <strong>Bill To:</strong><br>
-                Name: <span id="pdf-cust-name"></span><br>
-                Mobile: <span id="pdf-cust-mobile"></span><br>
-                Address: <span id="pdf-cust-address"></span><br>
-                State: <span id="pdf-cust-state"></span>
+                Name: <span id="pdf-cust-name">-</span><br>
+                Mobile: <span id="pdf-cust-mobile">-</span><br>
+                Address: <span id="pdf-cust-address">-</span><br>
+                State: <span id="pdf-cust-state">-</span>
             </div>
             <div class="pdf-meta-box">
-                <strong>Invoice Details:</strong><br>
-                Invoice No: <span id="pdf-inv-no"></span><br>
-                Date: <span id="pdf-inv-date"></span><br>
-                Status: <span style="color: green; font-weight: bold;">Paid</span>
+                <strong>Receipt Details:</strong><br>
+                Receipt No: <span id="pdf-inv-no"></span><br>
+                Date: <span id="pdf-inv-date"></span>
             </div>
         </div>
 
@@ -171,27 +165,33 @@
             <thead>
                 <tr>
                     <th width="5%">No.</th>
-                    <th width="50%">Item Description</th>
+                    <th width="45%">Item Description</th>
                     <th width="10%">Qty</th>
-                    <th width="15%">Rate (₹)</th>
+                    <th width="20%">Rate (₹)</th>
                     <th width="20%" class="text-right">Amount (₹)</th>
                 </tr>
             </thead>
-            <tbody id="pdf-items-body">
-                <!-- JS se fill hoga -->
-            </tbody>
+            <tbody id="pdf-items-body"></tbody>
         </table>
 
-        <div class="pdf-totals">
-            <div class="pdf-totals-row grand-total">
-                <span>Total Amount (₹)</span>
-                <span id="pdf-grand-total">0.00</span>
+        <div class="pdf-footer-area">
+            <!-- UPI QR Code Section -->
+            <div class="pdf-qr-section" id="qr-section">
+                <img id="pdf-qr-img" src="" alt="Scan to Pay">
+                <p>Scan & Pay Exact Amount</p>
+            </div>
+
+            <!-- Totals Section -->
+            <div class="pdf-totals">
+                <div class="pdf-totals-row grand-total">
+                    <span>Total Amount (₹)</span>
+                    <span id="pdf-grand-total">0.00</span>
+                </div>
             </div>
         </div>
 
-        <div class="pdf-footer">
-            <div class="pdf-thankyou">Thank You!</div>
-            <div>For Choosing MASTER ENTERPRISES</div>
+        <div class="pdf-thankyou">
+            Thank You! Visit Again.
         </div>
     </div>
 
@@ -208,7 +208,7 @@
                 <td>${rowCount}</td>
                 <td><input type="text" class="item-input item-desc" placeholder="Item Name"></td>
                 <td><input type="number" class="item-input item-qty" value="1" oninput="calcTotal()"></td>
-                <td><input type="number" class="item-input item-rate" value="0.00" oninput="calcTotal()"></td>
+                <td><input type="number" class="item-input item-rate" value="0" oninput="calcTotal()"></td>
                 <td class="item-amount">0.00</td>
             `;
             tbody.appendChild(tr);
@@ -228,38 +228,56 @@
                 row.querySelector('.item-amount').innerText = amount.toFixed(2);
                 grandTotal += amount;
             });
-
-            document.getElementById('grandTotalDisplay').innerText = `₹ ${grandTotal.toFixed(2)}`;
         }
 
         // PDF Generate karne ka function
         function generatePDF() {
+            const grandTotal = document.getElementById('pdf-grand-total').innerText;
+
             // 1. Form se data uthao aur PDF template mein daalo
-            document.getElementById('pdf-shop-address').innerText = document.getElementById('shopAddress').value;
-            document.getElementById('pdf-shop-mobile').innerText = document.getElementById('shopMobile').value;
-            document.getElementById('pdf-shop-email').innerText = document.getElementById('shopEmail').value;
+            const shopName = document.getElementById('shopName').value || "SHOP NAME";
+            document.getElementById('pdf-shop-name-display').innerHTML = shopName.replace(" ", "<br><span>") + "</span>";
+            document.getElementById('pdf-shop-address').innerText = document.getElementById('shopAddress').value || "-";
+            document.getElementById('pdf-shop-mobile').innerText = document.getElementById('shopMobile').value || "-";
+            document.getElementById('pdf-shop-email').innerText = document.getElementById('shopEmail').value || "-";
 
-            document.getElementById('pdf-cust-name').innerText = document.getElementById('custName').value;
-            document.getElementById('pdf-cust-mobile').innerText = document.getElementById('custMobile').value;
-            document.getElementById('pdf-cust-address').innerText = document.getElementById('custAddress').value;
-            document.getElementById('pdf-cust-state').innerText = document.getElementById('custState').value;
+            document.getElementById('pdf-cust-name').innerText = document.getElementById('custName').value || "-";
+            document.getElementById('pdf-cust-mobile').innerText = document.getElementById('custMobile').value || "-";
+            document.getElementById('pdf-cust-address').innerText = document.getElementById('custAddress').value || "-";
+            document.getElementById('pdf-cust-state').innerText = document.getElementById('custState').value || "-";
 
-            document.getElementById('pdf-inv-no').innerText = document.getElementById('invNo').value;
-            document.getElementById('pdf-inv-date').innerText = document.getElementById('invDate').value;
+            document.getElementById('pdf-inv-no').innerText = document.getElementById('invNo').value || "-";
+            document.getElementById('pdf-inv-date').innerText = document.getElementById('invDate').value || "-";
+
+            // UPI QR Code Generate karna
+            const upiId = document.getElementById('shopUpi').value;
+            const qrSection = document.getElementById('qr-section');
+            
+            if(upiId.trim() !== "" && grandTotal > 0) {
+                // UPI Link banaya
+                const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(shopName)}&am=${grandTotal}&cu=INR`;
+                // QR Server API se image generate ki
+                const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiUrl)}`;
+                
+                document.getElementById('pdf-qr-img').src = qrApiUrl;
+                qrSection.style.display = 'block';
+            } else {
+                qrSection.style.display = 'none'; // Agar UPI nahi daala toh QR nahi dikhega
+            }
 
             // Items table fill karo
             const pdfItemsBody = document.getElementById('pdf-items-body');
             pdfItemsBody.innerHTML = '';
             
-            let grandTotal = 0;
+            let total = 0;
             const rows = document.querySelectorAll('#itemsTable tbody tr');
             
             rows.forEach((row, index) => {
-                const desc = row.querySelector('.item-desc').value;
+                const desc = row.querySelector('.item-desc').value || "-";
                 const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
                 const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
                 const amount = qty * rate;
-                grandTotal += amount;
+                total += amount;
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -272,7 +290,7 @@
                 pdfItemsBody.appendChild(tr);
             });
 
-            document.getElementById('pdf-grand-total').innerText = grandTotal.toFixed(2);
+            document.getElementById('pdf-grand-total').innerText = total.toFixed(2);
 
             // 2. HTML se PDF banao
             const element = document.getElementById('pdf-template');
@@ -282,10 +300,11 @@
 
             const opt = {
                 margin:       0,
-                filename:     'seaox.pdf', // 🚨 Yahan PDF ka naam set hai
+                filename:     'seaox.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+                html2canvas:  { scale: 2, useCORS: true }, // useCORS jaroori hai QR image load hone ke liye
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] } // PDF aadhi nahi hogi ab
             };
 
             // Generate PDF
