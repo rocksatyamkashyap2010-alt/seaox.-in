@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEAOX - QR Visual</title>
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <!-- QR Code Generator Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body { margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { width: 100%; max-width: 450px; display: flex; align-items: center; margin-bottom: 20px; }
+        .back-btn { font-size: 24px; color: #333; text-decoration: none; margin-right: 15px; }
+        .title { font-size: 22px; font-weight: bold; color: #111; }
+        
+        .card { background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); max-width: 400px; width: 100%; text-align: center; box-sizing: border-box; }
+        .icon { font-size: 50px; margin-bottom: 10px; }
+        p { color: #666; font-size: 14px; margin-bottom: 25px; }
+
+        input[type="file"] { display: none; }
+        
+        .select-btn { background-color: #FF9800; color: white; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 15px; }
+        
+        #status { font-size: 14px; font-weight: bold; color: #E53935; margin-top: 10px; }
+
+        /* QR Code Area */
+        #qr-container { margin-top: 20px; display: none; flex-direction: column; align-items: center; }
+        #qrcode { padding: 10px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .download-qr-btn { background-color: #00A859; color: white; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: bold; margin-top: 20px; display: inline-block; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="menu.html" class="back-btn">←</a>
+        <div class="title">QR Visual Maker</div>
+    </div>
+
+    <div class="card">
+        <div class="icon">🖼️ 🔗 📱</div>
+        <h2>Image to QR Code</h2>
+        <p>Upload an image. We will generate a QR code. When someone scans it, they will see the image on our website!</p>
+
+        <input type="file" id="imageInput" accept="image/*">
+        
+        <button class="select-btn" onclick="document.getElementById('imageInput').click()">
+            Select Image
+        </button>
+
+        <div id="status"></div>
+
+        <div id="qr-container">
+            <div id="qrcode"></div>
+            <button class="download-qr-btn" onclick="downloadQR()">Download QR Code</button>
+        </div>
+    </div>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const statusDiv = document.getElementById('status');
+        const qrContainer = document.getElementById('qr-container');
+        const qrcodeDiv = document.getElementById('qrcode');
+        let qrCodeInstance = null;
+
+        imageInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            statusDiv.style.color = "#FF9800";
+            statusDiv.innerText = "Uploading image, please wait...";
+
+            try {
+                // Catbox.moe free API par image upload kar rahe hain
+                const formData = new FormData();
+                formData.append('reqtype', 'fileupload');
+                formData.append('fileToUpload', file);
+
+                const response = await fetch('https://catbox.moe/user/api.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Upload failed');
+                
+                const imageUrl = await response.text();
+                
+                // Aapki website ka URL jahan photo dikhegi
+                const viewUrl = `https://seaox.in/view.html?img=${encodeURIComponent(imageUrl)}`;
+
+                statusDiv.style.color = "#00A859";
+                statusDiv.innerText = "QR Code Generated Successfully!";
+
+                // QR Code generate kar rahe hain
+                qrcodeDiv.innerHTML = "";
+                qrContainer.style.display = "flex";
+                
+                qrCodeInstance = new QRCode(qrcodeDiv, {
+                    text: viewUrl,
+                    width: 200,
+                    height: 200,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+
+            } catch (error) {
+                statusDiv.style.color = "#E53935";
+                statusDiv.innerText = "Error uploading image. Please try again.";
+                qrContainer.style.display = "none";
+            }
+        });
+
+        function downloadQR() {
+            const img = qrcodeDiv.querySelector('img');
+            const canvas = qrcodeDiv.querySelector('canvas');
+            
+            // QR code download link trigger karo
+            const url = canvas ? canvas.toDataURL("image/png") : img.src;
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'SEAOX_QR_Code.png';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        }
+    </script>
+</body>
+</html>
