@@ -23,14 +23,20 @@
         .app-text { font-size: 55px; font-weight: 900; color: #111; letter-spacing: 2px; }
 
         /* Green Contact Box */
-        .contact-box { width: 100%; max-width: 450px; background-color: #00A859; border-radius: 20px; padding: 20px; box-sizing: border-box; display: flex; align-items: center; gap: 15px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .contact-box { width: 100%; max-width: 450px; background-color: #00A859; border-radius: 20px; padding: 20px; box-sizing: border-box; display: flex; align-items: center; gap: 15px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; margin-bottom: 20px; }
         .contact-box:active { transform: scale(0.98); }
         .contact-icon { font-size: 50px; color: white; }
         .contact-text { color: white; font-size: 18px; font-weight: bold; line-height: 1.4; }
 
+        /* Naya Blue Instagram Box */
+        .instagram-box { width: 100%; max-width: 450px; background-color: #1877F2; border-radius: 20px; padding: 20px; box-sizing: border-box; display: flex; align-items: center; gap: 15px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .instagram-box:active { transform: scale(0.98); }
+        .instagram-icon svg { width: 45px; height: 45px; fill: white; }
+        .instagram-text { color: white; font-size: 24px; font-weight: bold; letter-spacing: 1px; }
+
         /* Modal (Popup) Background */
         .modal-overlay {
-            display: none; /* Default mein chhupa rahega */
+            display: none; 
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.6);
@@ -67,14 +73,13 @@
             cursor: pointer;
         }
 
-        /* Contact Us Heading */
         .modal-content h2 { margin-top: 0; color: #333; font-size: 22px; }
         .modal-content p { color: #666; font-size: 14px; margin-bottom: 20px; }
 
         /* Red Button */
         .send-msg-btn {
             display: block;
-            background-color: #ff3333; /* Red color */
+            background-color: #ff3333; 
             color: white;
             text-decoration: none;
             padding: 15px;
@@ -86,7 +91,7 @@
         }
         .send-msg-btn:hover { background-color: #cc0000; }
 
-        /* Naya Hindi Text Style */
+        /* Hindi Text Style */
         .hindi-note {
             font-size: 13px;
             color: #555;
@@ -103,16 +108,16 @@
 
     <div class="header">
         <img src="IMG_20261006_211924.png" alt="SEAOX Logo" class="logo-img">
-        <!-- Yahan click karne par modal khulega -->
         <div class="menu-icon" onclick="openModal()">☰</div>
     </div>
 
+    <!-- APP Button -->
     <a href="store.html" class="app-box">
         <div class="app-icon">📱</div>
         <div class="app-text">APP</div>
     </a>
 
-    <!-- Green Box mein email update kar diya hai -->
+    <!-- Let's Talk (Green Box) -->
     <a href="mailto:seaoxseaox@gmail.com?subject=Website/App Development Inquiry" class="contact-box">
         <div class="contact-icon">💬</div>
         <div class="contact-text">
@@ -121,37 +126,42 @@
         </div>
     </a>
 
-    <!-- ========================================== -->
-    <!-- POPUP (MODAL) CODE START -->
-    <!-- ========================================== -->
+    <!-- Naya Instagram Button (Blue Box) -->
+    <!-- Aapki di hui link yahan add kar di hai -->
+    <a href="https://www.instagram.com/seaoxofficial" target="_blank" class="instagram-box">
+        <div class="instagram-icon">
+            <!-- Instagram ka SVG Logo -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+            </svg>
+        </div>
+        <div class="instagram-text">Instagram</div>
+    </a>
+
+    <!-- POPUP (MODAL) -->
     <div id="contactModal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">×</span>
             <h2>Contact Us</h2>
             <p>Have a question or want to build an app? Click below to send us a message.</p>
             
-            <!-- Red Button jisse Gmail khulega -->
             <a href="mailto:seaoxseaox@gmail.com?subject=New Message from SEAOX Website&body=Hello SEAOX Team," class="send-msg-btn">
                 📩 Send Message
             </a>
 
-            <!-- Aapka Hindi wala message -->
             <p class="hindi-note">*किसी भी तरह का यदि हमारे एप्लीकेशन में अप्डेट चाहिए या फिर कोई फीचर्स एड करना हो तो आप हमें मेल कर सकते है</p>
         </div>
     </div>
 
     <script>
-        // Popup kholne ka function
         function openModal() {
             document.getElementById('contactModal').style.display = 'flex';
         }
 
-        // Popup band karne ka function (jab 'X' pe click ho ya bahar click ho)
         function closeModal() {
             document.getElementById('contactModal').style.display = 'none';
         }
 
-        // Agar user popup ke bahar (black area mein) click kare toh band ho jaye
         window.onclick = function(event) {
             var modal = document.getElementById('contactModal');
             if (event.target == modal) {
