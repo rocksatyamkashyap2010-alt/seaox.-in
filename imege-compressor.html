@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEAOX - Image Compressor</title>
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <style>
+        body { margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { width: 100%; max-width: 450px; display: flex; align-items: center; margin-bottom: 20px; }
+        .back-btn { font-size: 24px; color: #333; text-decoration: none; margin-right: 15px; }
+        .title { font-size: 22px; font-weight: bold; color: #111; }
+        
+        .card { background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); max-width: 400px; width: 100%; text-align: center; box-sizing: border-box; }
+        
+        .icon-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 15px; font-size: 45px; }
+        h2 { margin: 0 0 10px 0; color: #111; }
+        p { color: #666; font-size: 14px; margin-bottom: 25px; line-height: 1.4; }
+
+        input[type="file"] { display: none; }
+        
+        .select-btn { background-color: #008080; color: white; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 15px; transition: background 0.3s; }
+        .select-btn:hover { background-color: #006666; }
+        
+        #status { font-size: 14px; font-weight: bold; color: #E53935; margin-top: 10px; }
+        
+        .result-area { margin-top: 20px; display: none; flex-direction: column; align-items: center; }
+        .preview-img { max-width: 100%; max-height: 200px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .download-btn { background-color: #00A859; color: white; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: bold; border: none; cursor: pointer; width: 100%; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="menu.html" class="back-btn">←</a>
+        <div class="title">Image Compressor</div>
+    </div>
+
+    <div class="card">
+        <div class="icon-container">🖼️ 📉</div>
+        <h2>Reduce Image Size</h2>
+        <p>Select an image to compress it directly on your device. It will become smaller in size without losing much quality.</p>
+
+        <input type="file" id="imageInput" accept="image/png, image/jpeg, image/jpg">
+        
+        <button class="select-btn" onclick="document.getElementById('imageInput').click()">
+            Select Image
+        </button>
+
+        <div id="status"></div>
+
+        <div id="resultArea" class="result-area">
+            <img id="previewImg" class="preview-img" src="" alt="Compressed Image">
+            <p id="fileSizeText" style="margin-bottom: 15px; color: #00A859; font-weight: bold;"></p>
+            <a id="downloadLink" class="download-btn" download="compressed_image.jpg">Download Compressed Image</a>
+        </div>
+    </div>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const statusDiv = document.getElementById('status');
+        const resultArea = document.getElementById('resultArea');
+        const previewImg = document.getElementById('previewImg');
+        const downloadLink = document.getElementById('downloadLink');
+        const fileSizeText = document.getElementById('fileSizeText');
+
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            statusDiv.style.color = "#008080";
+            statusDiv.innerText = "Compressing image, please wait...";
+            resultArea.style.display = "none";
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    // Canvas banakar image compress karenge
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // Max width/height 1200px taaki size kam ho jaye
+                    let width = img.width;
+                    let height = img.height;
+                    const maxSize = 1200;
+
+                    if (width > height && width > maxSize) {
+                        height *= maxSize / width;
+                        width = maxSize;
+                    } else if (height > maxSize) {
+                        width *= maxSize / height;
+                        height = maxSize;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Quality 0.7 (70%) set ki hai
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+
+                    // Result dikhao
+                    previewImg.src = compressedDataUrl;
+                    downloadLink.href = compressedDataUrl;
+                    
+                    // Size calculate karo (KB mein)
+                    const sizeInBytes = Math.round((compressedDataUrl.length - 'data:image/jpeg;base64,'.length) * 3 / 4);
+                    const sizeInKB = Math.round(sizeInBytes / 1024);
+                    
+                    fileSizeText.innerText = `New Size: ~${sizeInKB} KB`;
+                    
+                    statusDiv.innerText = "Compression Successful!";
+                    statusDiv.style.color = "#00A859";
+                    resultArea.style.display = "flex";
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>
