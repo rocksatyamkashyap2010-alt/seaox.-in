@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+     <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -31,19 +31,22 @@
         .btn-generate { background: #6B46C1; width: 100%; margin-top: 25px; padding: 15px; font-size: 18px; }
         .btn-generate:hover { background: #553c9a; }
 
-        /* 🖨️ PDF Template Styles */
+        /* 🖨️ PDF Template Styles (Fixed for html2pdf) */
         #pdf-template { 
-            display: none; /* Default mein chhupa rahega */
-            position: absolute; /* Layout ko kharab nahi karega */
+            position: fixed;
             top: 0;
-            left: -9999px; /* Screen ke bahar chhupa hua */
-            width: 800px; /* Fixed A4 width taaki cut na ho */
+            left: 0;
+            width: 800px; /* Fixed A4 width */
             min-height: 1122px; /* A4 Height */
-            padding: 40px; 
-            background: white; 
+            background: #ffffff; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             color: #333; 
             box-sizing: border-box;
+            padding: 40px;
+            /* Isko hide rakhne ka safe tarika taaki library scan kar sake */
+            z-index: -9999; 
+            opacity: 0.01; 
+            pointer-events: none;
         }
         
         .pdf-header { display: flex; justify-content: space-between; border-bottom: 3px solid #FFC107; padding-bottom: 20px; margin-bottom: 20px; }
@@ -62,11 +65,11 @@
         
         .pdf-footer-area { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 20px; }
         
-        .pdf-qr-section { text-align: center; border: 1px dashed #ccc; padding: 10px; border-radius: 8px; }
-        .pdf-qr-section img { width: 110px; height: 110px; margin-bottom: 5px; }
+        .pdf-qr-section { text-align: center; border: 1px dashed #ccc; padding: 10px; border-radius: 8px; width: 130px; }
+        .pdf-qr-section img { width: 100px; height: 100px; margin-bottom: 5px; }
         .pdf-qr-section p { margin: 0; font-size: 11px; font-weight: bold; color: #555; }
 
-        .pdf-totals { width: 45%; font-size: 14px; }
+        .pdf-totals { width: 45%; font-size: 14px; margin-left: auto; }
         .pdf-totals-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
         .pdf-totals-row.grand-total { background: #FFC107; font-weight: bold; font-size: 18px; border: none; padding: 12px; border-radius: 4px; margin-top: 5px; }
         
@@ -135,7 +138,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- HIDDEN PDF TEMPLATE (Yeh background mein rahega) -->
+    <!-- HIDDEN PDF TEMPLATE -->
     <!-- ========================================== -->
     <div id="pdf-template">
         <div class="pdf-header">
@@ -180,12 +183,12 @@
         <div class="pdf-footer-area">
             <!-- UPI QR Code Section -->
             <div class="pdf-qr-section" id="qr-section" style="display: none;">
-                <img id="pdf-qr-img" src="" alt="Scan to Pay">
+                <img id="pdf-qr-img" src="" alt="Scan to Pay" crossorigin="anonymous">
                 <p>Scan & Pay Exact Amount</p>
             </div>
 
             <!-- Totals Section -->
-            <div class="pdf-totals" style="margin-left: auto;">
+            <div class="pdf-totals">
                 <div class="pdf-totals-row grand-total">
                     <span>Total Amount (₹)</span>
                     <span id="pdf-grand-total">0.00</span>
@@ -220,22 +223,18 @@
 
         // Total calculate karne ka function
         function calcTotal() {
-            let grandTotal = 0;
             const rows = document.querySelectorAll('#itemsTable tbody tr');
-            
             rows.forEach(row => {
                 const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
                 const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
                 const amount = qty * rate;
-                
                 row.querySelector('.item-amount').innerText = amount.toFixed(2);
-                grandTotal += amount;
             });
         }
 
         // PDF Generate karne ka function
         function generatePDF() {
-            // 1. Data uthana
+            // 1. Form se data uthana aur PDF template mein daalna
             const shopName = document.getElementById('shopName').value || "SHOP NAME";
             document.getElementById('pdf-shop-name-display').innerHTML = shopName.replace(" ", "<br><span>") + "</span>";
             document.getElementById('pdf-shop-address').innerText = document.getElementById('shopAddress').value || "-";
@@ -250,40 +249,18 @@
             document.getElementById('pdf-inv-no').innerText = document.getElementById('invNo').value || "-";
             document.getElementById('pdf-inv-date').innerText = document.getElementById('invDate').value || "-";
 
-            // 2. QR Code Logic
-            const upiId = document.getElementById('shopUpi').value;
-            const qrSection = document.getElementById('qr-section');
-            const qrImg = document.getElementById('pdf-qr-img');
-            
-            let totalAmount = 0;
-            const rows = document.querySelectorAll('#itemsTable tbody tr');
-            
-            // Pehle calculate karo total
-            rows.forEach(row => {
-                const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
-                const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
-                totalAmount += (qty * rate);
-            });
-
-            if(upiId.trim() !== "" && totalAmount > 0) {
-                const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(shopName)}&am=${totalAmount.toFixed(2)}&cu=INR`;
-                const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiUrl)}`;
-                
-                qrImg.src = qrApiUrl;
-                qrSection.style.display = 'block';
-            } else {
-                qrSection.style.display = 'none';
-            }
-
-            // 3. Items Table bharna
+            // 2. Items Table bharna & Total nikalna
             const pdfItemsBody = document.getElementById('pdf-items-body');
             pdfItemsBody.innerHTML = '';
+            let totalAmount = 0;
+            const rows = document.querySelectorAll('#itemsTable tbody tr');
             
             rows.forEach((row, index) => {
                 const desc = row.querySelector('.item-desc').value || "-";
                 const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
                 const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
                 const amount = qty * rate;
+                totalAmount += amount;
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -298,29 +275,49 @@
 
             document.getElementById('pdf-grand-total').innerText = totalAmount.toFixed(2);
 
-            // 4. PDF Generation (Cut nahi hoga ab)
+            // 3. UPI QR Code Generate karna
+            const upiId = document.getElementById('shopUpi').value;
+            const qrSection = document.getElementById('qr-section');
+            const qrImg = document.getElementById('pdf-qr-img');
+            
+            if(upiId.trim() !== "" && totalAmount > 0) {
+                const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(shopName)}&am=${totalAmount.toFixed(2)}&cu=INR`;
+                const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiUrl)}`;
+                
+                // QR image load hone ka wait karo, phir PDF banao
+                qrImg.src = qrApiUrl;
+                qrSection.style.display = 'block';
+                
+                qrImg.onload = function() {
+                    generatePDFFile();
+                };
+            } else {
+                qrSection.style.display = 'none';
+                generatePDFFile();
+            }
+        }
+
+        // Final PDF Generation Function
+        function generatePDFFile() {
             const element = document.getElementById('pdf-template');
             
-            // Make it visible for rendering (but offscreen)
-            element.style.display = 'block';
+            // Temporarily make it visible for rendering, but keep it behind
+            element.style.opacity = '1';
+            element.style.zIndex = '-9999';
 
             const opt = {
                 margin:       0,
                 filename:     'seaox.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+                html2canvas:  { scale: 2, useCORS: true, scrollY: 0, windowWidth: 800 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            // 0.5 second wait for QR code image to load
-            setTimeout(() => {
-                html2pdf().set(opt).from(element).save().then(() => {
-                    element.style.display = 'none'; // Hide after done
-                });
-            }, 500); 
+            html2pdf().set(opt).from(element).save().then(() => {
+                // Hide it back after generation
+                element.style.opacity = '0.01'; 
+            });
         }
     </script>
 </body>
 </html>
-
-            
