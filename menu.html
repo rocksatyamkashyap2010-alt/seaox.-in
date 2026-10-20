@@ -17,103 +17,94 @@
         .app-box { width: 100%; max-width: 450px; height: 400px; background-color: #FFD700; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; }
         .app-box:active { transform: scale(0.98); }
         
-        /* Realistic iPhone 16 Frame Design */
+        /* Realistic Phone Frame */
         .app-icon { margin-bottom: 20px; display: flex; justify-content: center; }
         
         .iphone-frame {
             width: 130px;
-            height: 260px; /* Tall iPhone Shape */
-            background: #1a1a1a; /* Titanium Black */
+            height: 260px; 
+            background: #1a1a1a; 
             border-radius: 22px;
-            border: 4px solid #333; /* Outer Bezel */
-            box-shadow: 
-                inset 0 0 10px rgba(0,0,0,0.8), 
-                0 15px 25px rgba(0,0,0,0.3),
-                0 0 0 1px #555;
+            border: 4px solid #333; 
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 15px 25px rgba(0,0,0,0.3), 0 0 0 1px #555;
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* iPhone Side Buttons */
-        .iphone-frame::before { /* Volume buttons */
-            content: '';
-            position: absolute;
-            left: -6px;
-            top: 50px;
-            width: 2px;
-            height: 15px;
-            background: #444;
-            border-radius: 3px 0 0 3px;
-            box-shadow: 0 25px 0 #444, 0 50px 0 #444;
-        }
-        .iphone-frame::after { /* Power button */
-            content: '';
-            position: absolute;
-            right: -6px;
-            top: 60px;
-            width: 2px;
-            height: 30px;
-            background: #444;
-            border-radius: 0 3px 3px 0;
-        }
+        /* Side Buttons */
+        .iphone-frame::before { content: ''; position: absolute; left: -6px; top: 50px; width: 2px; height: 15px; background: #444; border-radius: 3px 0 0 3px; box-shadow: 0 25px 0 #444, 0 50px 0 #444; }
+        .iphone-frame::after { content: ''; position: absolute; right: -6px; top: 60px; width: 2px; height: 30px; background: #444; border-radius: 0 3px 3px 0; }
 
-        /* Screen inside iPhone */
+        /* Screen inside Phone */
         .phone-screen {
             width: 114px;
             height: 244px;
-            background: linear-gradient(180deg, #111, #222); /* Dark iOS background */
+            background: linear-gradient(180deg, #111, #222); 
             border-radius: 18px;
             overflow: hidden; 
             position: relative;
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 Columns */
+            grid-template-columns: repeat(3, 1fr);
             gap: 8px;
-            padding: 28px 10px 10px 10px; /* Top padding for Island */
+            padding: 28px 10px 30px 10px; /* Bottom padding badha diya nav bar ke liye */
             box-sizing: border-box;
         }
 
-        /* Dynamic Island (iPhone 16 Notch) */
+        /* Dynamic Island */
         .phone-screen::before {
             content: '';
             position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 45px;
-            height: 12px;
-            background: #000;
-            border-radius: 15px;
-            z-index: 10;
+            top: 8px; left: 50%; transform: translateX(-50%);
+            width: 45px; height: 12px;
+            background: #000; border-radius: 15px; z-index: 10;
             box-shadow: inset 0 0 2px rgba(255,255,255,0.1);
         }
 
         /* Square App Icons */
         .mini-app {
             width: 100%;
-            aspect-ratio: 1 / 1; /* Makes them perfect squares */
-            border-radius: 8px; /* Rounded square like iOS */
+            aspect-ratio: 1 / 1; 
+            border-radius: 8px; 
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        /* Tractor Book App (Center) */
+        /* Tractor Book App */
         .real-app {
             background: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.6); /* Glow effect */
-            z-index: 5;
-            border: 1px solid #eee;
-            padding: 1px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.6); z-index: 5;
+            border: 1px solid #eee; padding: 1px;
         }
-        .real-app img {
+        .real-app img { width: 100%; height: 100%; object-fit: contain; border-radius: 7px; }
+
+        /* NAYA: Android Navigation Bar (Neeche ke buttons) */
+        .android-nav {
+            position: absolute;
+            bottom: 0; left: 0;
             width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 7px;
+            height: 22px;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 10;
         }
+
+        /* Nav Icons Design (Gray color ke) */
+        .nav-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .icon-square { width: 8px; height: 8px; border: 2px solid #aaa; border-radius: 2px; }
+        .icon-circle { width: 8px; height: 8px; border: 2px solid #aaa; border-radius: 50%; }
+        .icon-triangle { width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-right: 9px solid #aaa; transform: translateX(-1px); }
 
         .app-text { font-size: 50px; font-weight: 900; color: #111; letter-spacing: 2px; margin-top: 5px; }
 
@@ -129,7 +120,7 @@
         .instagram-icon svg { width: 45px; height: 45px; fill: white; }
         .instagram-text { color: white; font-size: 24px; font-weight: bold; letter-spacing: 1px; }
 
-        /* Modal (Popup) Background */
+        /* Modal (Popup) */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: #fff; width: 85%; max-width: 350px; border-radius: 15px; padding: 25px 20px; text-align: center; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: popUp 0.3s ease-out; }
         @keyframes popUp { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -150,7 +141,6 @@
 
     <a href="store.html" class="app-box">
         <div class="app-icon">
-            <!-- Realistic iPhone 16 Frame -->
             <div class="iphone-frame">
                 <div class="phone-screen">
                     <!-- Row 1 -->
@@ -172,11 +162,13 @@
                     <div class="mini-app" style="background: #00E5FF;"></div>
                     <div class="mini-app" style="background: #FF9100;"></div>
                     <div class="mini-app" style="background: #2979FF;"></div>
-                    
-                    <!-- Row 4 (Bottom Dock) -->
-                    <div class="mini-app" style="background: #00C853; border-radius: 50%;"></div>
-                    <div class="mini-app" style="background: #D50000; border-radius: 50%;"></div>
-                    <div class="mini-app" style="background: #2962FF; border-radius: 50%;"></div>
+
+                    <!-- NAYA: Navigation Bar (Square, Circle, Triangle) -->
+                    <div class="android-nav">
+                        <div class="nav-icon"><div class="icon-square"></div></div>
+                        <div class="nav-icon"><div class="icon-circle"></div></div>
+                        <div class="nav-icon"><div class="icon-triangle"></div></div>
+                    </div>
                 </div>
             </div>
         </div>
