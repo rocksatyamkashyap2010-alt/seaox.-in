@@ -1,1 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEAOX - Image to PDF</title>
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <!-- jsPDF Library (PDF banane ke liye) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { width: 100%; max-width: 450px; display: flex; align-items: center; margin-bottom: 20px; }
+        .back-btn { font-size: 24px; color: #333; text-decoration: none; margin-right: 15px; }
+        .title { font-size: 22px; font-weight: bold; color: #111; }
+        
+        .card { background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); max-width: 400px; width: 100%; text-align: center; }
+        .icon { font-size: 60px; margin-bottom: 10px; }
+        p { color: #666; font-size: 14px; margin-bottom: 25px; }
 
+        input[type="file"] { display: none; }
+        
+        .select-btn, .convert-btn {
+            display: block; width: 100%; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; margin-bottom: 15px; box-sizing: border-box;
+        }
+        
+        .select-btn { background-color: #E0E0E0; color: #333; }
+        .convert-btn { background-color: #E53935; color: white; }
+        .convert-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        .file-count { font-size: 14px; color: #00A859; font-weight: bold; margin-bottom: 15px; display: none; }
+        
+        #status { font-size: 14px; font-weight: bold; color: #E53935; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="menu.html" class="back-btn">←</a>
+        <div class="title">PDF Maker</div>
+    </div>
+
+    <div class="card">
+        <div class="icon">🖼️ ➡️ 📄</div>
+        <h2>Convert Images to PDF</h2>
+        <p>Select multiple images from your gallery and convert them into a single PDF file for free.</p>
+
+        <!-- File Input -->
+        <input type="file" id="imageInput" accept="image/*" multiple>
+        
+        <button class="select-btn" onclick="document.getElementById('imageInput').click()">
+            Select Images
+        </button>
+        
+        <div id="fileCount" class="file-count">0 Images Selected</div>
+
+        <button id="convertBtn" class="convert-btn" onclick="generatePDF()" disabled>
+            Create PDF
+        </button>
+
+        <div id="status"></div>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+        let selectedFiles = [];
+
+        // Jab user gallery se images select kare
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            selectedFiles = Array.from(e.target.files);
+            
+            const fileCountDiv = document.getElementById('fileCount');
+            const convertBtn = document.getElementById('convertBtn');
+            
+            if(selectedFiles.length > 0) {
+                fileCountDiv.style.display = 'block';
+                fileCountDiv.innerText = selectedFiles.length + " Images Selected";
+                convertBtn.disabled = false;
+            } else {
+                fileCountDiv.style.display = 'none';
+                convertBtn.disabled = true;
+            }
+        });
+
+        // PDF Generate karne ka function
+        async function generatePDF() {
+            if (selectedFiles.length === 0) return;
+
+            const statusDiv = document.getElementById('status');
+            const convertBtn = document.getElementById('convertBtn');
+            
+            statusDiv.style.color = "#00A859"; // Green
+            statusDiv.innerText = "Creating PDF, please wait...";
+            convertBtn.disabled = true;
+
+            try {
+                const pdf = new jsPDF('p', 'pt', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+
+                for (let i = 0; i < selectedFiles.length; i++) {
+                    const file = selectedFiles[i];
+                    const imgData = await readFileAsDataURL(file);
+                    const img = await loadImage(imgData);
+                    
+                    const ratio = Math.min((pageWidth - 40) / img.width, (pageHeight - 40) / img.height);
+                    const imgWidth = img.width * ratio;
+                    const imgHeight = img.height * ratio;
+                    
+                    const x = (pageWidth - imgWidth) / 2;
+                    const y = (pageHeight - imgHeight) / 2;
+
+                    if (i > 0) {
+                        pdf.addPage();
+                    }
+
+                    pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
+                }
+
+                pdf.save("SEAOX_Document.pdf");
+                
+                statusDiv.innerText = "PDF Downloaded Successfully!";
+                setTimeout(() => {
+                    statusDiv.innerText = "";
+                    convertBtn.disabled = false;
+                }, 3000);
+
+            } catch (error) {
+                statusDiv.style.color = "#E53935"; // Red
+                statusDiv.innerText = "Error creating PDF. Please try again.";
+                convertBtn.disabled = false;
+            }
+        }
+
+        function readFileAsDataURL(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(e);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function loadImage(src) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = (e) => reject(e);
+                img.src = src;
+            });
+        }
+    </script>
+</body>
+</html>
