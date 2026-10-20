@@ -11,13 +11,10 @@
         /* Top Header */
         .header { width: 100%; max-width: 450px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         
-        /* Naya Lamba Logo */
-        .logo-img { 
-            width: 160px; 
-            mix-blend-mode: multiply; 
-        }
+        .logo-img { width: 160px; mix-blend-mode: multiply; }
         
-        .menu-icon { font-size: 32px; color: #333; cursor: pointer; }
+        /* Menu Icon clickable */
+        .menu-icon { font-size: 32px; color: #333; cursor: pointer; padding: 5px; }
 
         /* Yellow App Box */
         .app-box { width: 100%; max-width: 450px; height: 380px; background-color: #FFD700; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; }
@@ -30,13 +27,84 @@
         .contact-box:active { transform: scale(0.98); }
         .contact-icon { font-size: 50px; color: white; }
         .contact-text { color: white; font-size: 18px; font-weight: bold; line-height: 1.4; }
+
+        /* Modal (Popup) Background */
+        .modal-overlay {
+            display: none; /* Default mein chhupa rahega */
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Modal Content Box */
+        .modal-content {
+            background: #fff;
+            width: 85%;
+            max-width: 350px;
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: popUp 0.3s ease-out;
+        }
+
+        @keyframes popUp {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Close Button (X) */
+        .close-btn {
+            position: absolute;
+            top: 10px; right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #888;
+            cursor: pointer;
+        }
+
+        /* Contact Us Heading */
+        .modal-content h2 { margin-top: 0; color: #333; font-size: 22px; }
+        .modal-content p { color: #666; font-size: 14px; margin-bottom: 20px; }
+
+        /* Red Button */
+        .send-msg-btn {
+            display: block;
+            background-color: #ff3333; /* Red color */
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(255, 51, 51, 0.3);
+            transition: background 0.3s;
+        }
+        .send-msg-btn:hover { background-color: #cc0000; }
+
+        /* Naya Hindi Text Style */
+        .hindi-note {
+            font-size: 13px;
+            color: #555;
+            margin-top: 15px;
+            line-height: 1.4;
+            font-style: italic;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
     </style>
 </head>
 <body>
+
     <div class="header">
-        <!-- Yahan naya logo laga hai -->
         <img src="IMG_20261006_211924.png" alt="SEAOX Logo" class="logo-img">
-        <div class="menu-icon">☰</div>
+        <!-- Yahan click karne par modal khulega -->
+        <div class="menu-icon" onclick="openModal()">☰</div>
     </div>
 
     <a href="store.html" class="app-box">
@@ -44,12 +112,52 @@
         <div class="app-text">APP</div>
     </a>
 
-    <a href="mailto:seaox129@gmail.com?subject=Website/App Development Inquiry" class="contact-box">
+    <!-- Green Box mein email update kar diya hai -->
+    <a href="mailto:seaoxseaox@gmail.com?subject=Website/App Development Inquiry" class="contact-box">
         <div class="contact-icon">💬</div>
         <div class="contact-text">
             Want to build a website, app, or software?<br>
             Let's talk!
         </div>
     </a>
+
+    <!-- ========================================== -->
+    <!-- POPUP (MODAL) CODE START -->
+    <!-- ========================================== -->
+    <div id="contactModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">×</span>
+            <h2>Contact Us</h2>
+            <p>Have a question or want to build an app? Click below to send us a message.</p>
+            
+            <!-- Red Button jisse Gmail khulega -->
+            <a href="mailto:seaoxseaox@gmail.com?subject=New Message from SEAOX Website&body=Hello SEAOX Team," class="send-msg-btn">
+                📩 Send Message
+            </a>
+
+            <!-- Aapka Hindi wala message -->
+            <p class="hindi-note">*किसी भी तरह का यदि हमारे एप्लीकेशन में अप्डेट चाहिए या फिर कोई फीचर्स एड करना हो तो आप हमें मेल कर सकते है</p>
+        </div>
+    </div>
+
+    <script>
+        // Popup kholne ka function
+        function openModal() {
+            document.getElementById('contactModal').style.display = 'flex';
+        }
+
+        // Popup band karne ka function (jab 'X' pe click ho ya bahar click ho)
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+
+        // Agar user popup ke bahar (black area mein) click kare toh band ho jaye
+        window.onclick = function(event) {
+            var modal = document.getElementById('contactModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
