@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEAOX - Pro Screenshot Editor</title>
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <style>
+        body { margin: 0; padding: 10px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { width: 100%; max-width: 500px; display: flex; align-items: center; margin-bottom: 10px; }
+        .back-btn { font-size: 24px; color: #333; text-decoration: none; margin-right: 15px; }
+        .title { font-size: 20px; font-weight: bold; color: #111; }
+        
+        .card { background: #fff; padding: 10px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); max-width: 500px; width: 100%; box-sizing: border-box; }
+        
+        .canvas-container { width: 100%; display: flex; justify-content: center; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+        canvas { max-width: 100%; max-height: 45vh; display: block; cursor: crosshair; }
+        
+        .toolbar { display: flex; flex-direction: column; gap: 8px; }
+        .tool-row { display: flex; gap: 8px; align-items: center; background: #f8f9fa; padding: 8px; border-radius: 8px; border: 1px solid #ddd; flex-wrap: wrap; }
+        
+        .btn { background-color: #1877F2; color: white; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; width: 100%; text-align: center; }
+        .btn.upload { background-color: #00A859; margin-bottom: 10px; }
+        .btn.download { background-color: #E53935; margin-top: 10px; }
+        
+        input[type="file"] { display: none; }
+        .input-text { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        .input-color { width: 35px; height: 35px; padding: 0; border: none; border-radius: 5px; cursor: pointer; }
+        .input-range { flex: 1; }
+        .select-tool { padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; background: white; flex: 1; font-weight: bold;}
+        .checkbox-label { display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="menu.html" class="back-btn">←</a>
+        <div class="title">Screenshot Editor</div>
+    </div>
+
+    <div class="card">
+        <input type="file" id="imageLoader" accept="image/*">
+        <button class="btn upload" onclick="document.getElementById('imageLoader').click()">
+            Select Screenshot
+        </button>
+
+        <div class="canvas-container">
+            <canvas id="editorCanvas"></canvas>
+        </div>
+
+        <div class="toolbar">
+            <!-- Tool Selector -->
+            <div class="tool-row">
+                <select id="toolSelect" class="select-tool">
+                    <option value="box">🧹 Erase (Hide old text)</option>
+                    <option value="text">✍️ Add Text (New text)</option>
+                </select>
+            </div>
+
+            <!-- Eraser Controls (Box) -->
+            <div class="tool-row" id="boxControls">
+                <span style="font-size: 12px; font-weight: bold;">Box Color:</span>
+                <input type="color" id="boxColor" class="input-color" value="#ffffff">
+                <span style="font-size: 11px; color: #666;">(Select background color to hide text)</span>
+            </div>
+
+            <!-- Text Controls -->
+            <div class="tool-row" id="textControls" style="display: none; flex-direction: column;">
+                <div style="display: flex; gap: 8px; width: 100%;">
+                    <input type="text" id="textInput" class="input-text" placeholder="Type new text here..." oninput="drawCanvas()">
+                    <input type="color" id="textColor" class="input-color" value="#000000" oninput="drawCanvas()">
+                </div>
+                <div style="display: flex; gap: 8px; width: 100%; align-items: center; margin-top: 5px;">
+                    <select id="fontFamily" class="select-tool" onchange="drawCanvas()" style="width: 100px;">
+                        <option value="Arial, sans-serif">Arial</option>
+                        <option value="'Helvetica Neue', Helvetica, sans-serif">Helvetica</option>
+                        <option value="'Times New Roman', Times, serif">Times</option>
+                        <option value="'Courier New', Courier, monospace">Courier</option>
+                        <option value="'Roboto', sans-serif">Roboto</option>
+                        <option value="'Open Sans', sans-serif">Open Sans</option>
+                    </select>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="isBold" checked onchange="drawCanvas()"> Bold
+                    </label>
+                    <input type="range" id="textSize" class="input-range" min="10" max="100" value="30" oninput="drawCanvas()">
+                </div>
+            </div>
+
+            <button class="btn download" onclick="downloadImage()">Download Edited Photo</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('editorCanvas');
+        const ctx = canvas.getContext('2d');
+        let originalImage = null;
+        let objects = []; 
+
+        // Tool Switch
+        document.getElementById('toolSelect').addEventListener('change', function(e) {
+            if(e.target.value === 'box') {
+                document.getElementById('boxControls').style.display = 'flex';
+                document.getElementById('textControls').style.display = 'none';
+            } else {
+                document.getElementById('boxControls').style.display = 'none';
+                document.getElementById('textControls').style.display = 'flex';
+            }
+        });
+
+        // Load Image
+        document.getElementById('imageLoader').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    originalImage = img;
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    objects = []; 
+                    drawCanvas();
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Tap on Canvas
+        canvas.addEventListener('click', function(e) {
+            if (!originalImage) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+            const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+            const tool = document.getElementById('toolSelect').value;
+
+            if (tool === 'box') {
+                const color = document.getElementById('boxColor').value;
+                // Box size thoda bada kiya hai taaki text achhe se chhup jaye
+                const boxWidth = canvas.width * 0.35; 
+                const boxHeight = canvas.height * 0.08; 
+                
+                objects.push({
+                    type: 'box',
+                    x: x - (boxWidth/2),
+                    y: y - (boxHeight/2),
+                    w: boxWidth,
+                    h: boxHeight,
+                    color: color
+                });
+            } else {
+                const text = document.getElementById('textInput').value;
+                if(!text) { alert("Please type text first!"); return; }
+                
+                objects.push({
+                    type: 'text',
+                    x: x,
+                    y: y,
+                    text: text,
+                    color: document.getElementById('textColor').value,
+                    size: document.getElementById('textSize').value,
+                    font: document.getElementById('fontFamily').value,
+                    bold: document.getElementById('isBold').checked
+                });
+            }
+            drawCanvas();
+        });
+
+        // Draw Everything
+        function drawCanvas() {
+            if (!originalImage) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(originalImage, 0, 0);
+
+            objects.forEach(obj => {
+                if (obj.type === 'box') {
+                    ctx.fillStyle = obj.color;
+                    ctx.fillRect(obj.x, obj.y, obj.w, obj.h);
+                } else if (obj.type === 'text') {
+                    const weight = obj.bold ? 'bold' : 'normal';
+                    ctx.font = `${weight} ${obj.size}px ${obj.font}`;
+                    ctx.fillStyle = obj.color;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(obj.text, obj.x, obj.y);
+                }
+            });
+        }
+
+        // Download
+        function downloadImage() {
+            if (!originalImage) { alert("Select image first!"); return; }
+            const link = document.createElement('a');
+            link.download = 'SEAOX_Edited.jpg';
+            link.href = canvas.toDataURL('image/jpeg', 0.95);
+            link.click();
+        }
+    </script>
+</body>
+</html>
