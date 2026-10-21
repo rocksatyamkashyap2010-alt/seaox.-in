@@ -3,105 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEAOX - Video Trimmer</title>
+    <title>SEAOX - Pro Video Editor</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    
+    <!-- Google Fonts (50+ Popular Fonts for speed, can be expanded) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Lato&family=Montserrat&family=Oswald&family=Raleway&family=Poppins&family=Merriweather&family=Playfair+Display&family=Nunito&family=Ubuntu&family=Rubik&family=Quicksand&family=Barlow&family=Josefin+Sans&family=Teko&family=Dancing+Script&family=Pacifico&family=Caveat&family=Indie+Flower&family=Great+Vibes&family=Lobster&family=Righteous&family=Permanent+Marker&family=Anton&family=Bebas+Neue&family=Comfortaa&family=Kanit&family=Lora&display=swap" rel="stylesheet">
+
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; padding: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: white; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .header { width: 100%; max-width: 800px; display: flex; align-items: center; margin-bottom: 15px; }
+        body { margin: 0; padding: 10px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: white; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        
+        .header { width: 100%; max-width: 600px; display: flex; align-items: center; margin-bottom: 10px; }
         .back-btn { font-size: 24px; color: #fff; text-decoration: none; margin-right: 15px; }
-        .title { font-size: 20px; font-weight: bold; }
+        .title { font-size: 18px; font-weight: bold; }
 
-        .editor-container { position: relative; width: 100%; max-width: 600px; margin: auto; background: #000; border-radius: 10px; overflow: hidden; display: flex; justify-content: center; align-items: center; min-height: 200px; }
+        .editor-container { position: relative; width: 100%; max-width: 600px; background: #000; border-radius: 10px; overflow: hidden; display: flex; justify-content: center; align-items: center; min-height: 200px; }
+        video { width: 100%; max-height: 40vh; display: block; }
         
-        video { width: 100%; max-height: 50vh; display: block; }
+        /* Drag Elements */
+        .draggable { position: absolute; cursor: move; touch-action: none; display: none; }
+        #imageOverlay { width: 80px; height: auto; z-index: 10; }
+        #textOverlay { color: white; font-size: 24px; font-weight: bold; z-index: 11; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
         
-        /* Visual Crop Box */
-        .crop-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; touch-action: none; }
-        .crop-box { position: absolute; border: 2px dashed #00A859; background: rgba(0, 168, 89, 0.2); width: 80%; height: 80%; top: 10%; left: 10%; cursor: move; touch-action: none; }
-        .crop-box::before, .crop-box::after { content: ''; position: absolute; width: 15px; height: 15px; background: #00A859; border-radius: 50%; }
-        .crop-box::before { bottom: -7px; right: -7px; cursor: se-resize; }
+        /* Controls Container */
+        .controls-panel { width: 100%; max-width: 600px; background: #1e1e1e; margin-top: 10px; border-radius: 10px; padding: 15px; display: none; flex-direction: column; gap: 12px; max-height: 45vh; overflow-y: auto; }
         
-        /* Timeline Sliders */
-        .controls { width: 100%; max-width: 600px; margin-top: 15px; background: #1e1e1e; padding: 15px; border-radius: 10px; }
-        .slider-group { margin-bottom: 15px; }
-        .slider-group label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; color: #aaa; }
+        /* Tabs */
+        .tabs { display: flex; gap: 10px; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 10px; overflow-x: auto; }
+        .tab-btn { background: #333; color: #aaa; border: none; padding: 8px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; white-space: nowrap; }
+        .tab-btn.active { background: #E91E63; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: flex; flex-direction: column; gap: 10px; }
+
+        /* Form Elements */
+        .input-group { display: flex; flex-direction: column; gap: 5px; }
+        .input-group label { font-size: 12px; color: #aaa; display: flex; justify-content: space-between; }
         input[type="range"] { width: 100%; accent-color: #E91E63; }
+        input[type="text"], input[type="file"], select { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #444; background: #2a2a2a; color: white; font-family: inherit; }
         
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; background: #E91E63; color: white; margin-top: 10px; transition: 0.3s; }
+        .checkbox-group { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: bold; }
+        input[type="checkbox"] { width: 20px; height: 20px; accent-color: #00A859; }
+
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; background: #00A859; color: white; margin-top: 10px; transition: 0.3s; }
         .btn:disabled { background: #555; }
         
-        input[type="file"] { display: none; }
-        .upload-btn { background: #333; color: white; padding: 15px; border-radius: 8px; text-align: center; cursor: pointer; width: 100%; font-weight: bold; margin-bottom: 15px; display: block; border: 1px dashed #666; }
+        .upload-btn { background: #2C3E50; color: white; padding: 15px; border-radius: 8px; text-align: center; cursor: pointer; width: 100%; font-weight: bold; display: block; border: 1px dashed #666; }
         
-        #status { font-size: 14px; font-weight: bold; color: #FF9800; margin-top: 15px; text-align: center; }
+        #status { font-size: 13px; font-weight: bold; color: #FF9800; text-align: center; margin-top: 10px; }
+
+        /* Timeline specific */
+        .timeline-slider { position: relative; width: 100%; height: 30px; background: #333; border-radius: 5px; margin-top: 10px; overflow: hidden; }
+        .timeline-range { position: absolute; height: 100%; background: rgba(233, 30, 99, 0.3); border-left: 2px solid #E91E63; border-right: 2px solid #E91E63; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <a href="menu.html" class="back-btn">←</a>
-        <div class="title">Video Editor</div>
+        <div class="title">Pro Video Editor</div>
     </div>
 
     <input type="file" id="videoInput" accept="video/*">
-    <label for="videoInput" class="upload-btn">📂 Select Video to Edit</label>
+    <label for="videoInput" class="upload-btn" id="uploadLabel">📂 Select Video</label>
 
     <div class="editor-container" id="editorArea">
         <video id="videoPreview" playsinline></video>
-        <!-- Visual Crop Box -->
-        <div class="crop-overlay" id="cropOverlay">
-            <div class="crop-box" id="cropBox"></div>
-        </div>
+        
+        <!-- Overlays -->
+        <img id="imageOverlay" class="draggable" src="" alt="Overlay">
+        <div id="textOverlay" class="draggable">Sample Text</div>
     </div>
 
-    <div class="controls" id="controls" style="display: none;">
+    <div class="controls-panel" id="controlsPanel">
         
-        <div class="slider-group">
-            <label><span>Start Time</span> <span id="startVal">0.0s</span></label>
-            <input type="range" id="startSlider" min="0" max="100" value="0" step="0.1">
-        </div>
-        
-        <div class="slider-group">
-            <label><span>End Time</span> <span id="endVal">0.0s</span></label>
-            <input type="range" id="endSlider" min="0" max="100" value="100" step="0.1">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('trim')">✂️ Trim</button>
+            <button class="tab-btn" onclick="openTab('audio')">🔊 Audio</button>
+            <button class="tab-btn" onclick="openTab('image')">🖼️ Logo</button>
+            <button class="tab-btn" onclick="openTab('text')">🔤 Text</button>
         </div>
 
-        <div class="slider-group">
-            <label><span>Crop Width (Drag box corner)</span></label>
+        <!-- TRIM TAB -->
+        <div id="tab-trim" class="tab-content active">
+            <div class="input-group">
+                <label><span>Start Time</span> <span id="startVal">0.0s</span></label>
+                <input type="range" id="startSlider" min="0" max="100" value="0" step="0.1">
+            </div>
+            <div class="input-group">
+                <label><span>End Time</span> <span id="endVal">0.0s</span></label>
+                <input type="range" id="endSlider" min="0" max="100" value="100" step="0.1">
+            </div>
         </div>
 
-        <button class="btn" id="processBtn" onclick="processVideo()">
-            ✂️ Trim & Download Video
-        </button>
-        
+        <!-- AUDIO TAB -->
+        <div id="tab-audio" class="tab-content">
+            <label class="checkbox-group">
+                <input type="checkbox" id="includeAudio" checked>
+                Include Original Audio
+            </label>
+            <p style="font-size: 11px; color: #888;">*Agar video mein aawaz hai, toh record hone ke liye isko tick rakhein.</p>
+        </div>
+
+        <!-- IMAGE TAB -->
+        <div id="tab-image" class="tab-content">
+            <input type="file" id="imageInput" accept="image/*">
+            <label for="imageInput" class="upload-btn" style="padding: 10px; margin-bottom: 10px;">🖼️ Upload Logo/Image</label>
+            
+            <div id="imageControls" style="display: none;">
+                <div class="input-group">
+                    <label>Logo Show at (Sec): <span id="imgStartVal">0</span>s</label>
+                    <input type="range" id="imgStartTime" min="0" max="100" value="0">
+                </div>
+                <div class="input-group">
+                    <label>Logo Hide at (Sec): <span id="imgEndVal">5</span>s</label>
+                    <input type="range" id="imgEndTime" min="0" max="100" value="5">
+                </div>
+                <p style="font-size: 11px; color: #aaa; margin-top: 5px;">*Video par logo ko drag karke set karein.</p>
+            </div>
+        </div>
+
+        <!-- TEXT TAB -->
+        <div id="tab-text" class="tab-content">
+            <input type="text" id="textInput" placeholder="Type text here..." oninput="updateText()">
+            <input type="text" id="fontSearch" placeholder="Search fonts (e.g. Roboto)..." oninput="filterFonts()" style="margin-top: 5px;">
+            <select id="fontFamily" onchange="updateText()" style="font-size: 16px;">
+                <!-- Fonts will load here -->
+            </select>
+            
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <input type="color" id="textColor" value="#ffffff" onchange="updateText()" style="width: 50px; padding: 2px;">
+                <input type="range" id="textSize" min="10" max="100" value="30" oninput="updateText()">
+            </div>
+
+            <div id="textControls" style="display: none; margin-top: 10px;">
+                <div class="input-group">
+                    <label>Text Show at: <span id="txtStartVal">0</span>s</label>
+                    <input type="range" id="txtStartTime" min="0" max="100" value="0">
+                </div>
+                <div class="input-group">
+                    <label>Text Hide at: <span id="txtEndVal">5</span>s</label>
+                    <input type="range" id="txtEndTime" min="0" max="100" value="5">
+                </div>
+                <p style="font-size: 11px; color: #aaa;">*Video par text ko drag karke set karein.</p>
+            </div>
+        </div>
+
+        <button class="btn" id="processBtn" onclick="processVideo()">✂️ Process & Download</button>
         <div id="status"></div>
     </div>
 
     <canvas id="hiddenCanvas" style="display:none;"></canvas>
 
     <script>
+        // --- Elements ---
         const videoInput = document.getElementById('videoInput');
         const videoPreview = document.getElementById('videoPreview');
-        const controls = document.getElementById('controls');
-        const editorArea = document.getElementById('editorArea');
-        const cropOverlay = document.getElementById('cropOverlay');
-        const cropBox = document.getElementById('cropBox');
+        const controlsPanel = document.getElementById('controlsPanel');
         const startSlider = document.getElementById('startSlider');
         const endSlider = document.getElementById('endSlider');
         const startVal = document.getElementById('startVal');
         const endVal = document.getElementById('endVal');
-        const statusDiv = document.getElementById('status');
-        const processBtn = document.getElementById('processBtn');
-        const canvas = document.getElementById('hiddenCanvas');
-        const ctx = canvas.getContext('2d');
+        
+        const imageInput = document.getElementById('imageInput');
+        const imageOverlay = document.getElementById('imageOverlay');
+        const imgStartTime = document.getElementById('imgStartTime');
+        const imgEndTime = document.getElementById('imgEndTime');
+        const imageControls = document.getElementById('imageControls');
 
+        const textInput = document.getElementById('textInput');
+        const textOverlay = document.getElementById('textOverlay');
+        const txtStartTime = document.getElementById('txtStartTime');
+        const txtEndTime = document.getElementById('txtEndTime');
+        const textControls = document.getElementById('textControls');
+        
         let videoDuration = 0;
-        let isDragging = false;
-        let isResizing = false;
-        let startX, startY, startLeft, startTop, startWidth, startHeight;
+        let imgStartPercent = 0, imgEndPercent = 100;
+        let txtStartPercent = 0, txtEndPercent = 100;
+        let overlayImg = null;
 
-        // Video Load
+        // --- Tabs Logic ---
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // --- Video Load ---
         videoInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -114,117 +202,166 @@
                 endSlider.max = videoDuration;
                 endSlider.value = videoDuration;
                 
+                imgStartTime.max = videoDuration; imgEndTime.max = videoDuration;
+                imgEndTime.value = videoDuration;
+                txtStartTime.max = videoDuration; txtEndTime.max = videoDuration;
+                txtEndTime.value = videoDuration;
+
                 startVal.innerText = "0.0s";
                 endVal.innerText = videoDuration.toFixed(1) + "s";
                 
-                controls.style.display = 'block';
-                cropOverlay.style.display = 'block';
-                editorArea.style.height = 'auto';
+                controlsPanel.style.display = 'flex';
+                document.getElementById('uploadLabel').innerText = "Change Video";
             };
         });
 
-        // Slider Updates
+        // --- Sliders Update ---
         startSlider.addEventListener('input', () => {
-            if (parseFloat(startSlider.value) >= parseFloat(endSlider.value)) {
-                startSlider.value = endSlider.value - 1;
-            }
+            if (parseFloat(startSlider.value) >= parseFloat(endSlider.value)) startSlider.value = endSlider.value - 1;
             startVal.innerText = parseFloat(startSlider.value).toFixed(1) + "s";
-            videoPreview.currentTime = startSlider.value;
         });
-
         endSlider.addEventListener('input', () => {
-            if (parseFloat(endSlider.value) <= parseFloat(startSlider.value)) {
-                endSlider.value = parseFloat(startSlider.value) + 1;
-            }
+            if (parseFloat(endSlider.value) <= parseFloat(startSlider.value)) endSlider.value = parseFloat(startSlider.value) + 1;
             endVal.innerText = parseFloat(endSlider.value).toFixed(1) + "s";
         });
+        
+        // Overlay Time Sliders
+        imgStartTime.addEventListener('input', () => document.getElementById('imgStartVal').innerText = imgStartTime.value);
+        imgEndTime.addEventListener('input', () => document.getElementById('imgEndVal').innerText = imgEndTime.value);
+        txtStartTime.addEventListener('input', () => document.getElementById('txtStartVal').innerText = txtStartTime.value);
+        txtEndTime.addEventListener('input', () => document.getElementById('txtEndVal').innerText = txtEndTime.value);
 
-        // --- Visual Crop Box Logic (Drag & Resize) ---
-        cropBox.addEventListener('touchstart', (e) => {
-            const touch = e.touches[0];
-            startX = touch.clientX;
-            startY = touch.clientY;
+        // --- Image Overlay Load ---
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                overlayImg = new Image();
+                overlayImg.src = event.target.result;
+                imageOverlay.src = event.target.result;
+                imageOverlay.style.display = 'block';
+                imageOverlay.style.left = '10px';
+                imageOverlay.style.top = '10px';
+                imageControls.style.display = 'block';
+                makeDraggable(imageOverlay);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // --- Text Overlay ---
+        function updateText() {
+            const txt = textInput.value || "Sample Text";
+            textOverlay.innerText = txt;
+            textOverlay.style.color = document.getElementById('textColor').value;
+            textOverlay.style.fontSize = document.getElementById('textSize').value + "px";
+            textOverlay.style.fontFamily = document.getElementById('fontFamily').value;
             
-            // Check if resizing (corner)
-            if(e.target === cropBox) {
-                isDragging = true;
+            if(txt.length > 0) {
+                textOverlay.style.display = 'block';
+                textControls.style.display = 'block';
             } else {
-                isResizing = true;
+                textOverlay.style.display = 'none';
+                textControls.style.display = 'none';
             }
-            
-            startLeft = cropBox.offsetLeft;
-            startTop = cropBox.offsetTop;
-            startWidth = cropBox.offsetWidth;
-            startHeight = cropBox.offsetHeight;
-        });
+        }
 
-        // Add a drag handle in the corner
-        cropBox.innerHTML = '<div style="position:absolute; bottom:0; right:0; width:20px; height:20px; background:transparent;"></div>';
+        // --- Drag Functionality (for both image and text) ---
+        function makeDraggable(elmnt) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            elmnt.onmousedown = dragMouseDown;
+            elmnt.ontouchstart = dragMouseDown;
 
-        cropOverlay.addEventListener('touchmove', (e) => {
-            if(!isDragging && !isResizing) return;
-            e.preventDefault();
-            const touch = e.touches[0];
-            const dx = touch.clientX - startX;
-            const dy = touch.clientY - startY;
-
-            if (isDragging) {
-                cropBox.style.left = (startLeft + dx) + 'px';
-                cropBox.style.top = (startTop + dy) + 'px';
-            } else if (isResizing) {
-                let newWidth = startWidth + dx;
-                let newHeight = startHeight + dy;
-                if (newWidth > 50) cropBox.style.width = newWidth + 'px';
-                if (newHeight > 50) cropBox.style.height = newHeight + 'px';
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.touches ? e.touches[0].clientX : e.clientX;
+                pos4 = e.touches ? e.touches[0].clientY : e.clientY;
+                document.onmouseup = closeDragElement;
+                document.ontouchend = closeDragElement;
+                document.onmousemove = elementDrag;
+                document.ontouchmove = elementDrag;
             }
-        });
 
-        cropOverlay.addEventListener('touchend', () => {
-            isDragging = false;
-            isResizing = false;
-        });
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                pos1 = pos3 - clientX;
+                pos2 = pos4 - clientY;
+                pos3 = clientX;
+                pos4 = clientY;
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
 
-        // --- Video Processing ---
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+                document.ontouchend = null;
+                document.ontouchmove = null;
+            }
+        }
+        makeDraggable(textOverlay);
+
+        // --- Fonts Load & Search ---
+        const fontList = ["Roboto", "Open Sans", "Lato", "Montserrat", "Oswald", "Raleway", "Poppins", "Merriweather", "Playfair Display", "Nunito", "Ubuntu", "Rubik", "Quicksand", "Barlow", "Josefin Sans", "Teko", "Dancing Script", "Pacifico", "Caveat", "Indie Flower", "Great Vibes", "Lobster", "Righteous", "Permanent Marker", "Anton", "Bebas Neue", "Comfortaa", "Kanit", "Lora", "Arial", "Courier New", "Times New Roman", "Georgia", "Verdana"];
+
+        function loadFonts(filter = "") {
+            const select = document.getElementById('fontFamily');
+            select.innerHTML = '';
+            fontList.forEach(font => {
+                if(font.toLowerCase().includes(filter.toLowerCase())) {
+                    const opt = document.createElement('option');
+                    opt.value = font;
+                    opt.innerText = font;
+                    opt.style.fontFamily = font;
+                    select.appendChild(opt);
+                }
+            });
+            updateText();
+        }
+        function filterFonts() {
+            loadFonts(document.getElementById('fontSearch').value);
+        }
+        loadFonts();
+
+
+        // --- VIDEO PROCESSING & RECORDING ---
         async function processVideo() {
             const start = parseFloat(startSlider.value);
             const end = parseFloat(endSlider.value);
+            const keepAudio = document.getElementById('includeAudio').checked;
+            
+            if (end <= start) { alert("End time > Start time"); return; }
 
-            if (end <= start) {
-                alert("End time must be greater than Start time!");
-                return;
-            }
-
+            const processBtn = document.getElementById('processBtn');
+            const statusDiv = document.getElementById('status');
             processBtn.disabled = true;
-            statusDiv.innerText = "Processing... Please wait";
-            videoPreview.muted = true; // Audio issues on mobile
-            
-            // Calculate crop ratios based on video display size vs actual resolution
-            const videoRect = videoPreview.getBoundingClientRect();
-            const boxRect = cropBox.getBoundingClientRect();
-            
-            const scaleX = videoPreview.videoWidth / videoRect.width;
-            const scaleY = videoPreview.videoHeight / videoRect.height;
+            statusDiv.innerText = "Processing video... Please wait";
 
-            const cw = boxRect.width * scaleX;
-            const ch = boxRect.height * scaleY;
-            const cx = (boxRect.left - videoRect.left) * scaleX;
-            const cy = (boxRect.top - videoRect.top) * scaleY;
+            // Canvas Setup
+            const canvas = document.getElementById('hiddenCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = videoPreview.videoWidth;
+            canvas.height = videoPreview.videoHeight;
 
-            canvas.width = cw;
-            canvas.height = ch;
-
+            // Stream setup
             const stream = canvas.captureStream(30);
             
-            // Audio support (works on some browsers)
-            try {
-                const audioCtx = new AudioContext();
-                const source = audioCtx.createMediaElementSource(videoPreview);
-                const dest = audioCtx.createMediaStreamDestination();
-                source.connect(dest);
-                source.connect(audioCtx.destination);
-                const audioTrack = dest.stream.getAudioTracks()[0];
-                if (audioTrack) stream.addTrack(audioTrack);
-            } catch(e) { console.log("Audio capture not supported on this browser"); }
+            // Audio Logic
+            if (keepAudio) {
+                try {
+                    const audioCtx = new AudioContext();
+                    const source = audioCtx.createMediaElementSource(videoPreview);
+                    const dest = audioCtx.createMediaStreamDestination();
+                    source.connect(dest);
+                    source.connect(audioCtx.destination);
+                    const audioTrack = dest.stream.getAudioTracks()[0];
+                    if (audioTrack) stream.addTrack(audioTrack);
+                } catch(e) { console.log("Audio context error", e); }
+            }
 
             const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
             const chunks = [];
@@ -237,13 +374,32 @@
                 a.href = url;
                 a.download = 'SEAOX_Edited.webm';
                 a.click();
-                statusDiv.innerText = "Video Downloaded!";
+                statusDiv.innerText = "Download Complete!";
                 processBtn.disabled = false;
             };
 
+            // Start Recording
             videoPreview.currentTime = start;
+            videoPreview.muted = !keepAudio; // Video element ko mute karo taaki audio record na ho agar unchecked hai
             await videoPreview.play();
             mediaRecorder.start();
+
+            // Get Overlay Positions
+            const videoRect = videoPreview.getBoundingClientRect();
+            const imgRect = imageOverlay.getBoundingClientRect();
+            const txtRect = textOverlay.getBoundingClientRect();
+
+            // Calculate ratios
+            const scaleX = canvas.width / videoRect.width;
+            const scaleY = canvas.height / videoRect.height;
+
+            const imgX = (imgRect.left - videoRect.left) * scaleX;
+            const imgY = (imgRect.top - videoRect.top) * scaleY;
+            const imgW = imgRect.width * scaleX;
+            const imgH = imgRect.height * scaleY;
+
+            const txtX = (txtRect.left - videoRect.left) * scaleX;
+            const txtY = (txtRect.top - videoRect.top) * scaleY;
 
             function drawFrame() {
                 if (videoPreview.currentTime >= end || videoPreview.ended) {
@@ -251,7 +407,35 @@
                     videoPreview.pause();
                     return;
                 }
-                ctx.drawImage(videoPreview, cx, cy, cw, ch, 0, 0, cw, ch);
+
+                // 1. Draw Video
+                ctx.drawImage(videoPreview, 0, 0, canvas.width, canvas.height);
+
+                // 2. Draw Image Overlay (if within time)
+                if(overlayImg && videoPreview.currentTime >= parseFloat(imgStartTime.value) && videoPreview.currentTime <= parseFloat(imgEndTime.value)) {
+                    ctx.drawImage(overlayImg, imgX, imgY, imgW, imgH);
+                }
+
+                // 3. Draw Text Overlay (if within time)
+                if(textInput.value && videoPreview.currentTime >= parseFloat(txtStartTime.value) && videoPreview.currentTime <= parseFloat(txtEndTime.value)) {
+                    const fontSize = parseInt(document.getElementById('textSize').value) * scaleY;
+                    ctx.font = `bold ${fontSize}px "${document.getElementById('fontFamily').value}"`;
+                    ctx.fillStyle = document.getElementById('textColor').value;
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'top';
+                    
+                    // Shadow for text readability
+                    ctx.shadowColor = 'rgba(0,0,0,0.8)';
+                    ctx.shadowBlur = 5;
+                    ctx.shadowOffsetX = 2;
+                    ctx.shadowOffsetY = 2;
+                    
+                    ctx.fillText(textInput.value, txtX, txtY);
+                    
+                    // Reset shadow
+                    ctx.shadowColor = 'transparent';
+                }
+
                 requestAnimationFrame(drawFrame);
             }
             drawFrame();
