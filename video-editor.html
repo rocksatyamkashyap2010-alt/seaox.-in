@@ -6,8 +6,8 @@
     <title>SEAOX - Pro Video Editor</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     
-    <!-- Google Fonts (50+ Popular Fonts for speed, can be expanded) -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Lato&family=Montserrat&family=Oswald&family=Raleway&family=Poppins&family=Merriweather&family=Playfair+Display&family=Nunito&family=Ubuntu&family=Rubik&family=Quicksand&family=Barlow&family=Josefin+Sans&family=Teko&family=Dancing+Script&family=Pacifico&family=Caveat&family=Indie+Flower&family=Great+Vibes&family=Lobster&family=Righteous&family=Permanent+Marker&family=Anton&family=Bebas+Neue&family=Comfortaa&family=Kanit&family=Lora&display=swap" rel="stylesheet">
+    <!-- 100+ Fonts Load -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Lato&family=Montserrat&family=Oswald&family=Raleway&family=Poppins&family=Merriweather&family=Playfair+Display&family=Nunito&family=Ubuntu&family=Rubik&family=Quicksand&family=Barlow&family=Josefin+Sans&family=Teko&family=Dancing+Script&family=Pacifico&family=Caveat&family=Indie+Flower&family=Great+Vibes&family=Lobster&family=Righteous&family=Permanent+Marker&family=Anton&family=Bebas+Neue&family=Comfortaa&family=Kanit&family=Lora&family=Alfa+Slab+One&family=Archivo+Black&family=Bangers&family=Berkshire+Swash&family=Bungee&family=Chivo&family=Cinzel&family=Creepster&family=Domine&family=Dosis&family=Fjalla+One&family=Fredoka+One&family=Gloria+Hallelujah&family=Gochi+Hand&family=Gothic+A1&family=Handlee&family=Heebo&family=Josefin+Slab&family=Kalam&family=Lobster+Two&family=Marck+Script&family=Monoton&family=Neucha&family=Oleo+Script&family=Oxygen&family=Parisienne&family=Patrick+Hand&family=Philosopher&family=Play&family=Questrial&family=Rokkitt&family=Russo+One&family=Signika&family=Special+Elite&family=Sriracha&family=Tangerine&family=Ubuntu+Mono&family=Unica+One&family=Varela+Round&family=Vollkorn&family=VT323&family=Yellowtail&display=swap" rel="stylesheet">
 
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -18,24 +18,28 @@
         .title { font-size: 18px; font-weight: bold; }
 
         .editor-container { position: relative; width: 100%; max-width: 600px; background: #000; border-radius: 10px; overflow: hidden; display: flex; justify-content: center; align-items: center; min-height: 200px; }
-        video { width: 100%; max-height: 40vh; display: block; }
+        video { width: 100%; max-height: 35vh; display: block; }
         
-        /* Drag Elements */
         .draggable { position: absolute; cursor: move; touch-action: none; display: none; }
         #imageOverlay { width: 80px; height: auto; z-index: 10; }
-        #textOverlay { color: white; font-size: 24px; font-weight: bold; z-index: 11; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+        #textOverlay { color: white; font-size: 24px; font-weight: bold; z-index: 11; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); pointer-events: none; }
         
-        /* Controls Container */
-        .controls-panel { width: 100%; max-width: 600px; background: #1e1e1e; margin-top: 10px; border-radius: 10px; padding: 15px; display: none; flex-direction: column; gap: 12px; max-height: 45vh; overflow-y: auto; }
+        /* 🎬 TIMELINE UI 🎬 */
+        .timeline-container { width: 100%; max-width: 600px; margin-top: 10px; background: #1e1e1e; border-radius: 8px; padding: 5px; position: relative; overflow: hidden; display: none; }
+        .timeline-scroll { display: flex; overflow-x: auto; position: relative; height: 50px; scrollbar-width: none; }
+        .timeline-scroll::-webkit-scrollbar { display: none; }
+        .timeline-frame { height: 100%; min-width: 60px; border-right: 1px solid #333; object-fit: cover; opacity: 0.6; }
+        .playhead { position: absolute; top: 0; bottom: 0; width: 3px; background: #E91E63; left: 0; z-index: 5; box-shadow: 0 0 5px #E91E63; pointer-events: none; }
+        .playhead::before { content: ''; position: absolute; top: 0; left: -5px; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #E91E63; }
+
+        .controls-panel { width: 100%; max-width: 600px; background: #1e1e1e; margin-top: 10px; border-radius: 10px; padding: 15px; display: none; flex-direction: column; gap: 12px; max-height: 40vh; overflow-y: auto; }
         
-        /* Tabs */
         .tabs { display: flex; gap: 10px; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 10px; overflow-x: auto; }
         .tab-btn { background: #333; color: #aaa; border: none; padding: 8px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; white-space: nowrap; }
         .tab-btn.active { background: #E91E63; color: white; }
         .tab-content { display: none; }
         .tab-content.active { display: flex; flex-direction: column; gap: 10px; }
 
-        /* Form Elements */
         .input-group { display: flex; flex-direction: column; gap: 5px; }
         .input-group label { font-size: 12px; color: #aaa; display: flex; justify-content: space-between; }
         input[type="range"] { width: 100%; accent-color: #E91E63; }
@@ -51,9 +55,12 @@
         
         #status { font-size: 13px; font-weight: bold; color: #FF9800; text-align: center; margin-top: 10px; }
 
-        /* Timeline specific */
-        .timeline-slider { position: relative; width: 100%; height: 30px; background: #333; border-radius: 5px; margin-top: 10px; overflow: hidden; }
-        .timeline-range { position: absolute; height: 100%; background: rgba(233, 30, 99, 0.3); border-left: 2px solid #E91E63; border-right: 2px solid #E91E63; }
+        /* Font Search & List */
+        .font-search-box { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #444; background: #2a2a2a; color: white; margin-bottom: 5px; }
+        .font-list-container { height: 120px; overflow-y: auto; background: #111; border-radius: 5px; border: 1px solid #333; }
+        .font-item { padding: 10px; cursor: pointer; border-bottom: 1px solid #222; color: white; }
+        .font-item:hover { background: #333; }
+        .font-item.selected { background: #E91E63; color: white; }
     </style>
 </head>
 <body>
@@ -68,10 +75,16 @@
 
     <div class="editor-container" id="editorArea">
         <video id="videoPreview" playsinline></video>
-        
-        <!-- Overlays -->
         <img id="imageOverlay" class="draggable" src="" alt="Overlay">
         <div id="textOverlay" class="draggable">Sample Text</div>
+    </div>
+
+    <!-- 🎬 TIMELINE UI 🎬 -->
+    <div class="timeline-container" id="timelineContainer">
+        <div class="timeline-scroll" id="timelineScroll">
+            <!-- Frames will be injected here -->
+            <div class="playhead" id="playhead"></div>
+        </div>
     </div>
 
     <div class="controls-panel" id="controlsPanel">
@@ -93,6 +106,7 @@
                 <label><span>End Time</span> <span id="endVal">0.0s</span></label>
                 <input type="range" id="endSlider" min="0" max="100" value="100" step="0.1">
             </div>
+            <p style="font-size: 11px; color: #aaa;">*Timeline par click karke bhi video ko aage peeche kar sakte hain.</p>
         </div>
 
         <!-- AUDIO TAB -->
@@ -107,30 +121,27 @@
         <!-- IMAGE TAB -->
         <div id="tab-image" class="tab-content">
             <input type="file" id="imageInput" accept="image/*">
-            <label for="imageInput" class="upload-btn" style="padding: 10px; margin-bottom: 10px;">🖼️ Upload Logo/Image</label>
-            
+            <label for="imageInput" class="upload-btn" style="padding: 10px; margin-bottom: 10px;">🖼️ Upload Logo</label>
             <div id="imageControls" style="display: none;">
                 <div class="input-group">
-                    <label>Logo Show at (Sec): <span id="imgStartVal">0</span>s</label>
+                    <label>Logo Show at: <span id="imgStartVal">0</span>s</label>
                     <input type="range" id="imgStartTime" min="0" max="100" value="0">
                 </div>
                 <div class="input-group">
-                    <label>Logo Hide at (Sec): <span id="imgEndVal">5</span>s</label>
+                    <label>Logo Hide at: <span id="imgEndVal">5</span>s</label>
                     <input type="range" id="imgEndTime" min="0" max="100" value="5">
                 </div>
-                <p style="font-size: 11px; color: #aaa; margin-top: 5px;">*Video par logo ko drag karke set karein.</p>
             </div>
         </div>
 
         <!-- TEXT TAB -->
         <div id="tab-text" class="tab-content">
             <input type="text" id="textInput" placeholder="Type text here..." oninput="updateText()">
-            <input type="text" id="fontSearch" placeholder="Search fonts (e.g. Roboto)..." oninput="filterFonts()" style="margin-top: 5px;">
-            <select id="fontFamily" onchange="updateText()" style="font-size: 16px;">
-                <!-- Fonts will load here -->
-            </select>
+            <input type="text" id="fontSearch" class="font-search-box" placeholder="Search font..." oninput="filterFonts()">
+            <div id="fontList" class="font-list-container"></div>
+            <input type="hidden" id="fontFamily" value="Arial">
             
-            <div style="display: flex; gap: 10px; align-items: center;">
+            <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
                 <input type="color" id="textColor" value="#ffffff" onchange="updateText()" style="width: 50px; padding: 2px;">
                 <input type="range" id="textSize" min="10" max="100" value="30" oninput="updateText()">
             </div>
@@ -144,7 +155,6 @@
                     <label>Text Hide at: <span id="txtEndVal">5</span>s</label>
                     <input type="range" id="txtEndTime" min="0" max="100" value="5">
                 </div>
-                <p style="font-size: 11px; color: #aaa;">*Video par text ko drag karke set karein.</p>
             </div>
         </div>
 
@@ -159,6 +169,10 @@
         const videoInput = document.getElementById('videoInput');
         const videoPreview = document.getElementById('videoPreview');
         const controlsPanel = document.getElementById('controlsPanel');
+        const timelineContainer = document.getElementById('timelineContainer');
+        const timelineScroll = document.getElementById('timelineScroll');
+        const playhead = document.getElementById('playhead');
+        
         const startSlider = document.getElementById('startSlider');
         const endSlider = document.getElementById('endSlider');
         const startVal = document.getElementById('startVal');
@@ -177,8 +191,6 @@
         const textControls = document.getElementById('textControls');
         
         let videoDuration = 0;
-        let imgStartPercent = 0, imgEndPercent = 100;
-        let txtStartPercent = 0, txtEndPercent = 100;
         let overlayImg = null;
 
         // --- Tabs Logic ---
@@ -189,7 +201,7 @@
             event.target.classList.add('active');
         }
 
-        // --- Video Load ---
+        // --- Video Load & Timeline Generation ---
         videoInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -211,14 +223,78 @@
                 endVal.innerText = videoDuration.toFixed(1) + "s";
                 
                 controlsPanel.style.display = 'flex';
+                timelineContainer.style.display = 'block'; // Show Timeline
                 document.getElementById('uploadLabel').innerText = "Change Video";
+
+                generateTimeline(); // Call timeline generator
             };
+        });
+
+        // TIMELINE GENERATION (Thumbnails)
+        async function generateTimeline() {
+            const scrollContainer = document.getElementById('timelineScroll');
+            // Clear old frames but keep playhead
+            Array.from(scrollContainer.children).forEach(child => {
+                if(child.id !== 'playhead') child.remove();
+            });
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 160; // Thumbnail width
+            canvas.height = 90; // Thumbnail height
+
+            const totalFrames = 10; // Generate 10 thumbnails
+            const interval = videoDuration / totalFrames;
+
+            for(let i=0; i<totalFrames; i++) {
+                const time = i * interval;
+                
+                // Create a promise to wait for video seeking
+                await new Promise(resolve => {
+                    videoPreview.currentTime = time;
+                    videoPreview.onseeked = resolve;
+                });
+
+                ctx.drawImage(videoPreview, 0, 0, canvas.width, canvas.height);
+                const dataUrl = canvas.toDataURL('image/jpeg');
+                
+                const img = document.createElement('img');
+                img.src = dataUrl;
+                img.className = 'timeline-frame';
+                scrollContainer.appendChild(img);
+            }
+            
+            // Reset video to start
+            videoPreview.currentTime = 0;
+        }
+
+        // --- Timeline Playhead Movement ---
+        videoPreview.addEventListener('timeupdate', () => {
+            if(videoDuration > 0) {
+                const percent = videoPreview.currentTime / videoDuration;
+                playhead.style.left = (percent * 100) + '%';
+                
+                // Auto scroll timeline
+                const scrollWidth = timelineScroll.scrollWidth;
+                const clientWidth = timelineScroll.clientWidth;
+                const scrollPos = (percent * scrollWidth) - (clientWidth / 2);
+                timelineScroll.scrollLeft = scrollPos;
+            }
+        });
+
+        // Click on timeline to seek
+        timelineScroll.addEventListener('click', (e) => {
+            const rect = timelineScroll.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percent = clickX / rect.width;
+            videoPreview.currentTime = percent * videoDuration;
         });
 
         // --- Sliders Update ---
         startSlider.addEventListener('input', () => {
             if (parseFloat(startSlider.value) >= parseFloat(endSlider.value)) startSlider.value = endSlider.value - 1;
             startVal.innerText = parseFloat(startSlider.value).toFixed(1) + "s";
+            videoPreview.currentTime = startSlider.value;
         });
         endSlider.addEventListener('input', () => {
             if (parseFloat(endSlider.value) <= parseFloat(startSlider.value)) endSlider.value = parseFloat(startSlider.value) + 1;
@@ -249,13 +325,13 @@
             reader.readAsDataURL(file);
         });
 
-        // --- Text Overlay ---
+        // --- Text Overlay & Fonts ---
         function updateText() {
             const txt = textInput.value || "Sample Text";
             textOverlay.innerText = txt;
             textOverlay.style.color = document.getElementById('textColor').value;
             textOverlay.style.fontSize = document.getElementById('textSize').value + "px";
-            textOverlay.style.fontFamily = document.getElementById('fontFamily').value;
+            textOverlay.style.fontFamily = `'${document.getElementById('fontFamily').value}', sans-serif`;
             
             if(txt.length > 0) {
                 textOverlay.style.display = 'block';
@@ -266,7 +342,49 @@
             }
         }
 
-        // --- Drag Functionality (for both image and text) ---
+        const fontList = [
+            "Arial", "Roboto", "Open Sans", "Lato", "Montserrat", "Oswald", "Raleway", "Poppins", "Merriweather", 
+            "Playfair Display", "Nunito", "Ubuntu", "Rubik", "Quicksand", "Barlow", "Josefin Sans", "Mukta", 
+            "Teko", "Dancing Script", "Pacifico", "Caveat", "Indie Flower", "Shadows Into Light", "Great Vibes", 
+            "Satisfy", "Lobster", "Righteous", "Permanent Marker", "Amatic SC", "Anton", "Bebas Neue", "Comfortaa", 
+            "Exo 2", "Fira Sans", "Gloria Hallelujah", "Inconsolata", "Jura", "Kanit", "Kaushan Script", 
+            "Libre Baskerville", "Lora", "Maven Pro", "Merienda", "Nova Mono", "Orbitron", "Patua One", 
+            "Prompt", "Prosto One", "Sacramento", "Space Mono", "Spectral", "Titillium Web", "Yeseva One",
+            "Alfa Slab One", "Archivo Black", "Bangers", "Berkshire Swash", "Bungee", "Chivo", "Cinzel", 
+            "Creepster", "Domine", "Dosis", "Fjalla One", "Fredoka One", "Gochi Hand", "Gothic A1", "Handlee", 
+            "Heebo", "Josefin Slab", "Kalam", "Lobster Two", "Marck Script", "Monoton", "Neucha", "Oleo Script", 
+            "Oxygen", "Parisienne", "Patrick Hand", "Philosopher", "Play", "Questrial", "Rokkitt", "Russo One", 
+            "Signika", "Special Elite", "Sriracha", "Tangerine", "Ubuntu Mono", "Unica One", "Varela Round", 
+            "Vollkorn", "VT323", "Yellowtail"
+        ];
+
+        function renderFontList(filterText = "") {
+            const container = document.getElementById('fontList');
+            container.innerHTML = '';
+            
+            fontList.forEach(font => {
+                if(font.toLowerCase().includes(filterText.toLowerCase())) {
+                    const div = document.createElement('div');
+                    div.className = 'font-item';
+                    div.style.fontFamily = `'${font}', sans-serif`;
+                    div.innerText = font;
+                    div.onclick = () => {
+                        document.getElementById('fontFamily').value = font;
+                        document.querySelectorAll('.font-item').forEach(el => el.classList.remove('selected'));
+                        div.classList.add('selected');
+                        updateText();
+                    };
+                    container.appendChild(div);
+                }
+            });
+        }
+        renderFontList();
+
+        function filterFonts() {
+            renderFontList(document.getElementById('fontSearch').value);
+        }
+
+        // --- Drag Functionality ---
         function makeDraggable(elmnt) {
             let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
             elmnt.onmousedown = dragMouseDown;
@@ -305,30 +423,7 @@
         }
         makeDraggable(textOverlay);
 
-        // --- Fonts Load & Search ---
-        const fontList = ["Roboto", "Open Sans", "Lato", "Montserrat", "Oswald", "Raleway", "Poppins", "Merriweather", "Playfair Display", "Nunito", "Ubuntu", "Rubik", "Quicksand", "Barlow", "Josefin Sans", "Teko", "Dancing Script", "Pacifico", "Caveat", "Indie Flower", "Great Vibes", "Lobster", "Righteous", "Permanent Marker", "Anton", "Bebas Neue", "Comfortaa", "Kanit", "Lora", "Arial", "Courier New", "Times New Roman", "Georgia", "Verdana"];
-
-        function loadFonts(filter = "") {
-            const select = document.getElementById('fontFamily');
-            select.innerHTML = '';
-            fontList.forEach(font => {
-                if(font.toLowerCase().includes(filter.toLowerCase())) {
-                    const opt = document.createElement('option');
-                    opt.value = font;
-                    opt.innerText = font;
-                    opt.style.fontFamily = font;
-                    select.appendChild(opt);
-                }
-            });
-            updateText();
-        }
-        function filterFonts() {
-            loadFonts(document.getElementById('fontSearch').value);
-        }
-        loadFonts();
-
-
-        // --- VIDEO PROCESSING & RECORDING ---
+        // --- VIDEO PROCESSING ---
         async function processVideo() {
             const start = parseFloat(startSlider.value);
             const end = parseFloat(endSlider.value);
@@ -339,18 +434,15 @@
             const processBtn = document.getElementById('processBtn');
             const statusDiv = document.getElementById('status');
             processBtn.disabled = true;
-            statusDiv.innerText = "Processing video... Please wait";
+            statusDiv.innerText = "Processing... Please wait";
 
-            // Canvas Setup
             const canvas = document.getElementById('hiddenCanvas');
             const ctx = canvas.getContext('2d');
             canvas.width = videoPreview.videoWidth;
             canvas.height = videoPreview.videoHeight;
 
-            // Stream setup
             const stream = canvas.captureStream(30);
             
-            // Audio Logic
             if (keepAudio) {
                 try {
                     const audioCtx = new AudioContext();
@@ -360,7 +452,7 @@
                     source.connect(audioCtx.destination);
                     const audioTrack = dest.stream.getAudioTracks()[0];
                     if (audioTrack) stream.addTrack(audioTrack);
-                } catch(e) { console.log("Audio context error", e); }
+                } catch(e) { console.log("Audio capture error"); }
             }
 
             const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
@@ -378,18 +470,15 @@
                 processBtn.disabled = false;
             };
 
-            // Start Recording
             videoPreview.currentTime = start;
-            videoPreview.muted = !keepAudio; // Video element ko mute karo taaki audio record na ho agar unchecked hai
+            videoPreview.muted = !keepAudio;
             await videoPreview.play();
             mediaRecorder.start();
 
-            // Get Overlay Positions
             const videoRect = videoPreview.getBoundingClientRect();
             const imgRect = imageOverlay.getBoundingClientRect();
             const txtRect = textOverlay.getBoundingClientRect();
 
-            // Calculate ratios
             const scaleX = canvas.width / videoRect.width;
             const scaleY = canvas.height / videoRect.height;
 
@@ -408,31 +497,23 @@
                     return;
                 }
 
-                // 1. Draw Video
                 ctx.drawImage(videoPreview, 0, 0, canvas.width, canvas.height);
 
-                // 2. Draw Image Overlay (if within time)
                 if(overlayImg && videoPreview.currentTime >= parseFloat(imgStartTime.value) && videoPreview.currentTime <= parseFloat(imgEndTime.value)) {
                     ctx.drawImage(overlayImg, imgX, imgY, imgW, imgH);
                 }
 
-                // 3. Draw Text Overlay (if within time)
                 if(textInput.value && videoPreview.currentTime >= parseFloat(txtStartTime.value) && videoPreview.currentTime <= parseFloat(txtEndTime.value)) {
                     const fontSize = parseInt(document.getElementById('textSize').value) * scaleY;
-                    ctx.font = `bold ${fontSize}px "${document.getElementById('fontFamily').value}"`;
+                    ctx.font = `bold ${fontSize}px "${document.getElementById('fontFamily').value}", sans-serif`;
                     ctx.fillStyle = document.getElementById('textColor').value;
                     ctx.textAlign = 'left';
                     ctx.textBaseline = 'top';
-                    
-                    // Shadow for text readability
                     ctx.shadowColor = 'rgba(0,0,0,0.8)';
                     ctx.shadowBlur = 5;
                     ctx.shadowOffsetX = 2;
                     ctx.shadowOffsetY = 2;
-                    
                     ctx.fillText(textInput.value, txtX, txtY);
-                    
-                    // Reset shadow
                     ctx.shadowColor = 'transparent';
                 }
 
