@@ -6,8 +6,8 @@
     <title>SEAOX - Pro Screenshot Editor</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     
-    <!-- Google Fonts CDN (100+ Popular Fonts ke liye) -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Lato&family=Montserrat&family=Oswald&family=Raleway&family=Poppins&family=Merriweather&family=Playfair+Display&family=Nunito&family=Ubuntu&family=Rubik&family=Quicksand&family=Barlow&family=Josefin+Sans&family=Mukta&family=Teko&family=Dancing+Script&family=Pacifico&family=Caveat&family=Indie+Flower&family=Shadows+Into+Light&family=Great+Vibes&family=Satisfy&family=Lobster&family=Righteous&family=Permanent+Marker&family=Amatic+SC&family=Anton&family=Bebas+Neue&family=Comfortaa&family=Exo+2&family=Fira+Sans&family=Gloria+Hallelujah&family=Inconsolata&family=Jura&family=Kanit&family=Kaushan+Script&family=Libre+Baskerville&family=Lora&family=Maven+Pro&family=Merienda&family=Nova+Mono&family=Orbitron&family=Patua+One&family=Prompt&family=Prosto+One&family=Sacramento&family=Space+Mono&family=Spectral&family=Titillium+Web&family=Yeseva+One&display=swap" rel="stylesheet">
+    <!-- 100+ Stylish Google Fonts Load -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&family=Lato&family=Montserrat&family=Oswald&family=Raleway&family=Poppins&family=Merriweather&family=Playfair+Display&family=Nunito&family=Ubuntu&family=Rubik&family=Quicksand&family=Barlow&family=Josefin+Sans&family=Mukta&family=Teko&family=Dancing+Script&family=Pacifico&family=Caveat&family=Indie+Flower&family=Shadows+Into+Light&family=Great+Vibes&family=Satisfy&family=Lobster&family=Righteous&family=Permanent+Marker&family=Amatic+SC&family=Anton&family=Bebas+Neue&family=Comfortaa&family=Exo+2&family=Fira+Sans&family=Gloria+Hallelujah&family=Inconsolata&family=Jura&family=Kanit&family=Kaushan+Script&family=Libre+Baskerville&family=Lora&family=Maven+Pro&family=Merienda&family=Nova+Mono&family=Orbitron&family=Patua+One&family=Prompt&family=Prosto+One&family=Sacramento&family=Space+Mono&family=Spectral&family=Titillium+Web&family=Yeseva+One&family=Alfa+Slab+One&family=Archivo+Black&family=Bangers&family=Berkshire+Swash&family=Bungee&family=Chivo&family=Cinzel&family=Creepster&family=Domine&family=Dosis&family=Fjalla+One&family=Fredoka+One&family=Gloria+Hallelujah&family=Gochi+Hand&family=Gothic+A1&family=Handlee&family=Heebo&family=Indie+Flower&family=Josefin+Slab&family=Kalam&family=Lobster+Two&family=Marck+Script&family=Monoton&family=Muli&family=Neucha&family=Oleo+Script&family=Oxygen&family=Pacifico&family=Parisienne&family=Patrick+Hand&family=Permanent+Marker&family=Philosopher&family=Play&family=Poppins&family=Questrial&family=Quicksand&family=Rokkitt&family=Russo+One&family=Shadows+Into+Light&family=Signika&family=Special+Elite&family=Sriracha&family=Tangerine&family=Ubuntu+Mono&family=Unica+One&family=Varela+Round&family=Vollkorn&family=VT323&family=Yellowtail&display=swap" rel="stylesheet">
     
     <style>
         body { margin: 0; padding: 10px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
@@ -15,13 +15,12 @@
         .back-btn { font-size: 24px; color: #333; text-decoration: none; margin-right: 15px; }
         .title { font-size: 20px; font-weight: bold; color: #111; flex: 1; }
         
-        /* Undo Button Header */
         .undo-btn { background: #555; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
         
         .card { background: #fff; padding: 10px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); max-width: 500px; width: 100%; box-sizing: border-box; }
         
         .canvas-container { width: 100%; display: flex; justify-content: center; background: #e0e0e0; border-radius: 10px; overflow: hidden; margin-bottom: 10px; position: relative; }
-        canvas { max-width: 100%; max-height: 45vh; display: block; cursor: crosshair; }
+        canvas { max-width: 100%; max-height: 40vh; display: block; cursor: crosshair; }
         
         .toolbar { display: flex; flex-direction: column; gap: 8px; }
         .tool-row { display: flex; gap: 8px; align-items: center; background: #f8f9fa; padding: 8px; border-radius: 8px; border: 1px solid #ddd; flex-wrap: wrap; }
@@ -37,39 +36,38 @@
         .select-tool { padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; background: white; flex: 1; font-weight: bold;}
         .checkbox-label { display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: bold; }
         
-        /* Font Search Box */
-        .font-search-box { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; margin-bottom: 5px; }
+        /* Font Search & List UI */
+        .font-search-box { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; margin-bottom: 5px; box-sizing: border-box; }
+        .font-list-container { height: 120px; overflow-y: auto; border: 1px solid #ddd; border-radius: 5px; background: white; }
+        .font-item { padding: 10px; cursor: pointer; border-bottom: 1px solid #eee; font-size: 16px; }
+        .font-item:hover { background: #f0f0f0; }
+        .font-item.selected { background: #e3f2fd; color: #1877F2; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <a href="menu.html" class="back-btn">←</a>
-        <div class="title">Pro Screenshot Editor</div>
-        <!-- Naya Undo Button -->
+        <div class="title">Screenshot Editor</div>
         <button class="undo-btn" onclick="undo()">↩ Undo</button>
     </div>
 
     <div class="card">
         <input type="file" id="imageLoader" accept="image/*">
-        <button class="btn upload" onclick="document.getElementById('imageLoader').click()">
-            Select Screenshot
-        </button>
+        <button class="btn upload" onclick="document.getElementById('imageLoader').click()">Select Screenshot</button>
 
         <div class="canvas-container">
             <canvas id="editorCanvas"></canvas>
         </div>
 
         <div class="toolbar">
-            <!-- Tool Selector -->
             <div class="tool-row">
                 <select id="toolSelect" class="select-tool">
-                    <option value="box">🧹 Erase (Hide text)</option>
-                    <option value="text">✍️ Add Text (New text)</option>
+                    <option value="box">🧹 Erase</option>
+                    <option value="text">✍️ Add Text</option>
                 </select>
             </div>
 
-            <!-- Eraser Controls (Box) -->
             <div class="tool-row" id="boxControls">
                 <span style="font-size: 12px; font-weight: bold;">Color:</span>
                 <input type="color" id="boxColor" class="input-color" value="#ffffff">
@@ -77,23 +75,19 @@
                 <input type="range" id="boxSize" class="input-range" min="10" max="200" value="60">
             </div>
 
-            <!-- Text Controls -->
             <div class="tool-row" id="textControls" style="display: none; flex-direction: column; align-items: stretch;">
                 
-                <!-- Text Input & Color -->
                 <div style="display: flex; gap: 8px; width: 100%; margin-bottom: 5px;">
                     <input type="text" id="textInput" class="input-text" placeholder="Type text here..." oninput="drawCanvas()">
                     <input type="color" id="textColor" class="input-color" value="#000000" oninput="drawCanvas()">
                 </div>
                 
-                <!-- Font Search & Select -->
-                <input type="text" id="fontSearch" class="font-search-box" placeholder="Search font (e.g., Roboto, Arial)..." onkeyup="filterFonts()">
-                <select id="fontFamily" class="select-tool" onchange="drawCanvas()" style="width: 100%; margin-bottom: 5px;">
-                    <!-- Fonts JS se load honge -->
-                </select>
+                <!-- New Visual Font Search -->
+                <input type="text" id="fontSearch" class="font-search-box" placeholder="Search font (e.g., Roboto, Bebas)..." onkeyup="filterFonts()">
+                <div id="fontList" class="font-list-container"></div>
+                <input type="hidden" id="fontFamily" value="Arial">
 
-                <!-- Size & Bold -->
-                <div style="display: flex; gap: 8px; width: 100%; align-items: center;">
+                <div style="display: flex; gap: 8px; width: 100%; align-items: center; margin-top: 5px;">
                     <label class="checkbox-label">
                         <input type="checkbox" id="isBold" checked onchange="drawCanvas()"> Bold
                     </label>
@@ -112,47 +106,48 @@
         let originalImage = null;
         let objects = []; 
 
-        // Fonts List (100+ fonts)
+        // 100+ Fonts List
         const fontList = [
-            "Arial", "Helvetica", "Times New Roman", "Courier New", "Verdana", "Georgia", "Trebuchet MS", "Tahoma",
-            "Roboto", "Open Sans", "Lato", "Montserrat", "Oswald", "Raleway", "Poppins", "Merriweather", 
+            "Arial", "Roboto", "Open Sans", "Lato", "Montserrat", "Oswald", "Raleway", "Poppins", "Merriweather", 
             "Playfair Display", "Nunito", "Ubuntu", "Rubik", "Quicksand", "Barlow", "Josefin Sans", "Mukta", 
             "Teko", "Dancing Script", "Pacifico", "Caveat", "Indie Flower", "Shadows Into Light", "Great Vibes", 
             "Satisfy", "Lobster", "Righteous", "Permanent Marker", "Amatic SC", "Anton", "Bebas Neue", "Comfortaa", 
             "Exo 2", "Fira Sans", "Gloria Hallelujah", "Inconsolata", "Jura", "Kanit", "Kaushan Script", 
             "Libre Baskerville", "Lora", "Maven Pro", "Merienda", "Nova Mono", "Orbitron", "Patua One", 
-            "Prompt", "Prosto One", "Sacramento", "Space Mono", "Spectral", "Titillium Web", "Yeseva One"
+            "Prompt", "Prosto One", "Sacramento", "Space Mono", "Spectral", "Titillium Web", "Yeseva One",
+            "Alfa Slab One", "Archivo Black", "Bangers", "Berkshire Swash", "Bungee", "Chivo", "Cinzel", 
+            "Creepster", "Domine", "Dosis", "Fjalla One", "Fredoka One", "Gochi Hand", "Gothic A1", "Handlee", 
+            "Heebo", "Josefin Slab", "Kalam", "Lobster Two", "Marck Script", "Monoton", "Neucha", "Oleo Script", 
+            "Oxygen", "Parisienne", "Patrick Hand", "Philosopher", "Play", "Questrial", "Rokkitt", "Russo One", 
+            "Signika", "Special Elite", "Sriracha", "Tangerine", "Ubuntu Mono", "Unica One", "Varela Round", 
+            "Vollkorn", "VT323", "Yellowtail", "Times New Roman", "Courier New", "Georgia", "Verdana"
         ];
 
-        // Font Dropdown Populate karo
-        function populateFonts() {
-            const select = document.getElementById('fontFamily');
-            select.innerHTML = '';
-            fontList.forEach(font => {
-                const option = document.createElement('option');
-                option.value = font;
-                option.textContent = font;
-                option.style.fontFamily = font; // Preview in dropdown
-                select.appendChild(option);
-            });
-        }
-        populateFonts();
-
-        // Font Search Filter
-        function filterFonts() {
-            const searchValue = document.getElementById('fontSearch').value.toLowerCase();
-            const select = document.getElementById('fontFamily');
-            select.innerHTML = '';
+        // Render Visual Font List
+        function renderFontList(filterText = "") {
+            const container = document.getElementById('fontList');
+            container.innerHTML = '';
             
             fontList.forEach(font => {
-                if(font.toLowerCase().includes(searchValue)) {
-                    const option = document.createElement('option');
-                    option.value = font;
-                    option.textContent = font;
-                    option.style.fontFamily = font;
-                    select.appendChild(option);
+                if(font.toLowerCase().includes(filterText.toLowerCase())) {
+                    const div = document.createElement('div');
+                    div.className = 'font-item';
+                    div.style.fontFamily = `'${font}', sans-serif`;
+                    div.innerText = font;
+                    div.onclick = () => {
+                        document.getElementById('fontFamily').value = font;
+                        document.querySelectorAll('.font-item').forEach(el => el.classList.remove('selected'));
+                        div.classList.add('selected');
+                        drawCanvas();
+                    };
+                    container.appendChild(div);
                 }
             });
+        }
+        renderFontList(); // Initial load
+
+        function filterFonts() {
+            renderFontList(document.getElementById('fontSearch').value);
         }
 
         // Tool Switch
@@ -195,26 +190,13 @@
 
             if (tool === 'box') {
                 const color = document.getElementById('boxColor').value;
-                // Box size slider se lo
                 const size = parseInt(document.getElementById('boxSize').value); 
-                
-                objects.push({
-                    type: 'box',
-                    x: x - (size/2),
-                    y: y - (size/2),
-                    w: size,
-                    h: size,
-                    color: color
-                });
+                objects.push({ type: 'box', x: x - (size/2), y: y - (size/2), w: size, h: size, color: color });
             } else {
                 const text = document.getElementById('textInput').value;
                 if(!text) { alert("Please type text first!"); return; }
-                
                 objects.push({
-                    type: 'text',
-                    x: x,
-                    y: y,
-                    text: text,
+                    type: 'text', x: x, y: y, text: text,
                     color: document.getElementById('textColor').value,
                     size: document.getElementById('textSize').value,
                     font: document.getElementById('fontFamily').value,
@@ -224,7 +206,6 @@
             drawCanvas();
         });
 
-        // Draw Everything
         function drawCanvas() {
             if (!originalImage) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -245,19 +226,12 @@
             });
         }
 
-        // UNDO Function (Pichla step wapas)
         function undo() {
-            if (objects.length > 0) {
-                objects.pop(); // Last object remove karo
-                drawCanvas();  // Wapas draw karo
-            } else {
-                alert("Kuch aur undo karne ke liye nahi bacha!");
-            }
+            if (objects.length > 0) { objects.pop(); drawCanvas(); } 
         }
 
-        // Download
         function downloadImage() {
-            if (!originalImage) { alert("Select image first!"); return; }
+            if (!originalImage) return;
             const link = document.createElement('a');
             link.download = 'SEAOX_Edited.jpg';
             link.href = canvas.toDataURL('image/jpeg', 0.95);
