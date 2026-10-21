@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEAOX - Protect PDF</title>
+    <title>SEAOX - 100% Secure PDF</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     
-    <!-- pdf-lib (Original PDF Encryption - No White Screen) -->
-    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <!-- PDF.js (Read PDF) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- jsPDF with Encryption Support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <style>
         body { margin: 0; padding: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
@@ -22,11 +24,10 @@
 
         input[type="file"] { display: none; }
         .select-btn { background-color: #E0E0E0; color: #333; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 15px; transition: 0.3s; }
-        .select-btn:hover { background-color: #d0d0d0; }
         
         .input-group { display: flex; flex-direction: column; margin-bottom: 20px; text-align: left; }
         .input-group label { font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #333; }
-        .input-group input { padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+        .input-group input { padding: 12px; border: 2px solid #00A859; border-radius: 8px; font-size: 18px; font-weight: bold; letter-spacing: 2px; text-align: center; }
         
         .btn { padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; color: white; background-color: #2C3E50; transition: 0.3s; }
         .btn:disabled { background-color: #ccc; }
@@ -45,26 +46,26 @@
     </div>
 
     <div class="card">
-        <div class="icon">🔒</div>
-        <h2>Password Protect</h2>
-        <p>Select one or multiple PDF files, set a password, and download securely.</p>
+        <div class="icon">🔐</div>
+        <h2>100% Secure PDF</h2>
+        <p>Set a password. The PDF will ask for this password before opening anywhere.</p>
 
-        <!-- Multiple File Selection Enabled -->
-        <input type="file" id="pdfInput" accept="application/pdf" multiple>
+        <!-- File Input -->
+        <input type="file" id="pdfInput" accept="application/pdf">
         
         <button class="select-btn" onclick="document.getElementById('pdfInput').click()">
-            📂 Select PDF File(s)
+            📂 Select PDF File
         </button>
         
         <div id="fileName" style="font-size: 13px; color: #00A859; font-weight: bold; margin-bottom: 15px; word-break: break-all;"></div>
 
         <div class="input-group">
-            <label>Set Password:</label>
-            <input type="text" id="passwordInput" placeholder="Enter secret password...">
+            <label>Set Secret Password:</label>
+            <input type="text" id="passwordInput" placeholder="Enter Password..." autocomplete="off">
         </div>
 
         <button class="btn" id="protectBtn" onclick="protectPDF()">
-            🔒 Protect & Download
+            🔒 Lock & Download PDF
         </button>
         
         <div class="loader" id="loader"></div>
@@ -72,30 +73,28 @@
     </div>
 
     <script>
-        const { PDFDocument } = PDFLib;
+        // Setup PDF.js Worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
         const pdfInput = document.getElementById('pdfInput');
         const fileNameDiv = document.getElementById('fileName');
         
         pdfInput.addEventListener('change', function(e) {
             if(e.target.files.length > 0) {
-                if(e.target.files.length === 1) {
-                    fileNameDiv.innerText = "Selected: " + e.target.files[0].name;
-                } else {
-                    fileNameDiv.innerText = e.target.files.length + " Files Selected";
-                }
+                fileNameDiv.innerText = "Selected: " + e.target.files[0].name;
             }
         });
 
         async function protectPDF() {
-            const files = pdfInput.files;
+            const file = pdfInput.files[0];
             const password = document.getElementById('passwordInput').value;
             const statusDiv = document.getElementById('status');
             const btn = document.getElementById('protectBtn');
             const loader = document.getElementById('loader');
 
-            if (files.length === 0) {
+            if (!file) {
                 statusDiv.style.color = "#E53935";
-                statusDiv.innerText = "Please select a PDF file first!";
+                statusDiv.innerText = "Please select a PDF file!";
                 return;
             }
             if (!password) {
@@ -105,66 +104,90 @@
             }
 
             btn.disabled = true;
-            btn.innerText = "Processing...";
+            btn.innerText = "Locking PDF... Please wait";
             loader.style.display = "block";
             statusDiv.style.color = "#FF9800";
-
-            let successCount = 0;
+            statusDiv.innerText = "Reading original file...";
 
             try {
-                // Loop through all selected files
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    statusDiv.innerText = `Processing: ${file.name} (${i + 1}/${files.length})...`;
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                
+                // High Quality Scale (2.0)
+                const firstPage = await pdf.getPage(1);
+                const viewport = firstPage.getViewport({ scale: 2.0 }); 
+                const docWidth = viewport.width;
+                const docHeight = viewport.height;
 
-                    // Read file as ArrayBuffer
-                    const arrayBuffer = await file.arrayBuffer();
+                // Create PDF with Encryption
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({
+                    orientation: docWidth > docHeight ? 'landscape' : 'portrait',
+                    unit: 'px',
+                    format: [docWidth, docHeight],
+                    encryption: {
+                        userPassword: password, // User must enter this
+                        ownerPassword: password + "_SEAOX_MASTER", // Master key
+                        userPermissions: [] // No editing, no copying
+                    }
+                });
 
-                    // Load original PDF
-                    const pdfDoc = await PDFDocument.load(arrayBuffer);
+                // Process all pages
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    statusDiv.innerText = `Processing page ${i} of ${pdf.numPages}...`;
+                    
+                    const page = await pdf.getPage(i);
+                    const pageViewport = page.getViewport({ scale: 2.0 }); // High quality
 
-                    // Save with Encryption (No quality loss, very fast)
-                    const protectedPdfBytes = await pdfDoc.save({
-                        userPassword: password, // Password user will enter to open
-                        ownerPassword: password + "_SEAOX", // Admin password
-                        permissions: {
-                            printing: 'highResolution',
-                            modifying: false,
-                            copying: false,
-                            annotating: false,
-                            fillingForms: false,
-                            contentAccessibility: true,
-                            documentAssembly: false,
-                        }
-                    });
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = pageViewport.height;
+                    canvas.width = pageViewport.width;
 
-                    // Create Blob and trigger download
-                    const blob = new Blob([protectedPdfBytes], { type: 'application/pdf' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'Protected_' + file.name;
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                    URL.revokeObjectURL(url);
+                    // Draw White Background (Prevents White/Blank PDF)
+                    context.fillStyle = '#ffffff';
+                    context.fillRect(0, 0, canvas.width, canvas.height);
 
-                    successCount++;
+                    // Render page to canvas
+                    await page.render({ canvasContext: context, viewport: pageViewport }).promise;
+                    
+                    // Wait for canvas to settle
+                    await new Promise(resolve => setTimeout(resolve, 150));
 
-                    // Thoda delay taaki mobile browser multiple downloads allow kare
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    // Convert to image
+                    const imgData = canvas.toDataURL('image/jpeg', 0.9);
+
+                    // Safety Check
+                    if (imgData === 'data:,' || imgData.length < 500) {
+                        throw new Error("Image render failed. Please try again.");
+                    }
+
+                    if (i > 1) {
+                        doc.addPage([docWidth, docHeight], docWidth > docHeight ? 'landscape' : 'portrait');
+                    }
+                    
+                    doc.addImage(imgData, 'JPEG', 0, 0, docWidth, docHeight);
+                    
+                    // Cleanup memory for mobile
+                    canvas.width = 0;
+                    canvas.height = 0;
                 }
 
+                statusDiv.innerText = "Applying Password Lock...";
+                
+                // Save and download
+                doc.save('Locked_' + file.name);
+
                 statusDiv.style.color = "#00A859";
-                statusDiv.innerText = `Success! ${successCount} File(s) Protected & Downloaded.`;
+                statusDiv.innerText = "Success! PDF is locked. Try opening it, it will ask for password.";
                 
             } catch (error) {
                 console.error(error);
                 statusDiv.style.color = "#E53935";
-                statusDiv.innerText = "Error: File might be corrupted or already password protected.";
+                statusDiv.innerText = "Error: " + error.message;
             } finally {
                 btn.disabled = false;
-                btn.innerText = "🔒 Protect & Download";
+                btn.innerText = "🔒 Lock & Download PDF";
                 loader.style.display = "none";
             }
         }
