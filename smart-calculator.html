@@ -45,13 +45,13 @@
         .result-header label { font-size: 13px; font-weight: bold; color: #333; }
         .clear-btn { background: none; border: none; color: #E53935; font-size: 13px; font-weight: bold; cursor: pointer; }
         
-        textarea { width: 100%; height: 150px; padding: 10px; font-size: 20px; font-family: monospace; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; resize: vertical; margin-bottom: 10px; line-height: 1.5; text-align: right; }
+        textarea { width: 100%; height: 150px; padding: 10px; font-size: 22px; font-family: monospace; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; resize: vertical; margin-bottom: 10px; line-height: 1.5; text-align: right; }
         
-        .total-box { background: #00A859; color: white; padding: 15px; border-radius: 10px; text-align: center; font-size: 28px; font-weight: bold; box-shadow: 0 4px 10px rgba(0, 168, 89, 0.3); }
+        .total-box { background: #00A859; color: white; padding: 15px; border-radius: 10px; text-align: center; font-size: 30px; font-weight: bold; box-shadow: 0 4px 10px rgba(0, 168, 89, 0.3); }
         
         #status { font-size: 13px; font-weight: bold; color: #FF9800; margin-top: 10px; }
         #imagePreview { max-width: 100%; max-height: 150px; border-radius: 10px; display: none; margin: 10px auto; }
-        .voice-transcript { font-size: 18px; font-weight: bold; color: #1877F2; min-height: 24px; margin-bottom: 10px; padding: 10px; background: #e3f2fd; border-radius: 8px; }
+        .voice-transcript { font-size: 20px; font-weight: bold; color: #1877F2; min-height: 30px; margin-bottom: 10px; padding: 10px; background: #e3f2fd; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -71,7 +71,7 @@
 
         <!-- VOICE TAB -->
         <div id="tab-voice" class="tab-content active">
-            <p style="color:#666; font-size:13px; margin-bottom:15px;">Tap mic, speak numbers. (Speak one number, wait 2 seconds for next).</p>
+            <p style="color:#666; font-size:14px; margin-bottom:15px;">Tap Mic. Speak one number, pause for 1.5s, then next.</p>
             
             <button class="btn btn-mic" id="micBtn" onclick="startVoice()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
@@ -83,7 +83,7 @@
 
         <!-- PHOTO TAB -->
         <div id="tab-photo" class="tab-content">
-            <p style="color:#E53935; font-size:12px; font-weight:bold; margin-bottom:10px;">*AI photo reading. Write numbers clearly.</p>
+            <p style="color:#E53935; font-size:13px; font-weight:bold; margin-bottom:10px;">*AI photo reading. Write numbers clearly.</p>
             <input type="file" id="imageUpload" accept="image/*" capture="environment">
             <button class="btn btn-upload" onclick="document.getElementById('imageUpload').click()">
                 📸 Select Photo
@@ -118,19 +118,19 @@
         const extractedText = document.getElementById('extractedText');
 
         // ==========================================
-        // 1. SMART VOICE RECOGNITION (2-Sec Gap)
+        // 1. SMART VOICE RECOGNITION (1.5s Silence)
         // ==========================================
         let recognition;
         let isRecording = false;
-        let silenceTimer = null;
-        let currentSentence = "";
+        let voiceTimer;
+        let currentTranscript = "";
 
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
             recognition.continuous = true;
             recognition.interimResults = true; 
-            recognition.lang = 'en-IN'; 
+            recognition.lang = 'en-IN'; // Indian English for numbers
 
             recognition.onstart = function() {
                 isRecording = true;
@@ -138,35 +138,37 @@
                 document.getElementById('micBtn').innerHTML = "🔴 Listening... (Tap to Stop)";
                 document.getElementById('voiceStatus').innerText = "Speak now...";
                 resultArea.style.display = 'block';
-                currentSentence = "";
+                currentTranscript = "";
             };
 
             recognition.onresult = function(event) {
-                let interimTranscript = '';
-                let finalTranscript = '';
-
+                let interim = '';
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
-                    if (event.results[i].isFinal) {
-                        finalTranscript += event.results[i][0].transcript;
-                    } else {
-                        interimTranscript += event.results[i][0].transcript;
-                    }
+                    interim += event.results[i][0].transcript;
                 }
 
                 // Show what AI is hearing live
-                document.getElementById('voiceTranscript').innerText = interimTranscript || finalTranscript;
+                document.getElementById('voiceTranscript').innerText = interim;
+                currentTranscript = interim;
 
-                if (finalTranscript) {
-                    // Extract numbers
-                    let numbers = finalTranscript.match(/\d+(\.\d+)?/g);
-                    if(numbers) {
-                        let currentText = extractedText.value;
-                        let newNumbers = numbers.join("\n"); // Add each on new line
-                        extractedText.value = currentText ? currentText + "\n" + newNumbers : newNumbers;
-                        calculateTotal();
+                // Clear previous timer
+                clearTimeout(voiceTimer);
+
+                // Set new timer for 1.5 seconds (Silence detection)
+                voiceTimer = setTimeout(() => {
+                    if(currentTranscript.trim() !== "") {
+                        let numbers = currentTranscript.match(/\d+(\.\d+)?/g);
+                        if(numbers) {
+                            let currentText = extractedText.value;
+                            let newNumbers = numbers.join("\n");
+                            extractedText.value = currentText ? currentText + "\n" + newNumbers : newNumbers;
+                            calculateTotal();
+                        }
+                        // Clear the transcript box and ready for next number
+                        document.getElementById('voiceTranscript').innerText = "✓ Added!";
+                        currentTranscript = "";
                     }
-                    document.getElementById('voiceTranscript').innerText = "";
-                }
+                }, 1500); 
             };
 
             recognition.onerror = function(event) {
@@ -174,11 +176,9 @@
                 stopVoice();
             };
 
-            // This triggers when the browser detects a 2-second silence and finalizes the word
             recognition.onend = function() {
                 if(isRecording) {
-                    // Restart automatically if user is still in recording mode
-                    recognition.start();
+                    recognition.start(); // Auto-restart if user is still in recording mode
                 } else {
                     stopVoice();
                 }
@@ -204,7 +204,7 @@
         }
 
         // ==========================================
-        // 2. FAST PHOTO OCR (Grayscale + Compressed)
+        // 2. FAST PHOTO OCR (Threshold + Compressed)
         // ==========================================
         const imageUpload = document.getElementById('imageUpload');
         const imagePreview = document.getElementById('imagePreview');
@@ -224,7 +224,7 @@
 
             loaderContainer.style.display = 'block';
             resultArea.style.display = 'none';
-            statusDiv.innerText = "Optimizing image...";
+            statusDiv.innerText = "Filtering image for AI...";
 
             try {
                 const img = new Image();
@@ -242,16 +242,16 @@
 
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                // 🚀 ACCURACY FIX: Convert to Grayscale & Increase Contrast
+                // 🚀 ACCURACY FIX: Strict Black & White Threshold
                 let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 let data = imgData.data;
                 for (let i = 0; i < data.length; i += 4) {
                     let avg = (data[i] + data[i+1] + data[i+2]) / 3;
-                    // Increase contrast (make darks darker, lights lighter)
-                    avg = avg > 128 ? 255 : (avg < 80 ? 0 : avg);
-                    data[i] = avg;     // R
-                    data[i+1] = avg;   // G
-                    data[i+2] = avg;   // B
+                    // Convert to pure black (0) or white (255)
+                    let val = avg > 130 ? 255 : 0;
+                    data[i] = val;     // R
+                    data[i+1] = val;   // G
+                    data[i+2] = val;   // B
                 }
                 ctx.putImageData(imgData, 0, 0);
 
@@ -266,7 +266,7 @@
                     }
                 });
 
-                // Best settings for scattered handwritten numbers
+                // Optimized for scattered numbers
                 await worker.setParameters({
                     tessedit_char_whitelist: '0123456789.',
                     tessedit_pageseg_mode: Tesseract.PSM.SPARSE_TEXT, 
@@ -275,7 +275,7 @@
                 const { data: { text } } = await worker.recognize(compressedImageData);
                 await worker.terminate();
 
-                // Clean up the extracted text
+                // Clean text
                 let cleanText = text.split('\n')
                     .map(line => line.trim())
                     .filter(line => line !== '' && line.length > 0)
@@ -305,7 +305,6 @@
             let text = extractedText.value;
             let total = 0;
             
-            // Find all numbers (handles decimals)
             let numbers = text.match(/-?\d+(\.\d+)?/g);
 
             if (numbers && numbers.length > 0) {
