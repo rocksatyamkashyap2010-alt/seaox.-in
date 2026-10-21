@@ -6,7 +6,7 @@
     <title>SEAOX - Fast Calculator</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     
-    <!-- Tesseract.js (Fast OCR Engine) -->
+    <!-- Tesseract.js (AI OCR) -->
     <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
     
     <style>
@@ -19,8 +19,8 @@
         
         /* Tabs */
         .tabs { display: flex; gap: 5px; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
-        .tab-btn { flex: 1; padding: 10px 5px; border: none; border-radius: 8px; background: #f0f0f0; color: #333; font-weight: bold; font-size: 13px; cursor: pointer; transition: 0.3s; }
-        .tab-btn.active { background: #1877F2; color: white; }
+        .tab-btn { flex: 1; padding: 12px 5px; border: none; border-radius: 8px; background: #f0f0f0; color: #333; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: #1877F2; color: white; box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3); }
         
         .tab-content { display: none; }
         .tab-content.active { display: block; }
@@ -28,18 +28,11 @@
         input[type="file"] { display: none; }
         
         /* Buttons */
-        .btn { padding: 12px; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; border: none; width: 100%; color: white; transition: 0.3s; margin-bottom: 10px; }
-        .btn-upload { background-color: #1877F2; }
+        .btn { padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; color: white; transition: 0.3s; margin-bottom: 10px; }
+        .btn-upload { background-color: #00A859; }
         .btn-mic { background-color: #E53935; font-size: 18px; display: flex; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 4px 10px rgba(229, 57, 53, 0.3); }
         .btn-mic.recording { background-color: #00A859; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        
-        /* Fast Keypad */
-        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
-        .key { background: #f8f9fa; border: 1px solid #ddd; padding: 15px; font-size: 20px; font-weight: bold; border-radius: 10px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .key:active { background: #e0e0e0; }
-        .key.add-btn { background: #F39C12; color: white; grid-column: span 2; }
-        .key.clear-btn { background: #E53935; color: white; }
         
         /* Loading Spinner */
         .loader-container { display: none; margin: 15px 0; }
@@ -48,13 +41,17 @@
 
         /* Result Area */
         .result-area { text-align: left; margin-top: 10px; background: #f9f9f9; padding: 10px; border-radius: 10px; border: 1px solid #eee; }
-        textarea { width: 100%; height: 120px; padding: 10px; font-size: 18px; font-family: monospace; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; resize: vertical; margin-bottom: 10px; line-height: 1.5; }
+        .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .result-header label { font-size: 13px; font-weight: bold; color: #333; }
+        .clear-btn { background: none; border: none; color: #E53935; font-size: 13px; font-weight: bold; cursor: pointer; }
         
-        .total-box { background: #00A859; color: white; padding: 15px; border-radius: 10px; text-align: center; font-size: 26px; font-weight: bold; box-shadow: 0 4px 10px rgba(0, 168, 89, 0.3); }
+        textarea { width: 100%; height: 150px; padding: 10px; font-size: 20px; font-family: monospace; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; resize: vertical; margin-bottom: 10px; line-height: 1.5; text-align: right; }
+        
+        .total-box { background: #00A859; color: white; padding: 15px; border-radius: 10px; text-align: center; font-size: 28px; font-weight: bold; box-shadow: 0 4px 10px rgba(0, 168, 89, 0.3); }
         
         #status { font-size: 13px; font-weight: bold; color: #FF9800; margin-top: 10px; }
         #imagePreview { max-width: 100%; max-height: 150px; border-radius: 10px; display: none; margin: 10px auto; }
-        .voice-transcript { font-size: 16px; font-weight: bold; color: #1877F2; min-height: 24px; margin-bottom: 10px; }
+        .voice-transcript { font-size: 18px; font-weight: bold; color: #1877F2; min-height: 24px; margin-bottom: 10px; padding: 10px; background: #e3f2fd; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -69,13 +66,12 @@
         <!-- Tabs -->
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('voice')">🎙️ Voice</button>
-            <button class="tab-btn" onclick="switchTab('keypad')">⌨️ Manual</button>
             <button class="tab-btn" onclick="switchTab('photo')">📸 Photo</button>
         </div>
 
         <!-- VOICE TAB -->
         <div id="tab-voice" class="tab-content active">
-            <p style="color:#666; font-size:13px; margin-bottom:15px;">Tap mic, speak numbers with a small pause (e.g., "200" ... pause ... "500").</p>
+            <p style="color:#666; font-size:13px; margin-bottom:15px;">Tap mic, speak numbers. (Speak one number, wait 2 seconds for next).</p>
             
             <button class="btn btn-mic" id="micBtn" onclick="startVoice()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
@@ -85,30 +81,9 @@
             <div id="voiceStatus" style="font-size: 13px; font-weight: bold; color: #555; margin-bottom: 10px;"></div>
         </div>
 
-        <!-- MANUAL KEYPAD TAB -->
-        <div id="tab-keypad" class="tab-content">
-            <p style="color:#666; font-size:13px; margin-bottom:10px;">Type numbers and hit "+" to add them to the list.</p>
-            <input type="number" id="keypadInput" placeholder="Enter amount" style="width: 100%; padding: 15px; font-size: 24px; border: 2px solid #F39C12; border-radius: 10px; margin-bottom: 10px; box-sizing: border-box; text-align: right;">
-            <div class="keypad">
-                <button class="key" onclick="pressKey('1')">1</button>
-                <button class="key" onclick="pressKey('2')">2</button>
-                <button class="key" onclick="pressKey('3')">3</button>
-                <button class="key" onclick="pressKey('4')">4</button>
-                <button class="key" onclick="pressKey('5')">5</button>
-                <button class="key" onclick="pressKey('6')">6</button>
-                <button class="key" onclick="pressKey('7')">7</button>
-                <button class="key" onclick="pressKey('8')">8</button>
-                <button class="key" onclick="pressKey('9')">9</button>
-                <button class="key clear-btn" onclick="clearKeypad()">C</button>
-                <button class="key" onclick="pressKey('0')">0</button>
-                <button class="key" onclick="pressKey('00')">00</button>
-                <button class="key add-btn" onclick="addKeypadNumber()">+ Add to List</button>
-            </div>
-        </div>
-
         <!-- PHOTO TAB -->
         <div id="tab-photo" class="tab-content">
-            <p style="color:#E53935; font-size:12px; font-weight:bold; margin-bottom:10px;">*Handwriting OCR is slow and not always accurate. Voice is better!</p>
+            <p style="color:#E53935; font-size:12px; font-weight:bold; margin-bottom:10px;">*AI photo reading. Write numbers clearly.</p>
             <input type="file" id="imageUpload" accept="image/*" capture="environment">
             <button class="btn btn-upload" onclick="document.getElementById('imageUpload').click()">
                 📸 Select Photo
@@ -117,13 +92,16 @@
             
             <div class="loader-container" id="loaderContainer">
                 <div class="loader"></div>
-                <div style="font-size: 13px; font-weight: bold; color: #1877F2;">Reading photo...</div>
+                <div style="font-size: 13px; font-weight: bold; color: #1877F2;">Reading fast...</div>
             </div>
         </div>
 
-        <!-- RESULT AREA (Common for all) -->
+        <!-- RESULT AREA -->
         <div class="result-area" id="resultArea" style="display: none;">
-            <label style="font-size: 13px; font-weight: bold; color: #333; display: block; margin-bottom: 5px;">Numbers List (You can edit):</label>
+            <div class="result-header">
+                <label>Numbers List (You can edit):</label>
+                <button class="clear-btn" onclick="clearList()">Clear All</button>
+            </div>
             <textarea id="extractedText" placeholder="Numbers will appear here..." oninput="calculateTotal()"></textarea>
             
             <div style="margin-top: 10px;">
@@ -140,17 +118,19 @@
         const extractedText = document.getElementById('extractedText');
 
         // ==========================================
-        // 1. VOICE RECOGNITION (SMART & FAST)
+        // 1. SMART VOICE RECOGNITION (2-Sec Gap)
         // ==========================================
         let recognition;
         let isRecording = false;
+        let silenceTimer = null;
+        let currentSentence = "";
 
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
             recognition.continuous = true;
-            recognition.interimResults = true; // Turant feedback
-            recognition.lang = 'en-IN'; // Indian English for numbers
+            recognition.interimResults = true; 
+            recognition.lang = 'en-IN'; 
 
             recognition.onstart = function() {
                 isRecording = true;
@@ -158,6 +138,7 @@
                 document.getElementById('micBtn').innerHTML = "🔴 Listening... (Tap to Stop)";
                 document.getElementById('voiceStatus').innerText = "Speak now...";
                 resultArea.style.display = 'block';
+                currentSentence = "";
             };
 
             recognition.onresult = function(event) {
@@ -166,7 +147,7 @@
 
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
-                        finalTranscript += event.results[i][0].transcript + " ";
+                        finalTranscript += event.results[i][0].transcript;
                     } else {
                         interimTranscript += event.results[i][0].transcript;
                     }
@@ -176,18 +157,14 @@
                 document.getElementById('voiceTranscript').innerText = interimTranscript || finalTranscript;
 
                 if (finalTranscript) {
-                    // Extract numbers from the final sentence
+                    // Extract numbers
                     let numbers = finalTranscript.match(/\d+(\.\d+)?/g);
                     if(numbers) {
                         let currentText = extractedText.value;
-                        // Add each number on a new line
-                        let newNumbers = numbers.join("\n");
+                        let newNumbers = numbers.join("\n"); // Add each on new line
                         extractedText.value = currentText ? currentText + "\n" + newNumbers : newNumbers;
-                        
-                        // Auto calculate
                         calculateTotal();
                     }
-                    // Clear transcript after adding
                     document.getElementById('voiceTranscript').innerText = "";
                 }
             };
@@ -197,16 +174,23 @@
                 stopVoice();
             };
 
+            // This triggers when the browser detects a 2-second silence and finalizes the word
             recognition.onend = function() {
-                stopVoice();
+                if(isRecording) {
+                    // Restart automatically if user is still in recording mode
+                    recognition.start();
+                } else {
+                    stopVoice();
+                }
             };
         }
 
         function startVoice() {
             if(isRecording) {
                 recognition.stop();
+                stopVoice();
             } else {
-                extractedText.value = ""; // Clear old
+                extractedText.value = ""; 
                 document.getElementById('voiceTranscript').innerText = "...";
                 recognition.start();
             }
@@ -220,31 +204,7 @@
         }
 
         // ==========================================
-        // 2. MANUAL KEYPAD (0 SECONDS DELAY)
-        // ==========================================
-        const keypadInput = document.getElementById('keypadInput');
-
-        function pressKey(num) {
-            keypadInput.value += num;
-        }
-
-        function clearKeypad() {
-            keypadInput.value = "";
-        }
-
-        function addKeypadNumber() {
-            const val = keypadInput.value;
-            if(val) {
-                resultArea.style.display = 'block';
-                let currentText = extractedText.value;
-                extractedText.value = currentText ? currentText + "\n" + val : val;
-                keypadInput.value = "";
-                calculateTotal();
-            }
-        }
-
-        // ==========================================
-        // 3. FAST PHOTO OCR (COMPRESSED)
+        // 2. FAST PHOTO OCR (Grayscale + Compressed)
         // ==========================================
         const imageUpload = document.getElementById('imageUpload');
         const imagePreview = document.getElementById('imagePreview');
@@ -264,29 +224,40 @@
 
             loaderContainer.style.display = 'block';
             resultArea.style.display = 'none';
-            statusDiv.innerText = "Preparing image...";
+            statusDiv.innerText = "Optimizing image...";
 
             try {
-                // 🚀 EXTREME SPEED FIX: Resize to 600px for faster AI processing
                 const img = new Image();
                 img.src = URL.createObjectURL(file);
                 await new Promise(resolve => img.onload = resolve);
 
                 const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
+                const ctx = canvas.getContext('2d', { willReadFrequently: true });
                 
-                const MAX_WIDTH = 600; 
+                // 🚀 TURBO FIX: Resize to 400px for extreme speed
+                const MAX_WIDTH = 400; 
                 const scale = MAX_WIDTH / img.width;
                 canvas.width = MAX_WIDTH;
                 canvas.height = img.height * scale;
 
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                // 🚀 ACCURACY FIX: Convert to Grayscale & Increase Contrast
+                let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                let data = imgData.data;
+                for (let i = 0; i < data.length; i += 4) {
+                    let avg = (data[i] + data[i+1] + data[i+2]) / 3;
+                    // Increase contrast (make darks darker, lights lighter)
+                    avg = avg > 128 ? 255 : (avg < 80 ? 0 : avg);
+                    data[i] = avg;     // R
+                    data[i+1] = avg;   // G
+                    data[i+2] = avg;   // B
+                }
+                ctx.putImageData(imgData, 0, 0);
 
                 const compressedImageData = canvas.toDataURL('image/jpeg', 0.8);
 
-                // Initialize Tesseract
+                // Tesseract Setup
                 const worker = await Tesseract.createWorker('eng', 1, {
                     logger: m => {
                         if(m.status === 'recognizing text') {
@@ -295,16 +266,21 @@
                     }
                 });
 
-                // Optimize for scattered numbers
+                // Best settings for scattered handwritten numbers
                 await worker.setParameters({
                     tessedit_char_whitelist: '0123456789.',
-                    tessedit_pageseg_mode: Tesseract.PSM.SPARSE_TEXT, // Best for lists
+                    tessedit_pageseg_mode: Tesseract.PSM.SPARSE_TEXT, 
                 });
 
                 const { data: { text } } = await worker.recognize(compressedImageData);
                 await worker.terminate();
 
-                let cleanText = text.split('\n').map(line => line.trim()).filter(line => line !== '' && line.length > 1).join('\n');
+                // Clean up the extracted text
+                let cleanText = text.split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line !== '' && line.length > 0)
+                    .join('\n');
+                
                 extractedText.value = cleanText;
                 
                 loaderContainer.style.display = 'none';
@@ -323,12 +299,13 @@
         });
 
         // ==========================================
-        // 4. CALCULATION LOGIC
+        // 3. CALCULATION & UI
         // ==========================================
         function calculateTotal() {
             let text = extractedText.value;
             let total = 0;
             
+            // Find all numbers (handles decimals)
             let numbers = text.match(/-?\d+(\.\d+)?/g);
 
             if (numbers && numbers.length > 0) {
@@ -342,7 +319,12 @@
             }
         }
 
-        // Tabs Switch
+        function clearList() {
+            extractedText.value = "";
+            calculateTotal();
+            resultArea.style.display = 'none';
+        }
+
         function switchTab(tab) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
