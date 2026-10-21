@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEAOX - Receipt Generator</title>
+    <title>SEAOX - Professional Receipt Generator</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     
-    <!-- PDF Generation Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- QR Code Generator Library -->
+    <!-- jsPDF Library (Direct PDF banane ke liye) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <!-- QR Code Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    
+
     <style>
         body { margin: 0; padding: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; }
         .header { max-width: 800px; margin: 0 auto 20px auto; display: flex; align-items: center; }
@@ -18,63 +19,25 @@
         .title { font-size: 22px; font-weight: bold; color: #111; }
 
         .form-container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .section-title { background: #f8f9fa; padding: 10px; border-left: 4px solid #FFC107; font-weight: bold; margin-bottom: 15px; border-radius: 4px; margin-top: 20px; }
+        .section-title { background: #f8f9fa; padding: 10px; border-left: 4px solid #FFC107; font-weight: bold; margin-bottom: 15px; border-radius: 4px; margin-top: 20px; color: #333; }
         
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .input-group { display: flex; flex-direction: column; margin-bottom: 10px; }
         .input-group label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #555; }
-        .input-group input, .input-group select, .input-group textarea { padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; font-family: inherit; }
+        .input-group input { padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; font-family: inherit; }
         
         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
         th, td { padding: 8px; border: 1px solid #ddd; text-align: left; font-size: 14px; }
-        th { background: #f4f4f4; }
+        th { background: #f4f4f4; color: #333; }
         .item-input { width: 100%; box-sizing: border-box; padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
         
         .btn { padding: 12px 20px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; color: white; transition: 0.3s; }
         .btn-add { background: #00A859; margin-top: 5px; }
-        .btn-generate { background: #6B46C1; width: 100%; margin-top: 25px; padding: 15px; font-size: 18px; }
+        .btn-generate { background: #6B46C1; width: 100%; margin-top: 25px; padding: 15px; font-size: 18px; display: flex; justify-content: center; align-items: center; gap: 10px;}
         .btn-generate:hover { background: #553c9a; }
-
-        /* 🖨️ PDF Template Styles */
-        #pdf-template { 
-            display: none; /* Default mein chhupa rahega */
-            width: 800px; 
-            background: #ffffff; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            color: #333; 
-            box-sizing: border-box;
-            padding: 40px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 9999;
-        }
         
-        .pdf-header { display: flex; justify-content: space-between; border-bottom: 3px solid #FFC107; padding-bottom: 20px; margin-bottom: 20px; }
-        .pdf-logo { font-size: 32px; font-weight: 900; color: #111; margin: 0; line-height: 1.1; }
-        .pdf-logo span { color: #FFC107; }
-        .pdf-shop-details { text-align: right; font-size: 12px; line-height: 1.6; }
-        
-        .pdf-meta { display: flex; justify-content: space-between; margin-bottom: 30px; }
-        .pdf-meta-box { background: #f9f9f9; padding: 15px; border-radius: 8px; width: 45%; font-size: 13px; line-height: 1.8; border-left: 4px solid #FFC107; }
-        .pdf-meta-box strong { color: #111; font-size: 14px; }
-        
-        .pdf-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px; }
-        .pdf-table th { background: #FFC107; color: #111; padding: 12px; border: 1px solid #ddd; text-align: left; font-weight: bold; }
-        .pdf-table td { padding: 10px; border: 1px solid #ddd; }
-        .pdf-table .text-right { text-align: right; }
-        
-        .pdf-footer-area { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 20px; }
-        
-        .pdf-qr-section { text-align: center; border: 1px dashed #ccc; padding: 10px; border-radius: 8px; width: 130px; background: white; }
-        #qrcode { display: flex; justify-content: center; margin-bottom: 5px; }
-        .pdf-qr-section p { margin: 0; font-size: 11px; font-weight: bold; color: #555; }
-
-        .pdf-totals { width: 45%; font-size: 14px; margin-left: auto; }
-        .pdf-totals-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
-        .pdf-totals-row.grand-total { background: #FFC107; font-weight: bold; font-size: 18px; border: none; padding: 12px; border-radius: 4px; margin-top: 5px; }
-        
-        .pdf-thankyou { margin-top: 50px; text-align: center; font-size: 16px; color: #555; border-top: 1px solid #ddd; padding-top: 15px; }
+        /* Hidden QR container for generation */
+        #qr-hidden { display: none; }
     </style>
 </head>
 <body>
@@ -90,15 +53,14 @@
         <div class="grid-2">
             <div class="input-group"><label>Shop Name *</label><input type="text" id="shopName" placeholder="Enter Shop Name"></div>
             <div class="input-group"><label>Mobile No. *</label><input type="text" id="shopMobile" placeholder="Enter Mobile Number"></div>
-            <div class="input-group"><label>Address *</label><input type="text" id="shopAddress" placeholder="Enter Full Address"></div>
-            <div class="input-group"><label>Email</label><input type="text" id="shopEmail" placeholder="Enter Email"></div>
-            <div class="input-group" style="grid-column: span 2;"><label>UPI ID / GPay Number (For QR Code)</label><input type="text" id="shopUpi" placeholder="e.g. 9876543210@paytm or shop@okaxis"></div>
+            <div class="input-group" style="grid-column: span 2;"><label>Address *</label><input type="text" id="shopAddress" placeholder="Enter Full Address"></div>
+            <div class="input-group" style="grid-column: span 2;"><label>UPI ID (For QR Code)</label><input type="text" id="shopUpi" placeholder="e.g. 9876543210@paytm or shop@okaxis"></div>
         </div>
 
-        <!-- 2. Invoice Details -->
+        <!-- 2. Receipt Details -->
         <div class="section-title">2. Receipt Details</div>
         <div class="grid-2">
-            <div class="input-group"><label>Receipt No. *</label><input type="text" id="invNo" placeholder="SEAOX/001"></div>
+            <div class="input-group"><label>Receipt No. *</label><input type="text" id="invNo" value="SEAOX/001"></div>
             <div class="input-group"><label>Date *</label><input type="date" id="invDate"></div>
         </div>
 
@@ -107,8 +69,7 @@
         <div class="grid-2">
             <div class="input-group"><label>Customer Name *</label><input type="text" id="custName" placeholder="Enter Customer Name"></div>
             <div class="input-group"><label>Mobile No. *</label><input type="text" id="custMobile" placeholder="Enter Mobile Number"></div>
-            <div class="input-group"><label>Address</label><input type="text" id="custAddress" placeholder="Enter Customer Address"></div>
-            <div class="input-group"><label>State</label><input type="text" id="custState" placeholder="Enter State"></div>
+            <div class="input-group" style="grid-column: span 2;"><label>Address</label><input type="text" id="custAddress" placeholder="Enter Customer Address"></div>
         </div>
 
         <!-- 4. Item Details -->
@@ -135,72 +96,13 @@
         </table>
         <button class="btn btn-add" onclick="addRow()">+ Add Item</button>
 
-        <button class="btn btn-generate" onclick="preparePDF()">📄 Generate Receipt (PDF)</button>
+        <button class="btn btn-generate" onclick="generatePDF()" id="genBtn">
+            📄 Generate Receipt (PDF)
+        </button>
     </div>
 
-    <!-- ========================================== -->
-    <!-- HIDDEN PDF TEMPLATE -->
-    <!-- ========================================== -->
-    <div id="pdf-template">
-        <div class="pdf-header">
-            <div>
-                <h1 class="pdf-logo" id="pdf-shop-name-display">SHOP<br><span>NAME</span></h1>
-            </div>
-            <div class="pdf-shop-details">
-                <div>📍 <span id="pdf-shop-address"></span></div>
-                <div>📞 <span id="pdf-shop-mobile"></span></div>
-                <div>✉️ <span id="pdf-shop-email"></span></div>
-            </div>
-        </div>
-
-        <div class="pdf-meta">
-            <div class="pdf-meta-box">
-                <strong>Bill To:</strong><br>
-                Name: <span id="pdf-cust-name">-</span><br>
-                Mobile: <span id="pdf-cust-mobile">-</span><br>
-                Address: <span id="pdf-cust-address">-</span><br>
-                State: <span id="pdf-cust-state">-</span>
-            </div>
-            <div class="pdf-meta-box">
-                <strong>Receipt Details:</strong><br>
-                Receipt No: <span id="pdf-inv-no"></span><br>
-                Date: <span id="pdf-inv-date"></span>
-            </div>
-        </div>
-
-        <table class="pdf-table">
-            <thead>
-                <tr>
-                    <th width="5%">No.</th>
-                    <th width="45%">Item Description</th>
-                    <th width="10%">Qty</th>
-                    <th width="20%">Rate (₹)</th>
-                    <th width="20%" class="text-right">Amount (₹)</th>
-                </tr>
-            </thead>
-            <tbody id="pdf-items-body"></tbody>
-        </table>
-
-        <div class="pdf-footer-area">
-            <!-- UPI QR Code Section -->
-            <div class="pdf-qr-section" id="qr-section" style="display: none;">
-                <div id="qrcode"></div>
-                <p>Scan & Pay Exact Amount</p>
-            </div>
-
-            <!-- Totals Section -->
-            <div class="pdf-totals">
-                <div class="pdf-totals-row grand-total">
-                    <span>Total Amount (₹)</span>
-                    <span id="pdf-grand-total">0.00</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="pdf-thankyou">
-            Thank You! Visit Again.
-        </div>
-    </div>
+    <!-- Hidden QR Code generator div -->
+    <div id="qr-hidden"></div>
 
     <script>
         // Default Date setup
@@ -222,7 +124,7 @@
             calcTotal();
         }
 
-        // Total calculate karne ka function
+        // Total calculate karne ka function (Form ke liye)
         function calcTotal() {
             const rows = document.querySelectorAll('#itemsTable tbody tr');
             rows.forEach(row => {
@@ -233,96 +135,156 @@
             });
         }
 
-        // PDF Generate karne ka Main Function
-        function preparePDF() {
-            // 1. Form se data uthana
+        // Main PDF Generator Function
+        async function generatePDF() {
+            const btn = document.getElementById('genBtn');
+            btn.innerText = "Generating PDF... Please wait";
+            btn.disabled = true;
+
+            // 1. Data Collect karo
             const shopName = document.getElementById('shopName').value || "SHOP NAME";
-            document.getElementById('pdf-shop-name-display').innerHTML = shopName.replace(" ", "<br><span>") + "</span>";
-            document.getElementById('pdf-shop-address').innerText = document.getElementById('shopAddress').value || "-";
-            document.getElementById('pdf-shop-mobile').innerText = document.getElementById('shopMobile').value || "-";
-            document.getElementById('pdf-shop-email').innerText = document.getElementById('shopEmail').value || "-";
+            const shopMobile = document.getElementById('shopMobile').value || "-";
+            const shopAddress = document.getElementById('shopAddress').value || "-";
+            const shopUpi = document.getElementById('shopUpi').value;
 
-            document.getElementById('pdf-cust-name').innerText = document.getElementById('custName').value || "-";
-            document.getElementById('pdf-cust-mobile').innerText = document.getElementById('custMobile').value || "-";
-            document.getElementById('pdf-cust-address').innerText = document.getElementById('custAddress').value || "-";
-            document.getElementById('pdf-cust-state').innerText = document.getElementById('custState').value || "-";
+            const custName = document.getElementById('custName').value || "-";
+            const custMobile = document.getElementById('custMobile').value || "-";
+            const custAddress = document.getElementById('custAddress').value || "-";
 
-            document.getElementById('pdf-inv-no').innerText = document.getElementById('invNo').value || "-";
-            document.getElementById('pdf-inv-date').innerText = document.getElementById('invDate').value || "-";
+            const invNo = document.getElementById('invNo').value || "-";
+            const invDate = document.getElementById('invDate').value || "-";
 
-            // 2. Items Table aur Total
-            const pdfItemsBody = document.getElementById('pdf-items-body');
-            pdfItemsBody.innerHTML = '';
+            // Items Array banayo
+            const items = [];
             let totalAmount = 0;
             const rows = document.querySelectorAll('#itemsTable tbody tr');
             
-            rows.forEach((row, index) => {
+            rows.forEach((row) => {
                 const desc = row.querySelector('.item-desc').value || "-";
                 const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
                 const rate = parseFloat(row.querySelector('.item-rate').value) || 0;
                 const amount = qty * rate;
+                
+                items.push([desc, qty, rate.toFixed(2), amount.toFixed(2)]);
                 totalAmount += amount;
-
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${desc}</td>
-                    <td>${qty}</td>
-                    <td>${rate.toFixed(2)}</td>
-                    <td class="text-right">${amount.toFixed(2)}</td>
-                `;
-                pdfItemsBody.appendChild(tr);
             });
 
-            document.getElementById('pdf-grand-total').innerText = totalAmount.toFixed(2);
-
-            // 3. UPI QR Code (Using local library, no network issues)
-            const upiId = document.getElementById('shopUpi').value;
-            const qrSection = document.getElementById('qr-section');
-            const qrcodeDiv = document.getElementById('qrcode');
-            
-            qrcodeDiv.innerHTML = ''; // Clear old QR
-
-            if(upiId.trim() !== "" && totalAmount > 0) {
-                const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(shopName)}&am=${totalAmount.toFixed(2)}&cu=INR`;
+            // 2. QR Code Generate karo (Agar UPI ID daali hai)
+            let qrDataUrl = null;
+            if(shopUpi.trim() !== "" && totalAmount > 0) {
+                const qrDiv = document.getElementById('qr-hidden');
+                qrDiv.innerHTML = ''; // Clear old
+                const upiUrl = `upi://pay?pa=${shopUpi}&pn=${encodeURIComponent(shopName)}&am=${totalAmount.toFixed(2)}&cu=INR`;
                 
-                // QR Code generate karo
-                new QRCode(qrcodeDiv, {
+                new QRCode(qrDiv, {
                     text: upiUrl,
-                    width: 100,
-                    height: 100,
+                    width: 120,
+                    height: 120,
                     colorDark : "#000000",
                     colorLight : "#ffffff",
                     correctLevel : QRCode.CorrectLevel.H
                 });
+
+                // Wait thoda sa taaki QR render ho jaye
+                await new Promise(r => setTimeout(r, 300));
                 
-                qrSection.style.display = 'block';
-            } else {
-                qrSection.style.display = 'none';
+                const canvas = qrDiv.querySelector('canvas');
+                if(canvas) {
+                    qrDataUrl = canvas.toDataURL("image/png");
+                }
             }
 
-            // 4. PDF Generation Process
-            const element = document.getElementById('pdf-template');
-            
-            // Show the element for capture (make it visible and put it on top)
-            element.style.display = 'block';
-            element.style.zIndex = '99999';
-            
-            // Wait for 500ms so the QR code library can draw the canvas properly
-            setTimeout(() => {
-                const opt = {
-                    margin:       0,
-                    filename:     'seaox.pdf',
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2, useCORS: true, scrollY: 0, windowWidth: 800 },
-                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                };
+            // 3. PDF Create karo (jsPDF library)
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4'); // A4 size, portrait
 
-                html2pdf().set(opt).from(element).save().then(() => {
-                    // Hide it after PDF is generated
-                    element.style.display = 'none';
-                });
-            }, 500);
+            // Colors
+            const primaryColor = [255, 193, 7]; // Yellowish
+            const textColor = [33, 33, 33]; // Dark Grey
+            
+            // --- HEADER ---
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(24);
+            doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+            doc.text(shopName.toUpperCase(), 14, 25);
+
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.text("Mobile: " + shopMobile, 14, 32);
+            doc.text("Address: " + shopAddress, 14, 37);
+            
+            // Yellow Line
+            doc.setDrawColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.setLineWidth(1.5);
+            doc.line(14, 42, 196, 42);
+
+            // --- INVOICE TITLE ---
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(18);
+            doc.text("RECEIPT", 14, 55);
+            
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.text("Receipt No: " + invNo, 150, 50);
+            doc.text("Date: " + invDate, 150, 56);
+
+            // --- CUSTOMER DETAILS ---
+            doc.setFont("helvetica", "bold");
+            doc.text("Bill To:", 14, 70);
+            
+            doc.setFont("helvetica", "normal");
+            doc.text("Name: " + custName, 14, 76);
+            doc.text("Mobile: " + custMobile, 14, 82);
+            doc.text("Address: " + custAddress, 14, 88);
+
+            // --- ITEMS TABLE (Using AutoTable) ---
+            doc.autoTable({
+                startY: 100,
+                head: [['No.', 'Item Description', 'Qty', 'Rate (Rs)', 'Amount (Rs)']],
+                body: items.map((item, index) => [index + 1, ...item]),
+                theme: 'grid',
+                headStyles: { fillColor: primaryColor, textColor: textColor, fontStyle: 'bold' },
+                styles: { fontSize: 10, textColor: textColor, cellPadding: 4 },
+                columnStyles: {
+                    0: { cellWidth: 15, halign: 'center' },
+                    1: { cellWidth: 80 },
+                    2: { cellWidth: 20, halign: 'center' },
+                    3: { cellWidth: 30, halign: 'right' },
+                    4: { cellWidth: 35, halign: 'right' }
+                }
+            });
+
+            // Yahan pata karo table kahan khatam hui
+            let finalY = doc.lastAutoTable.finalY + 10;
+
+            // --- TOTALS ---
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(14);
+            doc.text("Total Amount: Rs " + totalAmount.toFixed(2), 130, finalY);
+
+            // --- QR CODE ---
+            if(qrDataUrl) {
+                doc.addImage(qrDataUrl, 'PNG', 14, finalY - 15, 30, 30);
+                doc.setFontSize(8);
+                doc.setFont("helvetica", "normal");
+                doc.text("Scan to Pay", 14, finalY + 18);
+            }
+
+            // --- FOOTER ---
+            doc.setDrawColor(200, 200, 200);
+            doc.line(14, 270, 196, 270);
+            
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text("Thank You! Visit Again.", 105, 280, { align: "center" });
+            doc.text("Powered by SEAOX", 105, 285, { align: "center" });
+
+            // --- SAVE PDF ---
+            doc.save('seaox.pdf');
+
+            // Button reset karo
+            btn.innerText = "📄 Generate Receipt (PDF)";
+            btn.disabled = false;
         }
     </script>
 </body>
