@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEAOX - Password Protect PDF</title>
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    
+    <!-- PDF.js (Read PDF) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- jsPDF (Create Encrypted PDF) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        body { margin: 0; padding: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { width: 100%; max-width: 500px; display: flex; align-items: center; margin-bottom: 20px; }
+        .back-btn { font-size: 24px; color: #333; text-decoration: none; margin-right: 15px; }
+        .title { font-size: 22px; font-weight: bold; color: #111; }
+        
+        .card { background: #fff; padding: 30px 20px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); max-width: 400px; width: 100%; text-align: center; box-sizing: border-box; }
+        .icon { font-size: 60px; margin-bottom: 10px; }
+        h2 { margin: 0 0 10px 0; color: #111; }
+        p { color: #666; font-size: 14px; margin-bottom: 25px; line-height: 1.4; }
+
+        input[type="file"] { display: none; }
+        .select-btn { background-color: #E0E0E0; color: #333; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 15px; }
+        
+        .input-group { display: flex; flex-direction: column; margin-bottom: 20px; text-align: left; }
+        .input-group label { font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #333; }
+        .input-group input { padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+        
+        .btn { padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; color: white; background-color: #2C3E50; transition: 0.3s; }
+        .btn:disabled { background-color: #ccc; }
+        
+        #status { font-size: 14px; font-weight: bold; color: #E53935; margin-top: 15px; min-height: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="menu.html" class="back-btn">←</a>
+        <div class="title">Protect PDF</div>
+    </div>
+
+    <div class="card">
+        <div class="icon">🔒</div>
+        <h2>Password Protect PDF</h2>
+        <p>Select any PDF file, set a secret password, and download it securely. Only people with the password can open it.</p>
+
+        <!-- File Input -->
+        <input type="file" id="pdfInput" accept="application/pdf">
+        
+        <button class="select-btn" onclick="document.getElementById('pdfInput').click()">
+            📂 Select PDF File
+        </button>
+        
+        <div id="fileName" style="font-size: 13px; color: #00A859; font-weight: bold; margin-bottom: 15px;"></div>
+
+        <!-- Password Input -->
+        <div class="input-group">
+            <label>Set Password:</label>
+            <input type="text" id="passwordInput" placeholder="Enter secret password...">
+        </div>
+
+        <button class="btn" id="protectBtn" onclick="protectPDF()">
+            🔒 Protect & Download PDF
+        </button>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        // PDF.js Worker setup
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        const pdfInput = document.getElementById('pdfInput');
+        const fileNameDiv = document.getElementById('fileName');
+        
+        pdfInput.addEventListener('change', function(e) {
+            if(e.target.files.length > 0) {
+                fileNameDiv.innerText = "Selected: " + e.target.files[0].name;
+            }
+        });
+
+        async function protectPDF() {
+            const file = pdfInput.files[0];
+            const password = document.getElementById('passwordInput').value;
+            const statusDiv = document.getElementById('status');
+            const btn = document.getElementById('protectBtn');
+
+            if (!file) {
+                statusDiv.style.color = "#E53935";
+                statusDiv.innerText = "Please select a PDF file first!";
+                return;
+            }
+            if (!password) {
+                statusDiv.style.color = "#E53935";
+                statusDiv.innerText = "Please enter a password!";
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Processing... Please wait";
+            statusDiv.style.color = "#FF9800";
+            statusDiv.innerText = "Reading PDF file...";
+
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                
+                // Load PDF using PDF.js
+                const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                
+                // Get first page dimensions for PDF layout
+                const firstPage = await pdf.getPage(1);
+                const viewport = firstPage.getViewport({ scale: 1.5 }); 
+                const docWidth = viewport.width;
+                const docHeight = viewport.height;
+
+                // Create new jsPDF with Encryption
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({
+                    orientation: docWidth > docHeight ? 'landscape' : 'portrait',
+                    unit: 'px',
+                    format: [docWidth, docHeight],
+                    encryption: {
+                        userPassword: password, // Yeh password user daalega
+                        ownerPassword: password + "_SEAOX", // Admin password
+                        userPermissions: ["print"] // Sirf print allow karega, copy/edit nahi
+                    }
+                });
+
+                statusDiv.innerText = `Processing pages (0/${pdf.numPages})...`;
+
+                // Loop through all pages
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    statusDiv.innerText = `Processing page ${i} of ${pdf.numPages}...`;
+                    
+                    const page = await pdf.getPage(i);
+                    const pageViewport = page.getViewport({ scale: 1.5 });
+
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = pageViewport.height;
+                    canvas.width = pageViewport.width;
+
+                    // Render PDF page to canvas
+                    await page.render({ canvasContext: context, viewport: pageViewport }).promise;
+                    
+                    // Convert to image
+                    const imgData = canvas.toDataURL('image/jpeg', 0.85);
+
+                    if (i > 1) {
+                        doc.addPage([docWidth, docHeight], docWidth > docHeight ? 'landscape' : 'portrait');
+                    }
+                    
+                    // Add image to encrypted PDF
+                    doc.addImage(imgData, 'JPEG', 0, 0, docWidth, docHeight);
+                }
+
+                statusDiv.innerText = "Saving protected PDF...";
+                
+                // Download the PDF
+                doc.save('SEAOX_Protected.pdf');
+
+                statusDiv.style.color = "#00A859";
+                statusDiv.innerText = "PDF Protected & Downloaded Successfully!";
+                
+            } catch (error) {
+                console.error(error);
+                statusDiv.style.color = "#E53935";
+                statusDiv.innerText = "Error processing PDF. It might be corrupted or too large.";
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "🔒 Protect & Download PDF";
+            }
+        }
+    </script>
+</body>
+</html>
