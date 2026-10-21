@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEAOX - Video Trimmer</title>
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <style>
+        body { margin: 0; padding: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; }
+        .header { max-width: 800px; margin: 0 auto 20px auto; display: flex; align-items: center; }
+        .back-btn { font-size: 24px; color: #333; text-decoration: none; margin-right: 15px; }
+        .title { font-size: 22px; font-weight: bold; color: #111; }
+
+        .card { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
+        
+        video { width: 100%; max-height: 300px; background: #000; border-radius: 8px; margin-bottom: 15px; display: none; }
+        
+        .input-group { display: flex; flex-direction: column; margin-bottom: 15px; text-align: left; }
+        .input-group label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #555; }
+        .input-group input { padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .btn { background: #00A859; color: white; padding: 15px; border-radius: 8px; font-size: 16px; font-weight: bold; border: none; cursor: pointer; width: 100%; margin-top: 10px; }
+        .btn:disabled { background: #ccc; }
+        .btn-upload { background: #1877F2; margin-bottom: 15px; }
+        
+        input[type="file"] { display: none; }
+        #status { font-size: 14px; font-weight: bold; color: #E53935; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="menu.html" class="back-btn">←</a>
+        <div class="title">Video Trimmer & Cropper</div>
+    </div>
+
+    <div class="card">
+        <input type="file" id="videoInput" accept="video/*">
+        <button class="btn btn-upload" onclick="document.getElementById('videoInput').click()">
+            Select Video
+        </button>
+
+        <video id="previewVideo" controls></video>
+
+        <!-- Trim Settings -->
+        <div class="grid-2">
+            <div class="input-group">
+                <label>Start Time (Seconds)</label>
+                <input type="number" id="startTime" value="0" step="0.1" min="0">
+            </div>
+            <div class="input-group">
+                <label>End Time (Seconds)</label>
+                <input type="number" id="endTime" value="10" step="0.1" min="1">
+            </div>
+        </div>
+
+        <!-- Crop Settings -->
+        <div class="grid-2">
+            <div class="input-group">
+                <label>Crop Width (px)</label>
+                <input type="number" id="cropWidth" value="300" placeholder="e.g. 300">
+            </div>
+            <div class="input-group">
+                <label>Crop Height (px)</label>
+                <input type="number" id="cropHeight" value="400" placeholder="e.g. 400">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Start X (Left Cut) px</label>
+            <input type="number" id="cropX" value="50" placeholder="e.g. 50">
+        </div>
+        
+        <div class="input-group">
+            <label>Start Y (Top Cut) px</label>
+            <input type="number" id="cropY" value="50" placeholder="e.g. 50">
+        </div>
+
+        <button class="btn" id="processBtn" onclick="processVideo()" disabled>
+            Process & Download Video
+        </button>
+        
+        <div id="status"></div>
+    </div>
+
+    <canvas id="hiddenCanvas" style="display:none;"></canvas>
+
+    <script>
+        const videoInput = document.getElementById('videoInput');
+        const previewVideo = document.getElementById('previewVideo');
+        const processBtn = document.getElementById('processBtn');
+        const statusDiv = document.getElementById('status');
+        const canvas = document.getElementById('hiddenCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let videoFileURL = null;
+
+        // Video Select karne par
+        videoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            videoFileURL = URL.createObjectURL(file);
+            previewVideo.src = videoFileURL;
+            previewVideo.style.display = 'block';
+            processBtn.disabled = false;
+
+            // Video load hone par End time set karo
+            previewVideo.onloadedmetadata = function() {
+                document.getElementById('endTime').value = previewVideo.duration.toFixed(1);
+                // Default crop size video ke size ke hisaab se set karo
+                document.getElementById('cropWidth').value = previewVideo.videoWidth;
+                document.getElementById('cropHeight').value = previewVideo.videoHeight;
+            };
+        });
+
+        async function processVideo() {
+            const start = parseFloat(document.getElementById('startTime').value);
+            const end = parseFloat(document.getElementById('endTime').value);
+            const cw = parseInt(document.getElementById('cropWidth').value);
+            const ch = parseInt(document.getElementById('cropHeight').value);
+            const cx = parseInt(document.getElementById('cropX').value);
+            const cy = parseInt(document.getElementById('cropY').value);
+
+            if (end <= start) {
+                statusDiv.innerText = "End time must be greater than Start time!";
+                return;
+            }
+
+            statusDiv.style.color = "#FF9800";
+            statusDiv.innerText = "Processing video... Please don't close this page.";
+            processBtn.disabled = true;
+
+            // Canvas Size crop ke hisaab se set karo
+            canvas.width = cw;
+            canvas.height = ch;
+
+            previewVideo.currentTime = start;
+            previewVideo.muted = false; // Audio ke liye
+            
+            // Audio Context Setup (Taaki video ki aawaz bhi save ho)
+            const audioCtx = new AudioContext();
+            const source = audioCtx.createMediaElementSource(previewVideo);
+            const dest = audioCtx.createMediaStreamDestination();
+            source.connect(dest);
+            source.connect(audioCtx.destination);
+
+            // Canvas ka Stream aur Audio ko milao
+            const stream = canvas.captureStream(30); // 30 FPS
+            const audioTrack = dest.stream.getAudioTracks()[0];
+            if (audioTrack) stream.addTrack(audioTrack);
+
+            // MediaRecorder setup
+            const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+            const chunks = [];
+
+            mediaRecorder.ondataavailable = e => {
+                if (e.data.size > 0) chunks.push(e.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'video/webm' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'SEAOX_Trimmed_Video.webm';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+
+                statusDiv.style.color = "#00A859";
+                statusDiv.innerText = "Video Downloaded Successfully!";
+                processBtn.disabled = false;
+            };
+
+            // Video Play karke recoding start karo
+            await previewVideo.play();
+            mediaRecorder.start();
+
+            function drawFrame() {
+                if (previewVideo.currentTime >= end || previewVideo.ended) {
+                    mediaRecorder.stop();
+                    previewVideo.pause();
+                    return;
+                }
+                
+                // Sirf select kiya hua crop area draw karo
+                ctx.drawImage(previewVideo, cx, cy, cw, ch, 0, 0, cw, ch);
+                requestAnimationFrame(drawFrame);
+            }
+            
+            drawFrame();
+        }
+    </script>
+</body>
+</html>
