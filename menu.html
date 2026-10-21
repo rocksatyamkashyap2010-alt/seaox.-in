@@ -7,43 +7,97 @@
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     <style>
         body { margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #ffffff; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        
+        /* Top Header */
         .header { width: 100%; max-width: 450px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .logo-img { width: 120px; mix-blend-mode: multiply; }
+        
+        /* Header Right Icons Container */
         .header-actions { display: flex; align-items: center; gap: 8px; }
-        .header-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-decoration: none; transition: transform 0.2s; }
+
+        /* Common Icon Style for Header */
+        .header-icon { 
+            width: 36px; 
+            height: 36px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
         .header-icon:active { transform: scale(0.9); }
+
+        /* Social Media Icons */
         .insta-header { background-color: #1877F2; }
         .insta-header svg { width: 18px; height: 18px; fill: white; }
+        
         .wa-header { background-color: #25D366; }
         .wa-header svg { width: 20px; height: 20px; fill: white; }
+        
         .x-header { background-color: #000000; }
         .x-header svg { width: 16px; height: 16px; fill: white; }
+        
         .menu-icon { font-size: 18px; color: #333; cursor: pointer; background: #f0f0f0; }
         .menu-icon:hover { background: #e0e0e0; }
-        .btn-box { width: 100%; max-width: 450px; height: 85px; border-radius: 20px; padding: 0 20px; box-sizing: border-box; display: flex; align-items: center; gap: 15px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; cursor: pointer; }
+
+        /* Common Button Style (Neeche ke buttons) */
+        .btn-box { 
+            width: 100%; 
+            max-width: 450px; 
+            height: 85px; 
+            border-radius: 20px; 
+            padding: 0 20px; 
+            box-sizing: border-box; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            text-decoration: none; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            transition: transform 0.2s; 
+            cursor: pointer;
+        }
         .btn-box:active { transform: scale(0.98); }
+        
         .btn-icon { display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; }
         .btn-text { font-weight: bold; }
-        
+
+        /* --- Button Colors --- */
+
+        /* 1. APP Box (Yellow) */
         .app-box { background-color: #FFD700; }
         .app-box .btn-text { color: #111; font-size: 28px; letter-spacing: 1px; }
+
+        /* 2. PDF Maker Box (Red) */
         .pdf-box { background-color: #E53935; }
         .pdf-box svg { width: 40px; height: 40px; fill: white; }
         .pdf-box .btn-text { color: white; font-size: 24px; letter-spacing: 0.5px; }
+
+        /* 3. Compressor Box (Chocolate) */
         .compressor-box { background-color: #D2691E; }
         .compressor-box svg { width: 40px; height: 40px; fill: white; }
         .compressor-box .btn-text { color: white; font-size: 24px; letter-spacing: 0.5px; }
+
+        /* 4. Screenshot Editor Box (Orange) */
         .editor-box { background-color: #FF9800; }
         .editor-box svg { width: 40px; height: 40px; fill: white; }
         .editor-box .btn-text { color: white; font-size: 20px; letter-spacing: 0.5px; }
+
+        /* 5. Invoice Generator Box (Purple) */
         .invoice-box { background-color: #6B46C1; }
         .invoice-box svg { width: 40px; height: 40px; fill: white; }
         .invoice-box .btn-text { color: white; font-size: 20px; letter-spacing: 0.5px; }
-        
-        /* Naya Video Box */
-        .video-box { background-color: #E91E63; } 
+
+        /* 6. Video Trimmer Box (Pink) */
+        .video-box { background-color: #E91E63; }
         .video-box svg { width: 40px; height: 40px; fill: white; }
         .video-box .btn-text { color: white; font-size: 20px; letter-spacing: 0.5px; }
+
+        /* 7. Protect PDF Box (Dark Blue) */
+        .protect-box { background-color: #2C3E50; }
+        .protect-box svg { width: 40px; height: 40px; fill: white; }
+        .protect-box .btn-text { color: white; font-size: 20px; letter-spacing: 0.5px; }
 
         /* Popup Modal */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 1000; justify-content: center; align-items: center; }
@@ -59,61 +113,120 @@
 </head>
 <body>
 
+    <!-- Header Section -->
     <div class="header">
         <img src="IMG_20261006_211924.png" alt="SEAOX Logo" class="logo-img">
+        
         <div class="header-actions">
+            <!-- Instagram -->
             <a href="https://www.instagram.com/seaoxofficial" target="_blank" class="header-icon insta-header">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                </svg>
             </a>
+
+            <!-- WhatsApp -->
             <a href="https://wa.me/919473991699?text=Hello%20SEAOX%20Team" target="_blank" class="header-icon wa-header">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                </svg>
             </a>
+
+            <!-- X (Twitter) -->
             <a href="https://x.com/seaoxoffcial" target="_blank" class="header-icon x-header">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
+                </svg>
             </a>
+            
+            <!-- Chat Icon (Contact Us) -->
             <div class="header-icon menu-icon" onclick="openModal()">💬</div>
         </div>
     </div>
 
-    <!-- Buttons -->
+    <!-- 1. APP Button (Yellow) -->
     <a href="store.html" class="btn-box app-box">
-        <div class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></div>
+        <div class="btn-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+            </svg>
+        </div>
         <div class="btn-text">APP</div>
     </a>
 
+    <!-- 2. PDF Maker Button (Red) -->
     <a href="pdf-tool.html" class="btn-box pdf-box">
-        <div class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6" stroke="#E53935" stroke-width="2"/><path d="M8 13h8M8 17h8M8 9h2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="btn-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                <path d="M14 2v6h6" stroke="#E53935" stroke-width="2"/>
+                <path d="M8 13h8M8 17h8M8 9h2" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
         <div class="btn-text">PDF Maker</div>
     </a>
 
+    <!-- 3. Compressor Button (Chocolate) -->
     <a href="image-compressor.html" class="btn-box compressor-box">
-        <div class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/><path d="M12 8v4m0 0v4m0-4h4m-4 0H8" stroke="#D2691E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="btn-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                <path d="M12 8v4m0 0v4m0-4h4m-4 0H8" stroke="#D2691E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
         <div class="btn-text">Compressor</div>
     </a>
 
+    <!-- 4. Screenshot Editor Button (Orange) -->
     <a href="image-editor.html" class="btn-box editor-box">
-        <div class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div>
+        <div class="btn-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+            </svg>
+        </div>
         <div class="btn-text">Screenshot Editor</div>
     </a>
 
+    <!-- 5. Invoice Generator Button (Purple) -->
     <a href="invoice.html" class="btn-box invoice-box">
-        <div class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+        <div class="btn-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+            </svg>
+        </div>
         <div class="btn-text">Invoice Generator</div>
     </a>
 
-    <!-- Naya Video Trimmer Button (Pink) -->
+    <!-- 6. Video Trimmer Button (Pink) -->
     <a href="video-editor.html" class="btn-box video-box">
-        <div class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM9.5 15l-3-3 1.41-1.41L9.5 12.17l3.59-3.59L14.5 10l-5 5z"/></svg></div>
+        <div class="btn-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM9.5 15l-3-3 1.41-1.41L9.5 12.17l3.59-3.59L14.5 10l-5 5z"/>
+            </svg>
+        </div>
         <div class="btn-text">Video Trimmer</div>
     </a>
 
-    <!-- Popup Modal -->
+    <!-- 7. Protect PDF Button (Dark Blue) -->
+    <a href="pdf-protect.html" class="btn-box protect-box">
+        <div class="btn-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
+            </svg>
+        </div>
+        <div class="btn-text">Protect PDF</div>
+    </a>
+
+    <!-- Popup Modal (Contact Us) -->
     <div id="contactModal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">×</span>
             <h2>Contact Us</h2>
             <p>Want to build a website, app, or software? Let's talk!</p>
-            <a href="mailto:seaoxseaox@gmail.com?subject=New Message from SEAOX Website&body=Hello SEAOX Team," class="send-msg-btn">📩 Send Message</a>
+            <a href="mailto:seaoxseaox@gmail.com?subject=New Message from SEAOX Website&body=Hello SEAOX Team," class="send-msg-btn">
+                📩 Send Message
+            </a>
             <p class="hindi-note">*किसी भी तरह का यदि हमारे एप्लीकेशन में अप्डेट चाहिए या फिर कोई फीचर्स एड करना हो तो आप हमें मेल कर सकते है</p>
         </div>
     </div>
