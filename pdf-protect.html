@@ -19,11 +19,12 @@
         
         .card { background: #fff; padding: 30px 20px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); max-width: 400px; width: 100%; text-align: center; box-sizing: border-box; }
         .icon { font-size: 60px; margin-bottom: 10px; }
-        h2 { margin: 0 0 10px 0; color: #111; }
+        h2 { margin: 0 0 10px 0; color: #111; font-size: 22px; }
         p { color: #666; font-size: 14px; margin-bottom: 25px; line-height: 1.4; }
 
         input[type="file"] { display: none; }
-        .select-btn { background-color: #E0E0E0; color: #333; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 15px; }
+        .select-btn { background-color: #E0E0E0; color: #333; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 15px; transition: 0.3s; }
+        .select-btn:hover { background-color: #d0d0d0; }
         
         .input-group { display: flex; flex-direction: column; margin-bottom: 20px; text-align: left; }
         .input-group label { font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #333; }
@@ -32,7 +33,9 @@
         .btn { padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; color: white; background-color: #2C3E50; transition: 0.3s; }
         .btn:disabled { background-color: #ccc; }
         
-        #status { font-size: 14px; font-weight: bold; color: #E53935; margin-top: 15px; min-height: 20px; }
+        #status { font-size: 14px; font-weight: bold; color: #E53935; margin-top: 15px; min-height: 20px; line-height: 1.5; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #2C3E50; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; display: none; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -45,7 +48,7 @@
     <div class="card">
         <div class="icon">🔒</div>
         <h2>Password Protect PDF</h2>
-        <p>Select any PDF file, set a secret password, and download it securely. Only people with the password can open it.</p>
+        <p>Select a PDF file, set a secret password, and download it securely. (Select 1 file at a time)</p>
 
         <!-- File Input -->
         <input type="file" id="pdfInput" accept="application/pdf">
@@ -54,7 +57,7 @@
             📂 Select PDF File
         </button>
         
-        <div id="fileName" style="font-size: 13px; color: #00A859; font-weight: bold; margin-bottom: 15px;"></div>
+        <div id="fileName" style="font-size: 13px; color: #00A859; font-weight: bold; margin-bottom: 15px; word-break: break-all;"></div>
 
         <!-- Password Input -->
         <div class="input-group">
@@ -66,6 +69,7 @@
             🔒 Protect & Download PDF
         </button>
         
+        <div class="loader" id="loader"></div>
         <div id="status"></div>
     </div>
 
@@ -87,6 +91,7 @@
             const password = document.getElementById('passwordInput').value;
             const statusDiv = document.getElementById('status');
             const btn = document.getElementById('protectBtn');
+            const loader = document.getElementById('loader');
 
             if (!file) {
                 statusDiv.style.color = "#E53935";
@@ -100,7 +105,8 @@
             }
 
             btn.disabled = true;
-            btn.innerText = "Processing... Please wait";
+            btn.innerText = "Processing...";
+            loader.style.display = "block";
             statusDiv.style.color = "#FF9800";
             statusDiv.innerText = "Reading PDF file...";
 
@@ -108,10 +114,11 @@
                 const arrayBuffer = await file.arrayBuffer();
                 
                 // Load PDF using PDF.js
-                const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
                 
-                // Get first page dimensions for PDF layout
+                // Get first page dimensions
                 const firstPage = await pdf.getPage(1);
+                // Scale 1.5 is good for mobile memory
                 const viewport = firstPage.getViewport({ scale: 1.5 }); 
                 const docWidth = viewport.width;
                 const docHeight = viewport.height;
@@ -123,13 +130,11 @@
                     unit: 'px',
                     format: [docWidth, docHeight],
                     encryption: {
-                        userPassword: password, // Yeh password user daalega
-                        ownerPassword: password + "_SEAOX", // Admin password
-                        userPermissions: ["print"] // Sirf print allow karega, copy/edit nahi
+                        userPassword: password, 
+                        ownerPassword: password + "_SEAOX", 
+                        userPermissions: ["print"] // Allow printing, no editing
                     }
                 });
-
-                statusDiv.innerText = `Processing pages (0/${pdf.numPages})...`;
 
                 // Loop through all pages
                 for (let i = 1; i <= pdf.numPages; i++) {
@@ -143,11 +148,23 @@
                     canvas.height = pageViewport.height;
                     canvas.width = pageViewport.width;
 
+                    // IMPORTANT: Fill canvas with white background to prevent white/transparent PDF issue
+                    context.fillStyle = '#ffffff';
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+
                     // Render PDF page to canvas
                     await page.render({ canvasContext: context, viewport: pageViewport }).promise;
                     
-                    // Convert to image
-                    const imgData = canvas.toDataURL('image/jpeg', 0.85);
+                    // Wait for canvas to fully paint
+                    await new Promise(resolve => setTimeout(resolve, 100));
+
+                    // Convert to image (0.7 quality to save mobile memory)
+                    const imgData = canvas.toDataURL('image/jpeg', 0.7);
+
+                    // Check if image data is generated
+                    if(imgData === 'data:,') {
+                        throw new Error("Canvas rendering failed. File might be too large.");
+                    }
 
                     if (i > 1) {
                         doc.addPage([docWidth, docHeight], docWidth > docHeight ? 'landscape' : 'portrait');
@@ -168,10 +185,11 @@
             } catch (error) {
                 console.error(error);
                 statusDiv.style.color = "#E53935";
-                statusDiv.innerText = "Error processing PDF. It might be corrupted or too large.";
+                statusDiv.innerText = "Error: " + error.message + ". File might be too large for mobile.";
             } finally {
                 btn.disabled = false;
                 btn.innerText = "🔒 Protect & Download PDF";
+                loader.style.display = "none";
             }
         }
     </script>
