@@ -26,12 +26,13 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
             text-decoration: none;
             transition: transform 0.2s;
+            overflow: hidden; /* Image ko circle mein rakhne ke liye */
         }
         .header-icon:active { transform: scale(0.9); }
 
-        /* AI Chat Icon (New) */
-        .ai-header { background: linear-gradient(135deg, #4285F4, #9b72cb, #d96570); }
-        .ai-header svg { width: 18px; height: 18px; fill: white; }
+        /* AI Chat Icon (Image) */
+        .ai-header { background: #ffffff; border: 1px solid #ddd; padding: 0; }
+        .ai-header img { width: 100%; height: 100%; object-fit: cover; }
 
         /* Instagram Icon Specifics */
         .insta-header { background-color: #1877F2; }
@@ -130,11 +131,9 @@
         <img src="IMG_20261006_211924.png" alt="SEAOX Logo" class="logo-img">
         
         <div class="header-actions">
-            <!-- 1. AI Chat Icon (Naya) -->
+            <!-- 1. AI Chat Icon (Now using Image) -->
             <a href="gemini-chat.html" class="header-icon ai-header">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>
+                <img src="IMG_20261019_105230.jpg" alt="AI Chat">
             </a>
 
             <!-- 2. Instagram Icon -->
