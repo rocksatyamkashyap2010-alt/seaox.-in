@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEAOX - AI Assistant</title>
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <style>
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        
+        /* Top Header */
+        .header { background: #1877F2; color: white; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 10; }
+        .back-btn { font-size: 24px; color: white; text-decoration: none; margin-right: 15px; }
+        .title { font-size: 20px; font-weight: bold; flex: 1; }
+        
+        /* Chat Area */
+        .chat-container { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        
+        .message { max-width: 80%; padding: 12px 15px; border-radius: 15px; font-size: 15px; line-height: 1.4; word-wrap: break-word; }
+        .msg-user { background: #1877F2; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .msg-bot { background: #ffffff; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        /* Loading Dots */
+        .typing { display: none; align-self: flex-start; background: #e0e0e0; padding: 15px; border-radius: 15px; border-bottom-left-radius: 2px; }
+        .dot { display: inline-block; width: 8px; height: 8px; background: #666; border-radius: 50%; margin: 0 2px; animation: bounce 1.4s infinite ease-in-out both; }
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+        /* Input Area */
+        .input-area { background: white; padding: 10px; display: flex; gap: 10px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+        .input-box { flex: 1; padding: 12px 15px; border: 1px solid #ddd; border-radius: 25px; font-size: 16px; outline: none; font-family: inherit; }
+        .send-btn { background: #1877F2; color: white; border: none; border-radius: 50%; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 18px; }
+        .send-btn:disabled { background: #ccc; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="menu.html" class="back-btn">←</a>
+        <div class="title">SEAOX AI</div>
+    </div>
+
+    <div class="chat-container" id="chatContainer">
+        <div class="message msg-bot">Hello! Main aapka SEAOX AI assistant hoon. Main aapki kya madad kar sakta hoon?</div>
+        <div class="typing" id="typingIndicator">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <input type="text" id="userInput" class="input-box" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+    </div>
+
+    <script>
+        //  curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent" \
+  -H 'Content-Type: application/json' \
+  -H 'X-goog-api-key: AQ.Ab8RN6JG--W6IJ1aK3UOn-P3I4pdb-BRYIXrIEQfp8hAHsgDvQ' \
+  -X POST \
+  -d '{
+    "contents": [
+      {
+        "parts": [
+          {
+            "text": "Explain how AI works in a few words"
+          }
+        ]
+      }
+    ]
+  }'       const API_KEY = 'AQ.Ab8RN6K4FYi77s1o3MaiLOsLS0mKOsBhDDhvl6SgGQgJ8pBTCg';
+        
+        // Aapke curl command ke hisaab se URL
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
+
+        const chatContainer = document.getElementById('chatContainer');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            // User ka message screen par
+            addMessage(text, 'user');
+            userInput.value = '';
+            sendBtn.disabled = true;
+            typingIndicator.style.display = 'block';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            try {
+                // API Call
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-goog-api-key': API_KEY 
+                    },
+                    body: JSON.stringify({
+                        contents: [
+                            {
+                                parts: [
+                                    { text: text }
+                                ]
+                            }
+                        ]
+                    })
+                });
+
+                const data = await response.json();
+                
+                // Bot ka reply
+                if (data.candidates && data.candidates.length > 0 && data.candidates[0].content.parts[0].text) {
+                    const botReply = data.candidates[0].content.parts[0].text;
+                    addMessage(botReply, 'bot');
+                } else {
+                    addMessage("Sorry, main abhi jawab nahi de pa raha. Error aaya hai.", 'bot');
+                    console.log("API Error:", data);
+                }
+
+            } catch (error) {
+                console.error(error);
+                addMessage("Network error! Please check your internet.", 'bot');
+            } finally {
+                sendBtn.disabled = false;
+                typingIndicator.style.display = 'none';
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+
+        function addMessage(text, sender) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message msg-${sender}`;
+            msgDiv.innerText = text;
+            chatContainer.insertBefore(msgDiv, typingIndicator);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    </script>
+</body>
+</html>
