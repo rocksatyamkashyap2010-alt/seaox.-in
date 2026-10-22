@@ -35,6 +35,7 @@
         .message { max-width: 78%; padding: 10px 14px; border-radius: 18px; font-size: 15px; line-height: 1.5; word-wrap: break-word; white-space: pre-wrap; position: relative; }
         .msg-bot { background: #ffffff; color: #050505; border-bottom-left-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
         .msg-user { background: #1877F2; color: white; border-bottom-right-radius: 4px; box-shadow: 0 1px 2px rgba(24, 119, 242, 0.2); }
+        .error-msg { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; font-size: 14px; }
         
         /* Typing Indicator */
         .typing { display: none; align-self: flex-start; background: #ffffff; padding: 12px 15px; border-radius: 18px; border-bottom-left-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin-left: 42px; }
@@ -63,7 +64,7 @@
         <!-- Initial Message -->
         <div class="msg-row bot">
             <div class="avatar bot-avatar">S</div>
-            <div class="message msg-bot">Namaste! Main SEAOX ka official AI assistant hoon. Main aapko humari services, Tractor Book app, ya kisi bhi software/web development ke baare mein jankari de sakta hoon. Aap kya jaanna chahte hain?</div>
+            <div class="message msg-bot">Namaste! Main SEAOX ka official AI assistant hoon. Main aapko humari company, services, Tractor Book app, ya kisi bhi software/web development ke baare mein jankari de sakta hoon. Aap kya jaanna chahte hain?</div>
         </div>
         
         <div class="typing" id="typingIndicator">
@@ -83,26 +84,36 @@
         const encodedKey = 'QVEuQWI4Uk42TEpYZXFCWGlwUWxMcmxaZmxUbms3b244aS1odEgxZWZqMEdycUg1ZWlqaFE=';
         const API_KEY = atob(encodedKey); 
         
-        // 🔥 FIX: Model wapas 'gemini-flash-latest' kar diya gaya hai
-        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:streamGenerateContent?alt=sse';
+        // Auto-Retry Models (503 Error Fix)
+        const MODELS = [
+            'gemini-flash-latest',
+            'gemini-2.0-flash',
+            'gemini-1.5-flash-latest'
+        ];
 
         const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
         const typingIndicator = document.getElementById('typingIndicator');
 
+        // 🚨 UPDATED SYSTEM PROMPT (With ALL Company Details) 🚨
         const SYSTEM_PROMPT = `You are the official AI assistant for 'SEAOX'. 
-Here is the company knowledge:
-- SEAOX is a freelancing startup company.
-- They build software, mobile apps, and websites.
-- They are the creators of the 'Tractor Book' app (an app for tractor owners to track accounts and farm activities).
+Here is the complete company knowledge that you must use to answer users:
+- SEAOX is a freelancing startup company created by two brothers.
+- Leadership: The CEO is Shivam Kashyap, and the Director Head is Satyam Kashyap.
+- Services: They build software, mobile apps, and websites.
+- Products: They are the creators of the 'Tractor Book' app (an app for tractor owners to track accounts and farm activities).
+- Net Worth: The company's net worth is officially NOT public. If someone asks, politely say it is not publicly disclosed.
+- Contact Email: seaoxseaox@gmail.com
+- Contact WhatsApp: 09473991699
 
 Your Rules:
 1. Always answer politely and professionally.
-2. If someone asks about SEAOX, Tractor Book, or what SEAOX does, answer using the knowledge above. Do not make up fake information.
-3. If someone asks to build an app or website, tell them SEAOX can help, and guide them to use the Contact Us button on the website.
-4. Keep your answers short, crisp, and to the point (max 3-4 lines).
-5. Reply in the language the user speaks (Hindi or English).`;
+2. If someone asks about SEAOX, Tractor Book, the founders, or what SEAOX does, answer exactly using the knowledge above. Do NOT make up fake information.
+3. If someone asks for contact details, give them the Email and WhatsApp number provided above.
+4. If someone asks to build an app or website, tell them SEAOX can help.
+5. Keep your answers short, crisp, and to the point (max 3-4 lines).
+6. Reply in the language the user speaks (Hindi or English).`;
 
         sendBtn.addEventListener('click', sendMessage);
         userInput.addEventListener('keypress', function (e) {
@@ -119,7 +130,6 @@ Your Rules:
             typingIndicator.style.display = 'block';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            // Bot ka message box pehle hi create karo
             const botDiv = document.createElement('div');
             botDiv.className = 'message msg-bot';
             
@@ -130,73 +140,100 @@ Your Rules:
             
             chatContainer.insertBefore(botRow, typingIndicator);
 
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'X-goog-api-key': API_KEY 
-                    },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: text }] }],
-                        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] }
-                    })
-                });
+            let success = false;
+            let retries = 0;
+            const maxRetries = 2; 
 
-                typingIndicator.style.display = 'none'; 
+            // Loop through models if one fails (Fixes 503 Busy Error)
+            for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
+                if (success) break;
+                
+                const currentModel = MODELS[modelIndex];
+                const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:streamGenerateContent?alt=sse`;
 
-                if (!response.ok) {
-                    throw new Error("API Error: " + response.status);
-                }
+                for (let attempt = 0; attempt <= maxRetries; attempt++) {
+                    try {
+                        if (attempt > 0) {
+                            const waitTime = attempt * 1500;
+                            botDiv.innerText = `Server busy hai, ${waitTime/1000} second mein try kar raha hoon...`;
+                            await new Promise(r => setTimeout(r, waitTime));
+                        }
 
-                // 🔥 FIX: Stronger SSE Parser
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder("utf-8");
-                let fullText = "";
-                let buffer = "";
+                        const response = await fetch(API_URL, {
+                            method: 'POST',
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'X-goog-api-key': API_KEY 
+                            },
+                            body: JSON.stringify({
+                                contents: [{ parts: [{ text: text }] }],
+                                systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] }
+                            })
+                        });
 
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-
-                    buffer += decoder.decode(value, { stream: true });
-                    let lines = buffer.split('\n');
-                    
-                    // Aakhri line adhuri ho sakti hai, use next loop ke liye bacha lo
-                    buffer = lines.pop(); 
-
-                    for (const line of lines) {
-                        if (line.startsWith('data: ')) {
-                            try {
-                                const dataStr = line.replace('data: ', '').trim();
-                                if (dataStr === '[DONE]') continue;
-                                
-                                const data = JSON.parse(dataStr);
-                                if (data.candidates && data.candidates[0].content.parts[0].text) {
-                                    const textChunk = data.candidates[0].content.parts[0].text;
-                                    fullText += textChunk;
-                                    botDiv.innerText = fullText; 
-                                    chatContainer.scrollTop = chatContainer.scrollHeight;
-                                }
-                            } catch (e) { 
-                                // Agar chunk adhura ho toh ignore karo
+                        if (!response.ok) {
+                            if (response.status === 503 || response.status === 429) {
+                                throw new Error("BUSY");
+                            } else {
+                                throw new Error("FATAL");
                             }
                         }
-                    }
-                }
-                
-                // Agar bilkul khali rah gaya toh error dikhao
-                if(fullText === "") {
-                    botDiv.innerText = "Sorry, jawab nahi mil paya. Kripya dobara try karein.";
-                }
 
-            } catch (error) {
-                console.error(error);
-                botDiv.innerText = "Error: " + error.message;
-            } finally {
-                sendBtn.disabled = false;
-                chatContainer.scrollTop = chatContainer.scrollHeight;
+                        typingIndicator.style.display = 'none'; 
+                        botDiv.innerText = ""; 
+
+                        const reader = response.body.getReader();
+                        const decoder = new TextDecoder("utf-8");
+                        let fullText = "";
+                        let buffer = "";
+
+                        while (true) {
+                            const { done, value } = await reader.read();
+                            if (done) break;
+
+                            buffer += decoder.decode(value, { stream: true });
+                            let lines = buffer.split('\n');
+                            buffer = lines.pop(); 
+
+                            for (const line of lines) {
+                                if (line.startsWith('data: ')) {
+                                    try {
+                                        const dataStr = line.replace('data: ', '').trim();
+                                        if (dataStr === '[DONE]') continue;
+                                        
+                                        const data = JSON.parse(dataStr);
+                                        if (data.candidates && data.candidates[0].content.parts[0].text) {
+                                            const textChunk = data.candidates[0].content.parts[0].text;
+                                            fullText += textChunk;
+                                            botDiv.innerText = fullText; 
+                                            chatContainer.scrollTop = chatContainer.scrollHeight;
+                                        }
+                                    } catch (e) { }
+                                }
+                            }
+                        }
+                        
+                        if(fullText !== "") {
+                            success = true;
+                            break; 
+                        }
+
+                    } catch (error) {
+                        console.warn(`Attempt ${attempt} failed on ${currentModel}:`, error.message);
+                        if (error.message === "FATAL") {
+                            break; 
+                        }
+                    }
+                } 
+            } 
+
+            if (!success) {
+                botDiv.className = 'message msg-bot error-msg';
+                botDiv.innerText = "⚠️ Google ka AI server abhi bahut busy hai. Kripya thodi der baad dobara try karein.";
             }
+
+            sendBtn.disabled = false;
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
         function addMessage(text, sender) {
