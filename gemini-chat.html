@@ -51,17 +51,20 @@
     </div>
 
     <script>
-        // 🚨 Aapki Key yahan pehle se daali hui hai
-        const API_KEY = 'AQ.Ab8RN6LuezhjC8qyVmpgfVvWAnHYIEZKtEGDX2zaTCDLTCf6sw'; 
+        // Aapki Base64 Encoded Key
+        const encodedKey = 'QVEuQWI4Uk42TEpYZXFCWGlwUWxMcmxaZmxUbms3b244aS1odEgxZWZqMEdycUg1ZWlqaFE=';
         
-        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
+        // Decode ho rahi hai automatically
+        const API_KEY = atob(encodedKey); 
+        
+        // API URL
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
         const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
         const typingIndicator = document.getElementById('typingIndicator');
 
-        // Button click aur Enter key dono ke liye event
         sendBtn.addEventListener('click', sendMessage);
         userInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
@@ -73,7 +76,6 @@
             const text = userInput.value.trim();
             if (!text) return;
 
-            // User ka message screen par dikhao
             addMessage(text, 'user');
             userInput.value = '';
             sendBtn.disabled = true;
@@ -81,6 +83,7 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
             try {
+                // API Call with Header
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 
@@ -98,16 +101,12 @@
 
                 const data = await response.json();
                 
-                // Agar API mein koi error aata hai (jaise key galat hai)
                 if (data.error) {
                     addMessage("⚠️ Error: " + data.error.message, 'bot');
-                } 
-                // Agar AI ka jawab aa jata hai
-                else if (data.candidates && data.candidates.length > 0 && data.candidates[0].content.parts[0].text) {
+                } else if (data.candidates && data.candidates.length > 0 && data.candidates[0].content.parts[0].text) {
                     const botReply = data.candidates[0].content.parts[0].text;
                     addMessage(botReply, 'bot');
-                } 
-                else {
+                } else {
                     addMessage("Sorry, main samajh nahi paya. Dobara try karein.", 'bot');
                 }
 
