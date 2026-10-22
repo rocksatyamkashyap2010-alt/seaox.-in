@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEAOX - Smart Voice Calculator</title>
+    <title>SEAOX - Fast Calculator</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     
-    <!-- Tesseract.js (Photo OCR) -->
+    <!-- Tesseract.js (AI OCR) -->
     <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
     
     <style>
@@ -40,17 +40,18 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* Result Area */
-        .result-area { text-align: left; margin-top: 10px; background: #f9f9f9; padding: 10px; border-radius: 10px; border: 1px solid #eee; }
-        .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .result-header label { font-size: 13px; font-weight: bold; color: #333; }
-        .clear-btn { background: none; border: none; color: #E53935; font-size: 13px; font-weight: bold; cursor: pointer; }
+        .result-area { text-align: left; margin-top: 10px; background: #f9f9f9; padding: 15px; border-radius: 10px; border: 1px solid #ddd; }
+        .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .result-header label { font-size: 14px; font-weight: bold; color: #333; }
         
-        textarea { width: 100%; height: 150px; padding: 10px; font-size: 20px; font-family: monospace; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; resize: vertical; margin-bottom: 10px; line-height: 1.5; text-align: right; }
+        textarea { width: 100%; height: 150px; padding: 10px; font-size: 20px; font-family: monospace; border: 2px solid #1877F2; border-radius: 8px; box-sizing: border-box; resize: vertical; margin-bottom: 15px; line-height: 1.5; text-align: right; background: #fff; }
         
-        .total-box { background: #00A859; color: white; padding: 15px; border-radius: 10px; text-align: center; font-size: 28px; font-weight: bold; box-shadow: 0 4px 10px rgba(0, 168, 89, 0.3); }
+        .btn-calc { background: #F39C12; font-size: 18px; }
+        
+        .total-box { background: #00A859; color: white; padding: 15px; border-radius: 10px; text-align: center; font-size: 32px; font-weight: bold; box-shadow: 0 4px 10px rgba(0, 168, 89, 0.3); margin-top: 15px; display: none;}
         
         #status { font-size: 13px; font-weight: bold; color: #FF9800; margin-top: 10px; }
-        #imagePreview { max-width: 100%; max-height: 150px; border-radius: 10px; display: none; margin: 10px auto; }
+        #imagePreview { max-width: 100%; max-height: 200px; border-radius: 10px; display: none; margin: 10px auto; }
         .voice-transcript { font-size: 18px; font-weight: bold; color: #1877F2; min-height: 24px; margin-bottom: 10px; padding: 10px; background: #e3f2fd; border-radius: 8px; text-align: left; }
     </style>
 </head>
@@ -65,13 +66,13 @@
         
         <!-- Tabs -->
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('voice')">🎙️ Voice</button>
-            <button class="tab-btn" onclick="switchTab('photo')">📸 Photo</button>
+            <button class="tab-btn active" onclick="switchTab('voice')">🎙️ Voice (Accurate)</button>
+            <button class="tab-btn" onclick="switchTab('photo')">📸 Photo (AI)</button>
         </div>
 
         <!-- VOICE TAB -->
         <div id="tab-voice" class="tab-content active">
-            <p style="color:#666; font-size:14px; margin-bottom:15px;">Tap Mic. Speak numbers. Say "Plus" or "Add" to move to next line.</p>
+            <p style="color:#666; font-size:14px; margin-bottom:15px;">Tap Mic. Speak numbers. Say "Plus" to move to next line.</p>
             
             <button class="btn btn-mic" id="micBtn" onclick="startVoice()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
@@ -83,31 +84,31 @@
 
         <!-- PHOTO TAB -->
         <div id="tab-photo" class="tab-content">
-            <p style="color:#E53935; font-size:13px; font-weight:bold; margin-bottom:10px;">*AI photo reading. Write numbers clearly.</p>
+            <p style="color:#E53935; font-size:13px; font-weight:bold; margin-bottom:10px;">*Tip: Write numbers clearly with a dark pen.</p>
             <input type="file" id="imageUpload" accept="image/*" capture="environment">
             <button class="btn btn-upload" onclick="document.getElementById('imageUpload').click()">
-                📸 Select Photo
+                📸 Take Photo / Select
             </button>
             <img id="imagePreview" src="" alt="Preview">
             
             <div class="loader-container" id="loaderContainer">
                 <div class="loader"></div>
-                <div style="font-size: 13px; font-weight: bold; color: #1877F2;">Reading fast...</div>
+                <div style="font-size: 13px; font-weight: bold; color: #1877F2;">AI padh raha hai... (Please wait)</div>
             </div>
         </div>
 
         <!-- RESULT AREA -->
         <div class="result-area" id="resultArea" style="display: none;">
             <div class="result-header">
-                <label>Numbers List (You can edit):</label>
-                <button class="clear-btn" onclick="clearList()">Clear All</button>
+                <label>Check & Edit Numbers:</label>
+                <button class="clear-btn" style="background:none; border:none; color:#E53935; font-weight:bold; cursor:pointer;" onclick="clearList()">Clear</button>
             </div>
-            <textarea id="extractedText" placeholder="Numbers will appear here..." oninput="calculateTotal()"></textarea>
             
-            <div style="margin-top: 10px;">
-                <div style="font-size: 14px; font-weight: bold; color: #555; margin-bottom: 5px; text-align: center;">Total Amount</div>
-                <div class="total-box" id="totalAmount">₹ 0</div>
-            </div>
+            <textarea id="extractedText" placeholder="Numbers yahan aayenge... (Galti ho toh sudhar lein)" oninput="hideTotal()"></textarea>
+            
+            <button class="btn btn-calc" onclick="calculateTotal()">🧮 Calculate Total</button>
+
+            <div class="total-box" id="totalAmount">₹ 0</div>
         </div>
 
         <div id="status"></div>
@@ -116,29 +117,30 @@
     <script>
         const resultArea = document.getElementById('resultArea');
         const extractedText = document.getElementById('extractedText');
+        const totalBox = document.getElementById('totalAmount');
 
         // ==========================================
-        // 1. CONTINUOUS SMART VOICE RECOGNITION
+        // 1. VOICE RECOGNITION (SMART)
         // ==========================================
         let recognition;
         let isRecording = false;
-        let accumulatedText = ""; // To store spoken words before processing
+        let accumulatedText = ""; 
         let silenceTimer = null;
-        let lastProcessedNumber = ""; // To prevent duplicates
 
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
             recognition.continuous = true;
             recognition.interimResults = true; 
-            recognition.lang = 'en-IN'; // Indian English
+            recognition.lang = 'en-IN'; 
 
             recognition.onstart = function() {
                 isRecording = true;
                 document.getElementById('micBtn').classList.add('recording');
                 document.getElementById('micBtn').innerHTML = "🔴 Listening... (Tap to Stop)";
-                document.getElementById('voiceStatus').innerText = "Mic is ON. Speak now...";
+                document.getElementById('voiceStatus').innerText = "Speak now...";
                 resultArea.style.display = 'block';
+                totalBox.style.display = 'none'; // Hide total until calculated
             };
 
             recognition.onresult = function(event) {
@@ -153,7 +155,6 @@
                     }
                 }
 
-                // Show live hearing
                 if (interim) {
                     document.getElementById('voiceTranscript').innerText = accumulatedText + " " + interim;
                 }
@@ -161,12 +162,11 @@
                 if (final) {
                     accumulatedText += final;
                     
-                    // Check if user said "plus", "add", "dhan", "जोड़"
+                    // Check for 'plus' or 'add' to create new line
                     if (/plus|add|dhan|जोड़/i.test(final)) {
                         clearTimeout(silenceTimer);
-                        processAccumulatedText(); // Process immediately
+                        processAccumulatedText(); 
                     } else {
-                        // If they just said a number, wait for 1.2 seconds to see if they say "plus"
                         clearTimeout(silenceTimer);
                         silenceTimer = setTimeout(processAccumulatedText, 1200);
                     }
@@ -175,51 +175,35 @@
 
             recognition.onerror = function(event) {
                 document.getElementById('voiceStatus').innerText = "Error: " + event.error;
-                // Don't stop recording on simple 'no-speech' errors
-                if (event.error !== 'no-speech') {
-                    stopVoice();
-                }
+                if (event.error !== 'no-speech') stopVoice();
             };
 
-            // 🔥 FIX: Automatically restart if user hasn't stopped it
             recognition.onend = function() {
-                if (isRecording) {
-                    recognition.start(); // Keep listening
-                } else {
-                    stopVoice();
-                }
+                if (isRecording) recognition.start(); 
+                else stopVoice();
             };
         }
 
         function processAccumulatedText() {
             if (accumulatedText.trim() === "") return;
 
-            // Process keywords for new lines
             let textToParse = accumulatedText.toLowerCase()
                                 .replace(/plus/g, '\n')
                                 .replace(/add/g, '\n')
                                 .replace(/dhan/g, '\n')
                                 .replace(/जोड़/g, '\n');
             
-            // Extract numbers
             let numbers = textToParse.match(/\d+(\.\d+)?/g);
             
             if (numbers) {
                 let currentText = extractedText.value.trim();
                 let newNumbers = numbers.join("\n");
-                
-                // Append to textarea
-                if (currentText === "") {
-                    extractedText.value = newNumbers;
-                } else {
-                    extractedText.value = currentText + "\n" + newNumbers;
-                }
-                calculateTotal();
+                extractedText.value = currentText ? currentText + "\n" + newNumbers : newNumbers;
             }
 
-            // Reset for next sentence
             accumulatedText = "";
             document.getElementById('voiceTranscript').innerText = "✓ Added!";
+            totalBox.style.display = 'none'; // Hide total until calculated
         }
 
         function startVoice() {
@@ -273,24 +257,26 @@
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d', { willReadFrequently: true });
                 
-                const MAX_WIDTH = 400; 
+                // Resize to 800px for better balance of speed and accuracy
+                const MAX_WIDTH = 800; 
                 const scale = MAX_WIDTH / img.width;
                 canvas.width = MAX_WIDTH;
                 canvas.height = img.height * scale;
 
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                // Grayscale
+                // Stronger Grayscale & Threshold (Black & White)
                 let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 let data = imgData.data;
                 for (let i = 0; i < data.length; i += 4) {
                     let avg = (data[i] + data[i+1] + data[i+2]) / 3;
-                    let val = avg > 130 ? 255 : 0;
+                    // Threshold: Make dark pixels darker, light pixels lighter
+                    let val = avg > 140 ? 255 : 0; 
                     data[i] = val; data[i+1] = val; data[i+2] = val;
                 }
                 ctx.putImageData(imgData, 0, 0);
 
-                const compressedImageData = canvas.toDataURL('image/jpeg', 0.8);
+                const compressedImageData = canvas.toDataURL('image/jpeg', 0.9);
 
                 const worker = await Tesseract.createWorker('eng', 1, {
                     logger: m => {
@@ -308,6 +294,7 @@
                 const { data: { text } } = await worker.recognize(compressedImageData);
                 await worker.terminate();
 
+                // Clean text: Remove empty lines and non-number characters
                 let cleanText = text.split('\n')
                     .map(line => line.trim())
                     .filter(line => line !== '' && line.length > 0)
@@ -316,16 +303,15 @@
                 extractedText.value = cleanText;
                 
                 loaderContainer.style.display = 'none';
-                statusDiv.innerText = "Check numbers below!";
+                statusDiv.innerText = "AI ne photo padh li hai! Ab check karo.";
                 statusDiv.style.color = "#00A859";
                 resultArea.style.display = 'block';
-
-                calculateTotal();
+                totalBox.style.display = 'none'; // Keep total hidden until user clicks calculate
 
             } catch (error) {
                 console.error(error);
                 loaderContainer.style.display = 'none';
-                statusDiv.innerText = "Error: Try again or use Voice.";
+                statusDiv.innerText = "Error: Photo padhne mein dikkat aayi.";
                 statusDiv.style.color = "#E53935";
             }
         });
@@ -344,15 +330,21 @@
                     total += parseFloat(num);
                 });
                 
-                document.getElementById('totalAmount').innerText = "₹ " + total.toLocaleString('en-IN');
+                totalBox.innerText = "₹ " + total.toLocaleString('en-IN');
+                totalBox.style.display = 'block';
             } else {
-                document.getElementById('totalAmount').innerText = "₹ 0";
+                totalBox.innerText = "₹ 0";
+                totalBox.style.display = 'block';
             }
+        }
+
+        function hideTotal() {
+            totalBox.style.display = 'none';
         }
 
         function clearList() {
             extractedText.value = "";
-            calculateTotal();
+            totalBox.style.display = 'none';
             resultArea.style.display = 'none';
         }
 
