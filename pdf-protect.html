@@ -6,8 +6,8 @@
     <title>SEAOX - 100% Secure PDF</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     
-    <!-- @cantoo/pdf-lib: Yeh library original PDF ke andar direct password lock lagati hai -->
-    <script src="https://cdn.jsdelivr.net/npm/@cantoo/pdf-lib@1.17.4/dist/pdf-lib.min.js"></script>
+    <!-- Yeh library Direct Original PDF ko Encrypt karti hai (No white screen) -->
+    <script src="https://unpkg.com/@cantoo/pdf-lib@1.17.4/dist/pdf-lib.min.js"></script>
     
     <style>
         body { margin: 0; padding: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
@@ -22,16 +22,15 @@
 
         input[type="file"] { display: none; }
         .select-btn { background-color: #E0E0E0; color: #333; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 15px; transition: 0.3s; }
-        .select-btn:hover { background-color: #d0d0d0; }
         
         .input-group { display: flex; flex-direction: column; margin-bottom: 20px; text-align: left; }
         .input-group label { font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #333; }
-        .input-group input { padding: 12px; border: 2px solid #00A859; border-radius: 8px; font-size: 16px; font-weight: bold; text-align: center; letter-spacing: 1px;}
+        .input-group input { padding: 12px; border: 2px solid #00A859; border-radius: 8px; font-size: 16px; font-weight: bold; letter-spacing: 1px; text-align: center; }
         
         .btn { padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; color: white; background-color: #2C3E50; transition: 0.3s; }
         .btn:disabled { background-color: #ccc; }
         
-        #status { font-size: 14px; font-weight: bold; color: #E53935; margin-top: 15px; min-height: 20px; line-height: 1.5; }
+        #status { font-size: 14px; font-weight: bold; color: #E53935; margin-top: 15px; min-height: 20px; line-height: 1.5; word-wrap: break-word; }
         
         .loader { border: 4px solid #f3f3f3; border-top: 4px solid #2C3E50; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -47,7 +46,7 @@
     <div class="card">
         <div class="icon">🔒</div>
         <h2>Password Protect</h2>
-        <p>Select a PDF file, set a secret password, and download it securely. (No quality loss).</p>
+        <p>Select a PDF file, set a secret password, and download it securely. No quality loss, 100% safe.</p>
 
         <!-- File Input -->
         <input type="file" id="pdfInput" accept="application/pdf">
@@ -72,8 +71,10 @@
     </div>
 
     <script>
-        // PDFLib object ko access karo
-        const { PDFDocument } = PDFLib;
+        // Check if the library loaded properly
+        if (typeof PDFLib === 'undefined') {
+            document.getElementById('status').innerText = "Error: Internet issue. Library load nahi hui. Page refresh karein.";
+        }
 
         const pdfInput = document.getElementById('pdfInput');
         const fileNameDiv = document.getElementById('fileName');
@@ -93,12 +94,12 @@
 
             if (!file) {
                 statusDiv.style.color = "#E53935";
-                statusDiv.innerText = "Please select a PDF file!";
+                statusDiv.innerText = "Pehle koi PDF file select karo!";
                 return;
             }
             if (!password) {
                 statusDiv.style.color = "#E53935";
-                statusDiv.innerText = "Please enter a password!";
+                statusDiv.innerText = "Password daalna zaroori hai!";
                 return;
             }
 
@@ -106,19 +107,23 @@
             btn.innerText = "Locking PDF... Please wait";
             loader.style.display = "block";
             statusDiv.style.color = "#FF9800";
-            statusDiv.innerText = "Reading original file...";
+            statusDiv.innerText = "Original file read ho rahi hai...";
 
             try {
-                // 1. Original PDF ko ArrayBuffer mein read karo
+                // 1. Read File as ArrayBuffer
                 const arrayBuffer = await file.arrayBuffer();
 
-                // 2. PDF Document load karo (Bina image banaye, direct file edit karenge)
-                const pdfDoc = await PDFDocument.load(arrayBuffer);
+                // 2. Load Original PDF (Direct binary read)
+                const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer, { 
+                    ignoreEncryption: false // If already encrypted, it will throw error
+                });
 
-                // 3. Password Lock lagao (Original PDF format mein)
+                statusDiv.innerText = "Password apply ho raha hai...";
+
+                // 3. Encrypt (Apply Password)
                 pdfDoc.encrypt({
-                    userPassword: password, // Yeh password popup mein maangega
-                    ownerPassword: password + "_SEAOX_MASTER", // Admin key
+                    userPassword: password, // Yeh password user se maanga jayega
+                    ownerPassword: password + "_SEAOX_ADMIN", // Admin bypass password
                     permissions: {
                         printing: 'highResolution',
                         modifying: false,
@@ -130,11 +135,10 @@
                     }
                 });
 
-                // 4. Locked PDF save karo
-                statusDiv.innerText = "Saving locked PDF...";
+                // 4. Save the locked PDF
                 const pdfBytes = await pdfDoc.save();
 
-                // 5. Download trigger karo
+                // 5. Create download link and trigger
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -146,16 +150,19 @@
                 URL.revokeObjectURL(url);
 
                 statusDiv.style.color = "#00A859";
-                statusDiv.innerText = "Success! PDF is locked. Try opening it, it will ask for password.";
+                statusDiv.innerText = "✅ Success! PDF Locked & Downloaded. Ab ise kholne par password maangega.";
                 
             } catch (error) {
                 console.error(error);
                 statusDiv.style.color = "#E53935";
-                // Agar file pehle se locked hai to error aayega
+                
+                // Error Handling
                 if(error.message.includes("encrypted") || error.message.includes("password")) {
-                    statusDiv.innerText = "Error: This PDF is already protected.";
+                    statusDiv.innerText = "❌ Error: Yeh PDF pehle se hi password protected hai.";
+                } else if (error.message.includes("PDF")) {
+                    statusDiv.innerText = "❌ Error: File corrupt hai ya valid PDF nahi hai.";
                 } else {
-                    statusDiv.innerText = "Error: File might be corrupted or invalid.";
+                    statusDiv.innerText = "❌ Error: " + error.message;
                 }
             } finally {
                 btn.disabled = false;
