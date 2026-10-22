@@ -6,63 +6,26 @@
     <title>SEAOX - AI Assistant</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     <style>
-        /* Mobile Height Fix */
         html, body { height: 100%; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; }
+        body { display: flex; flex-direction: column; height: 100dvh; overflow: hidden; }
         
-        body { 
-            display: flex; 
-            flex-direction: column; 
-            height: 100dvh; /* Dynamic viewport height for mobile */
-            overflow: hidden; 
-        }
-        
-        /* Top Header */
-        .header { 
-            flex-shrink: 0; 
-            background: #1877F2; 
-            color: white; 
-            padding: 15px; 
-            display: flex; 
-            align-items: center; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-            z-index: 10; 
-        }
+        .header { flex-shrink: 0; background: #1877F2; color: white; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 10; }
         .back-btn { font-size: 24px; color: white; text-decoration: none; margin-right: 15px; }
         .title { font-size: 20px; font-weight: bold; flex: 1; }
         
-        /* Chat Area */
-        .chat-container { 
-            flex: 1; 
-            padding: 15px; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 10px; 
-            -webkit-overflow-scrolling: touch;
-        }
+        .chat-container { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; -webkit-overflow-scrolling: touch; }
         
         .message { max-width: 85%; padding: 12px 15px; border-radius: 15px; font-size: 15px; line-height: 1.4; word-wrap: break-word; }
         .msg-user { background: #1877F2; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
         .msg-bot { background: #ffffff; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         
-        /* Loading Dots */
         .typing { display: none; align-self: flex-start; background: #e0e0e0; padding: 15px; border-radius: 15px; border-bottom-left-radius: 2px; }
         .dot { display: inline-block; width: 8px; height: 8px; background: #666; border-radius: 50%; margin: 0 2px; animation: bounce 1.4s infinite ease-in-out both; }
         .dot:nth-child(1) { animation-delay: -0.32s; }
         .dot:nth-child(2) { animation-delay: -0.16s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
 
-        /* Input Area - Fixed at Bottom */
-        .input-area { 
-            flex-shrink: 0; 
-            background: white; 
-            padding: 10px; 
-            display: flex; 
-            gap: 10px; 
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05); 
-            border-top: 1px solid #eee;
-            padding-bottom: max(10px, env(safe-area-inset-bottom)); 
-        }
+        .input-area { flex-shrink: 0; background: white; padding: 10px; display: flex; gap: 10px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); border-top: 1px solid #eee; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
         .input-box { flex: 1; padding: 12px 15px; border: 1px solid #ddd; border-radius: 25px; font-size: 16px; outline: none; font-family: inherit; background: #f9f9f9; }
         .send-btn { background: #1877F2; color: white; border: none; border-radius: 50%; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 18px; flex-shrink: 0; }
         .send-btn:disabled { background: #ccc; }
@@ -83,43 +46,34 @@
     </div>
 
     <div class="input-area">
-        <input type="text" id="userInput" class="input-box" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
-        <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+        <input type="text" id="userInput" class="input-box" placeholder="Type a message...">
+        <button class="send-btn" id="sendBtn">➤</button>
     </div>
 
     <script>
-        //AQ.Ab8RN6KIbJjIHvyCvLlNO-A3HIR_-yyxpNhX8bXakpVHTR65zA
-        const API_KEY ='AQ.Ab8RN6KIbJjIHvyCvLlNO-A3HIR_-yyxpNhX8bXakpVHTR65zA;
+        // 🚨 Aapki Key yahan pehle se daali hui hai
+        const API_KEY = 'AQ.Ab8RN6LuezhjC8qyVmpgfVvWAnHYIEZKtEGDX2zaTCDLTCf6sw'; 
         
-        const API_URL = 'curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent" \
-  -H 'Content-Type: application/json' \
-  -H 'X-goog-api-key: AQ.Ab8RN6KIbJjIHvyCvLlNO-A3HIR_-yyxpNhX8bXakpVHTR65zA' \
-  -X POST \
-  -d '{
-    "contents": [
-      {
-        "parts": [
-          {
-            "text": "Explain how AI works in a few words"
-          }
-        ]
-      }
-    ]
-  }'';
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
 
         const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
         const typingIndicator = document.getElementById('typingIndicator');
 
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') sendMessage();
-        }
+        // Button click aur Enter key dono ke liye event
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
 
         async function sendMessage() {
             const text = userInput.value.trim();
             if (!text) return;
 
+            // User ka message screen par dikhao
             addMessage(text, 'user');
             userInput.value = '';
             sendBtn.disabled = true;
@@ -144,17 +98,22 @@
 
                 const data = await response.json();
                 
-                if (data.candidates && data.candidates.length > 0 && data.candidates[0].content.parts[0].text) {
+                // Agar API mein koi error aata hai (jaise key galat hai)
+                if (data.error) {
+                    addMessage("⚠️ Error: " + data.error.message, 'bot');
+                } 
+                // Agar AI ka jawab aa jata hai
+                else if (data.candidates && data.candidates.length > 0 && data.candidates[0].content.parts[0].text) {
                     const botReply = data.candidates[0].content.parts[0].text;
                     addMessage(botReply, 'bot');
-                } else {
-                    addMessage("Sorry, error aaya hai. Check console.", 'bot');
-                    console.log("API Error:", data);
+                } 
+                else {
+                    addMessage("Sorry, main samajh nahi paya. Dobara try karein.", 'bot');
                 }
 
             } catch (error) {
                 console.error(error);
-                addMessage("Network error! Please check your internet.", 'bot');
+                addMessage("Network Error: Internet check karein.", 'bot');
             } finally {
                 sendBtn.disabled = false;
                 typingIndicator.style.display = 'none';
