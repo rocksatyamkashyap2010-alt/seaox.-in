@@ -51,14 +51,12 @@
     </div>
 
     <script>
-        // Aapki Base64 Encoded Key
+        // Base64 Encoded Key
         const encodedKey = 'QVEuQWI4Uk42TEpYZXFCWGlwUWxMcmxaZmxUbms3b244aS1odEgxZWZqMEdycUg1ZWlqaFE=';
-        
-        // Decode ho rahi hai automatically
         const API_KEY = atob(encodedKey); 
         
-        // API URL
-        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+        // 🔥 FIX: Model ka naam wapas 'gemini-flash-latest' kar diya hai
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
 
         const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
@@ -83,7 +81,6 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
             try {
-                // API Call with Header
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 
