@@ -6,10 +6,8 @@
     <title>SEAOX - 100% Secure PDF</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     
-    <!-- PDF.js (Read PDF) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <!-- jsPDF with Encryption Support -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- @cantoo/pdf-lib: Yeh library original PDF ke andar direct password lock lagati hai -->
+    <script src="https://cdn.jsdelivr.net/npm/@cantoo/pdf-lib@1.17.4/dist/pdf-lib.min.js"></script>
     
     <style>
         body { margin: 0; padding: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
@@ -24,10 +22,11 @@
 
         input[type="file"] { display: none; }
         .select-btn { background-color: #E0E0E0; color: #333; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; margin-bottom: 15px; transition: 0.3s; }
+        .select-btn:hover { background-color: #d0d0d0; }
         
         .input-group { display: flex; flex-direction: column; margin-bottom: 20px; text-align: left; }
         .input-group label { font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #333; }
-        .input-group input { padding: 12px; border: 2px solid #00A859; border-radius: 8px; font-size: 18px; font-weight: bold; letter-spacing: 2px; text-align: center; }
+        .input-group input { padding: 12px; border: 2px solid #00A859; border-radius: 8px; font-size: 16px; font-weight: bold; text-align: center; letter-spacing: 1px;}
         
         .btn { padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; border: none; width: 100%; color: white; background-color: #2C3E50; transition: 0.3s; }
         .btn:disabled { background-color: #ccc; }
@@ -46,9 +45,9 @@
     </div>
 
     <div class="card">
-        <div class="icon">🔐</div>
-        <h2>100% Secure PDF</h2>
-        <p>Set a password. The PDF will ask for this password before opening anywhere.</p>
+        <div class="icon">🔒</div>
+        <h2>Password Protect</h2>
+        <p>Select a PDF file, set a secret password, and download it securely. (No quality loss).</p>
 
         <!-- File Input -->
         <input type="file" id="pdfInput" accept="application/pdf">
@@ -73,8 +72,8 @@
     </div>
 
     <script>
-        // Setup PDF.js Worker
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        // PDFLib object ko access karo
+        const { PDFDocument } = PDFLib;
 
         const pdfInput = document.getElementById('pdfInput');
         const fileNameDiv = document.getElementById('fileName');
@@ -110,73 +109,41 @@
             statusDiv.innerText = "Reading original file...";
 
             try {
+                // 1. Original PDF ko ArrayBuffer mein read karo
                 const arrayBuffer = await file.arrayBuffer();
-                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                
-                // High Quality Scale (2.0)
-                const firstPage = await pdf.getPage(1);
-                const viewport = firstPage.getViewport({ scale: 2.0 }); 
-                const docWidth = viewport.width;
-                const docHeight = viewport.height;
 
-                // Create PDF with Encryption
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF({
-                    orientation: docWidth > docHeight ? 'landscape' : 'portrait',
-                    unit: 'px',
-                    format: [docWidth, docHeight],
-                    encryption: {
-                        userPassword: password, // User must enter this
-                        ownerPassword: password + "_SEAOX_MASTER", // Master key
-                        userPermissions: [] // No editing, no copying
+                // 2. PDF Document load karo (Bina image banaye, direct file edit karenge)
+                const pdfDoc = await PDFDocument.load(arrayBuffer);
+
+                // 3. Password Lock lagao (Original PDF format mein)
+                pdfDoc.encrypt({
+                    userPassword: password, // Yeh password popup mein maangega
+                    ownerPassword: password + "_SEAOX_MASTER", // Admin key
+                    permissions: {
+                        printing: 'highResolution',
+                        modifying: false,
+                        copying: false,
+                        annotating: false,
+                        fillingForms: false,
+                        contentAccessibility: true,
+                        documentAssembly: false,
                     }
                 });
 
-                // Process all pages
-                for (let i = 1; i <= pdf.numPages; i++) {
-                    statusDiv.innerText = `Processing page ${i} of ${pdf.numPages}...`;
-                    
-                    const page = await pdf.getPage(i);
-                    const pageViewport = page.getViewport({ scale: 2.0 }); // High quality
+                // 4. Locked PDF save karo
+                statusDiv.innerText = "Saving locked PDF...";
+                const pdfBytes = await pdfDoc.save();
 
-                    const canvas = document.createElement('canvas');
-                    const context = canvas.getContext('2d');
-                    canvas.height = pageViewport.height;
-                    canvas.width = pageViewport.width;
-
-                    // Draw White Background (Prevents White/Blank PDF)
-                    context.fillStyle = '#ffffff';
-                    context.fillRect(0, 0, canvas.width, canvas.height);
-
-                    // Render page to canvas
-                    await page.render({ canvasContext: context, viewport: pageViewport }).promise;
-                    
-                    // Wait for canvas to settle
-                    await new Promise(resolve => setTimeout(resolve, 150));
-
-                    // Convert to image
-                    const imgData = canvas.toDataURL('image/jpeg', 0.9);
-
-                    // Safety Check
-                    if (imgData === 'data:,' || imgData.length < 500) {
-                        throw new Error("Image render failed. Please try again.");
-                    }
-
-                    if (i > 1) {
-                        doc.addPage([docWidth, docHeight], docWidth > docHeight ? 'landscape' : 'portrait');
-                    }
-                    
-                    doc.addImage(imgData, 'JPEG', 0, 0, docWidth, docHeight);
-                    
-                    // Cleanup memory for mobile
-                    canvas.width = 0;
-                    canvas.height = 0;
-                }
-
-                statusDiv.innerText = "Applying Password Lock...";
-                
-                // Save and download
-                doc.save('Locked_' + file.name);
+                // 5. Download trigger karo
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Locked_' + file.name;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
 
                 statusDiv.style.color = "#00A859";
                 statusDiv.innerText = "Success! PDF is locked. Try opening it, it will ask for password.";
@@ -184,7 +151,12 @@
             } catch (error) {
                 console.error(error);
                 statusDiv.style.color = "#E53935";
-                statusDiv.innerText = "Error: " + error.message;
+                // Agar file pehle se locked hai to error aayega
+                if(error.message.includes("encrypted") || error.message.includes("password")) {
+                    statusDiv.innerText = "Error: This PDF is already protected.";
+                } else {
+                    statusDiv.innerText = "Error: File might be corrupted or invalid.";
+                }
             } finally {
                 btn.disabled = false;
                 btn.innerText = "🔒 Lock & Download PDF";
