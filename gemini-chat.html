@@ -15,7 +15,7 @@
         
         .chat-container { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; -webkit-overflow-scrolling: touch; }
         
-        .message { max-width: 85%; padding: 12px 15px; border-radius: 15px; font-size: 15px; line-height: 1.4; word-wrap: break-word; }
+        .message { max-width: 85%; padding: 12px 15px; border-radius: 15px; font-size: 15px; line-height: 1.4; word-wrap: break-word; white-space: pre-wrap; }
         .msg-user { background: #1877F2; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
         .msg-bot { background: #ffffff; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         
@@ -51,12 +51,11 @@
     </div>
 
     <script>
-        // Base64 Encoded Key
         const encodedKey = 'QVEuQWI4Uk42TEpYZXFCWGlwUWxMcmxaZmxUbms3b244aS1odEgxZWZqMEdycUg1ZWlqaFE=';
         const API_KEY = atob(encodedKey); 
         
-        // 🔥 FIX: Model ka naam wapas 'gemini-flash-latest' kar diya hai
-        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
+        // 🚀 STREAMING URL: Yeh AI se word-by-word jawab mangwata hai (Super Fast)
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:streamGenerateContent?alt=sse';
 
         const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
@@ -65,20 +64,25 @@
 
         sendBtn.addEventListener('click', sendMessage);
         userInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
+            if (e.key === 'Enter') sendMessage();
         });
 
         async function sendMessage() {
             const text = userInput.value.trim();
             if (!text) return;
 
+            // User ka message
             addMessage(text, 'user');
             userInput.value = '';
             sendBtn.disabled = true;
             typingIndicator.style.display = 'block';
             chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Bot ka khali message box banao jahan type hoga
+            const botDiv = document.createElement('div');
+            botDiv.className = 'message msg-bot';
+            botDiv.innerText = ""; 
+            chatContainer.insertBefore(botDiv, typingIndicator);
 
             try {
                 const response = await fetch(API_URL, {
@@ -88,31 +92,49 @@
                         'X-goog-api-key': API_KEY 
                     },
                     body: JSON.stringify({
-                        contents: [
-                            {
-                                parts: [{ text: text }]
-                            }
-                        ]
+                        contents: [{ parts: [{ text: text }] }],
+                        // AI ko bolo ki chhota jawab de (Time bachane ke liye)
+                        systemInstruction: { parts: [{ text: "You are a helpful assistant. Keep answers short, direct and to the point." }] }
                     })
                 });
 
-                const data = await response.json();
-                
-                if (data.error) {
-                    addMessage("⚠️ Error: " + data.error.message, 'bot');
-                } else if (data.candidates && data.candidates.length > 0 && data.candidates[0].content.parts[0].text) {
-                    const botReply = data.candidates[0].content.parts[0].text;
-                    addMessage(botReply, 'bot');
-                } else {
-                    addMessage("Sorry, main samajh nahi paya. Dobara try karein.", 'bot');
-                }
+                // 🚀 STREAMING PARSER
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder("utf-8");
+                let fullText = "";
 
+                typingIndicator.style.display = 'none'; // Dots hata do
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value, { stream: true });
+                    
+                    // SSE Format parse karo (data: {...})
+                    const lines = chunk.split('\n');
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            try {
+                                const dataStr = line.replace('data: ', '').trim();
+                                if (dataStr === '[DONE]') continue;
+                                
+                                const data = JSON.parse(dataStr);
+                                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                                    const textChunk = data.candidates[0].content.parts[0].text;
+                                    fullText += textChunk;
+                                    botDiv.innerText = fullText; // Real-time update
+                                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                                }
+                            } catch (e) { /* Ignore incomplete JSON chunks */ }
+                        }
+                    }
+                }
             } catch (error) {
                 console.error(error);
-                addMessage("Network Error: Internet check karein.", 'bot');
+                botDiv.innerText = "Network Error: Internet check karein.";
             } finally {
                 sendBtn.disabled = false;
-                typingIndicator.style.display = 'none';
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }
         }
