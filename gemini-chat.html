@@ -2,21 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SEAOX - AI Assistant</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     <style>
-        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        /* CSS FIX: Height issue solved for mobile */
+        html, body { height: 100%; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; }
+        
+        body { 
+            display: flex; 
+            flex-direction: column; 
+            height: 100dvh; /* Dynamic Viewport Height for mobile */
+            overflow: hidden; 
+        }
         
         /* Top Header */
-        .header { background: #1877F2; color: white; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 10; }
+        .header { 
+            flex-shrink: 0; /* Prevents header from shrinking */
+            background: #1877F2; 
+            color: white; 
+            padding: 15px; 
+            display: flex; 
+            align-items: center; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            z-index: 10; 
+        }
         .back-btn { font-size: 24px; color: white; text-decoration: none; margin-right: 15px; }
         .title { font-size: 20px; font-weight: bold; flex: 1; }
         
         /* Chat Area */
-        .chat-container { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .chat-container { 
+            flex: 1; 
+            padding: 15px; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            -webkit-overflow-scrolling: touch;
+        }
         
-        .message { max-width: 80%; padding: 12px 15px; border-radius: 15px; font-size: 15px; line-height: 1.4; word-wrap: break-word; }
+        .message { max-width: 85%; padding: 12px 15px; border-radius: 15px; font-size: 15px; line-height: 1.4; word-wrap: break-word; }
         .msg-user { background: #1877F2; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
         .msg-bot { background: #ffffff; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         
@@ -27,10 +52,19 @@
         .dot:nth-child(2) { animation-delay: -0.16s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
 
-        /* Input Area */
-        .input-area { background: white; padding: 10px; display: flex; gap: 10px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
-        .input-box { flex: 1; padding: 12px 15px; border: 1px solid #ddd; border-radius: 25px; font-size: 16px; outline: none; font-family: inherit; }
-        .send-btn { background: #1877F2; color: white; border: none; border-radius: 50%; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 18px; }
+        /* Input Area - FIXED BOTTOM */
+        .input-area { 
+            flex-shrink: 0; /* Prevents input area from shrinking */
+            background: white; 
+            padding: 10px; 
+            display: flex; 
+            gap: 10px; 
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05); 
+            border-top: 1px solid #eee;
+            padding-bottom: max(10px, env(safe-area-inset-bottom)); /* iPhone safe area support */
+        }
+        .input-box { flex: 1; padding: 12px 15px; border: 1px solid #ddd; border-radius: 25px; font-size: 16px; outline: none; font-family: inherit; background: #f9f9f9; }
+        .send-btn { background: #1877F2; color: white; border: none; border-radius: 50%; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 18px; flex-shrink: 0; }
         .send-btn:disabled { background: #ccc; }
     </style>
 </head>
@@ -54,9 +88,9 @@
     </div>
 
     <script>
-        //  curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent" \
+       curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent" \
   -H 'Content-Type: application/json' \
-  -H 'X-goog-api-key: AQ.Ab8RN6JG--W6IJ1aK3UOn-P3I4pdb-BRYIXrIEQfp8hAHsgDvQ' \
+  -H 'X-goog-api-key: AQ.Ab8RN6LdD2OILIHhf3JdYdh3CPkYctQbxNRwWUS_GWjh0GA5NQ' \
   -X POST \
   -d '{
     "contents": [
@@ -70,7 +104,6 @@
     ]
   }'       const API_KEY = 'AQ.Ab8RN6K4FYi77s1o3MaiLOsLS0mKOsBhDDhvl6SgGQgJ8pBTCg';
         
-        // Aapke curl command ke hisaab se URL
         const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
 
         const chatContainer = document.getElementById('chatContainer');
@@ -86,7 +119,7 @@
             const text = userInput.value.trim();
             if (!text) return;
 
-            // User ka message screen par
+            // User message add karo
             addMessage(text, 'user');
             userInput.value = '';
             sendBtn.disabled = true;
@@ -94,7 +127,6 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
             try {
-                // API Call
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 
@@ -104,9 +136,7 @@
                     body: JSON.stringify({
                         contents: [
                             {
-                                parts: [
-                                    { text: text }
-                                ]
+                                parts: [{ text: text }]
                             }
                         ]
                     })
@@ -114,7 +144,6 @@
 
                 const data = await response.json();
                 
-                // Bot ka reply
                 if (data.candidates && data.candidates.length > 0 && data.candidates[0].content.parts[0].text) {
                     const botReply = data.candidates[0].content.parts[0].text;
                     addMessage(botReply, 'bot');
