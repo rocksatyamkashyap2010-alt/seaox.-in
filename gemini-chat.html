@@ -185,7 +185,7 @@ Rules:
                     try {
                         if (attempt > 0) {
                             const waitTime = 1000 * Math.pow(2, attempt);
-                            botDiv.innerText = `Server busy... Retrying in ${waitTime/1000}s...`;
+                            botDiv.innerText = `SEAOX server busy hai... Retrying in ${waitTime/1000}s...`;
                             await new Promise(r => setTimeout(r, waitTime));
                         }
 
@@ -241,7 +241,8 @@ Rules:
 
             if (!success) {
                 botDiv.className = 'message msg-bot error-msg';
-                botDiv.innerText = "⚠️ Google ka AI server busy hai. Kripya 'Retry' dabayein.";
+                // 🚨 NAYA MESSAGE: Google ki jagah SEAOX likha hai
+                botDiv.innerText = "⚠️ SEAOX ka server abhi busy hai. Kripya 'Retry' dabayein.";
                 const retryBtn = document.createElement('button');
                 retryBtn.className = 'retry-btn';
                 retryBtn.innerText = '🔄 Retry Message';
@@ -273,16 +274,11 @@ Rules:
         }
 
         // ==========================================
-        // 2. TIC-TAC-TOE GAME LOGIC
+        // 2. SMART TIC-TAC-TOE GAME LOGIC (Minimax)
         // ==========================================
         let boardState = ["", "", "", "", "", "", "", "", ""];
         let currentPlayer = "X";
         let gameActive = true;
-        const winConditions = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Cols
-            [0, 4, 8], [2, 4, 6]             // Diagonals
-        ];
 
         function openGame() { document.getElementById('gameModal').style.display = 'flex'; }
         function closeGame() { document.getElementById('gameModal').style.display = 'none'; }
@@ -291,14 +287,12 @@ Rules:
         }
 
         function makeMove(index) {
-            // Agar cell khali hai aur game chal raha hai
             if (boardState[index] !== "" || !gameActive || currentPlayer !== "X") return;
 
-            // Player ki turn
             boardState[index] = "X";
             updateBoard();
 
-            if (checkWin("X")) {
+            if (checkWin(boardState, "X")) {
                 document.getElementById('game-status').innerText = "🎉 You Won!";
                 gameActive = false;
                 return;
@@ -309,28 +303,18 @@ Rules:
                 return;
             }
 
-            // Ab Computer ki turn
             currentPlayer = "O";
             document.getElementById('game-status').innerText = "Computer is thinking...";
             
             setTimeout(() => {
-                computerMove();
-            }, 500); // 0.5 sec delay for realism
-        }
+                // Use Minimax for unbeatable AI
+                let bestMove = minimax(boardState, "O").index;
+                if(bestMove !== undefined) {
+                    boardState[bestMove] = "O";
+                    updateBoard();
+                }
 
-        function computerMove() {
-            if (!gameActive) return;
-
-            // Simple AI: Find empty spots
-            let emptySpots = boardState.map((val, index) => val === "" ? index : null).filter(val => val !== null);
-            
-            if (emptySpots.length > 0) {
-                // Random move
-                let randomSpot = emptySpots[Math.floor(Math.random() * emptySpots.length)];
-                boardState[randomSpot] = "O";
-                updateBoard();
-
-                if (checkWin("O")) {
+                if (checkWin(boardState, "O")) {
                     document.getElementById('game-status').innerText = "🤖 Computer Won!";
                     gameActive = false;
                     return;
@@ -340,25 +324,78 @@ Rules:
                     gameActive = false;
                     return;
                 }
+
+                currentPlayer = "X";
+                document.getElementById('game-status').innerText = "Your Turn (X)";
+            }, 600); // 0.6 sec delay for realism
+        }
+
+        // 🧠 Minimax Algorithm (Computer ko smart banata hai)
+        function minimax(newBoard, player) {
+            let availSpots = newBoard.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
+
+            if (checkWin(newBoard, "X")) return { score: -10 }; // Human wins
+            if (checkWin(newBoard, "O")) return { score: 10 };  // AI wins
+            if (availSpots.length === 0) return { score: 0 };   // Draw
+
+            let moves = [];
+            for (let i = 0; i < availSpots.length; i++) {
+                let move = {};
+                move.index = availSpots[i];
+                newBoard[availSpots[i]] = player;
+
+                if (player === "O") {
+                    let result = minimax(newBoard, "X");
+                    move.score = result.score;
+                } else {
+                    let result = minimax(newBoard, "O");
+                    move.score = result.score;
+                }
+
+                newBoard[availSpots[i]] = ""; // Undo move
+                moves.push(move);
             }
 
-            currentPlayer = "X";
-            document.getElementById('game-status').innerText = "Your Turn (X)";
+            let bestMove;
+            if (player === "O") {
+                let bestScore = -Infinity;
+                for (let i = 0; i < moves.length; i++) {
+                    if (moves[i].score > bestScore) {
+                        bestScore = moves[i].score;
+                        bestMove = i;
+                    }
+                }
+            } else {
+                let bestScore = Infinity;
+                for (let i = 0; i < moves.length; i++) {
+                    if (moves[i].score < bestScore) {
+                        bestScore = moves[i].score;
+                        bestMove = i;
+                    }
+                }
+            }
+            return moves[bestMove];
         }
 
         function updateBoard() {
             const cells = document.querySelectorAll('.cell');
             cells.forEach((cell, index) => {
                 cell.innerText = boardState[index];
-                cell.className = 'cell'; // Reset classes
+                cell.className = 'cell';
                 if (boardState[index] === "X") cell.classList.add('x');
                 if (boardState[index] === "O") cell.classList.add('o');
             });
         }
 
-        function checkWin(player) {
+        // Check win for any given board state
+        function checkWin(board, player) {
+            const winConditions = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Cols
+                [0, 4, 8], [2, 4, 6]             // Diagonals
+            ];
             return winConditions.some(condition => {
-                return condition.every(index => boardState[index] === player);
+                return condition.every(index => board[index] === player);
             });
         }
 
