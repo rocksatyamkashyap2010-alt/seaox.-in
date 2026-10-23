@@ -6,8 +6,8 @@
     <title>SEAOX - 100% Secure PDF</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     
-    <!-- 🔥 Special PDF Library with Encryption Support -->
-    <script src="https://unpkg.com/pdf-lib-plus-encrypt@1.1.0/dist/pdf-lib.min.js"></script>
+    <!-- ✅ NAYA SAHI LIBRARY LINK (Direct UMD build for browser) -->
+    <script src="https://unpkg.com/@cantoo/pdf-lib@2.7.0/dist/pdf-lib.min.js"></script>
     
     <style>
         body { margin: 0; padding: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
@@ -46,7 +46,7 @@
     <div class="card">
         <div class="icon">🔒</div>
         <h2>Password Protect</h2>
-        <p>Select a PDF file, set a secret password, and download it securely.</p>
+        <p>Select a PDF file, set a secret password, and download it securely. No quality loss, 100% safe.</p>
 
         <input type="file" id="pdfInput" accept="application/pdf">
         
@@ -70,9 +70,9 @@
     </div>
 
     <script>
-        // Check if library loaded
+        // Check karo ki library load hui ya nahi
         if (typeof PDFLib === 'undefined') {
-            document.getElementById('status').innerText = "Error: Library load nahi hui. Internet check karein.";
+            document.getElementById('status').innerText = "Error: Library load nahi hui. Internet check karein ya page refresh karein.";
         }
 
         const pdfInput = document.getElementById('pdfInput');
@@ -111,17 +111,17 @@
             try {
                 const arrayBuffer = await file.arrayBuffer();
 
-                // 1. Load Original PDF
+                // 1. PDF Load karo
                 const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer, { 
                     ignoreEncryption: false 
                 });
 
                 statusDiv.innerText = "Password apply ho raha hai...";
 
-                // 2. Encrypt (Special library feature)
+                // 2. Password Lock lagao
                 pdfDoc.encrypt({
-                    userPassword: password, // User enters this
-                    ownerPassword: password + "_SEAOX_ADMIN", // Admin key
+                    userPassword: password, 
+                    ownerPassword: password + "_SEAOX_ADMIN",
                     permissions: {
                         printing: 'highResolution',
                         modifying: false,
@@ -133,10 +133,10 @@
                     }
                 });
 
-                // 3. Save
+                // 3. Save karo
                 const pdfBytes = await pdfDoc.save();
 
-                // 4. Download
+                // 4. Download karo
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
