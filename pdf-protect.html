@@ -6,8 +6,8 @@
     <title>SEAOX - 100% Secure PDF</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     
-    <!-- Yeh library Direct Original PDF ko Encrypt karti hai (No white screen) -->
-    <script src="https://unpkg.com/@cantoo/pdf-lib@1.17.4/dist/pdf-lib.min.js"></script>
+    <!-- 🔥 Special PDF Library with Encryption Support -->
+    <script src="https://unpkg.com/pdf-lib-plus-encrypt@1.1.0/dist/pdf-lib.min.js"></script>
     
     <style>
         body { margin: 0; padding: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
@@ -46,9 +46,8 @@
     <div class="card">
         <div class="icon">🔒</div>
         <h2>Password Protect</h2>
-        <p>Select a PDF file, set a secret password, and download it securely. No quality loss, 100% safe.</p>
+        <p>Select a PDF file, set a secret password, and download it securely.</p>
 
-        <!-- File Input -->
         <input type="file" id="pdfInput" accept="application/pdf">
         
         <button class="select-btn" onclick="document.getElementById('pdfInput').click()">
@@ -71,9 +70,9 @@
     </div>
 
     <script>
-        // Check if the library loaded properly
+        // Check if library loaded
         if (typeof PDFLib === 'undefined') {
-            document.getElementById('status').innerText = "Error: Internet issue. Library load nahi hui. Page refresh karein.";
+            document.getElementById('status').innerText = "Error: Library load nahi hui. Internet check karein.";
         }
 
         const pdfInput = document.getElementById('pdfInput');
@@ -110,20 +109,19 @@
             statusDiv.innerText = "Original file read ho rahi hai...";
 
             try {
-                // 1. Read File as ArrayBuffer
                 const arrayBuffer = await file.arrayBuffer();
 
-                // 2. Load Original PDF (Direct binary read)
+                // 1. Load Original PDF
                 const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer, { 
-                    ignoreEncryption: false // If already encrypted, it will throw error
+                    ignoreEncryption: false 
                 });
 
                 statusDiv.innerText = "Password apply ho raha hai...";
 
-                // 3. Encrypt (Apply Password)
+                // 2. Encrypt (Special library feature)
                 pdfDoc.encrypt({
-                    userPassword: password, // Yeh password user se maanga jayega
-                    ownerPassword: password + "_SEAOX_ADMIN", // Admin bypass password
+                    userPassword: password, // User enters this
+                    ownerPassword: password + "_SEAOX_ADMIN", // Admin key
                     permissions: {
                         printing: 'highResolution',
                         modifying: false,
@@ -135,10 +133,10 @@
                     }
                 });
 
-                // 4. Save the locked PDF
+                // 3. Save
                 const pdfBytes = await pdfDoc.save();
 
-                // 5. Create download link and trigger
+                // 4. Download
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -150,17 +148,13 @@
                 URL.revokeObjectURL(url);
 
                 statusDiv.style.color = "#00A859";
-                statusDiv.innerText = "✅ Success! PDF Locked & Downloaded. Ab ise kholne par password maangega.";
+                statusDiv.innerText = "✅ Success! PDF Locked & Downloaded.";
                 
             } catch (error) {
                 console.error(error);
                 statusDiv.style.color = "#E53935";
-                
-                // Error Handling
                 if(error.message.includes("encrypted") || error.message.includes("password")) {
                     statusDiv.innerText = "❌ Error: Yeh PDF pehle se hi password protected hai.";
-                } else if (error.message.includes("PDF")) {
-                    statusDiv.innerText = "❌ Error: File corrupt hai ya valid PDF nahi hai.";
                 } else {
                     statusDiv.innerText = "❌ Error: " + error.message;
                 }
