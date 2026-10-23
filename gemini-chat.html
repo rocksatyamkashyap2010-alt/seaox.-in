@@ -12,11 +12,17 @@
         html, body { height: 100%; font-family: 'Inter', sans-serif; background-color: #f0f2f5; }
         body { display: flex; flex-direction: column; height: 100dvh; overflow: hidden; }
         
+        /* Header */
         .header { flex-shrink: 0; background: #1877F2; color: white; padding: 12px 15px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 10; }
         .back-btn { font-size: 22px; color: white; text-decoration: none; margin-right: 12px; display: flex; align-items: center;}
         .title { font-size: 17px; font-weight: 600; flex: 1; display: flex; flex-direction: column; }
         .title span { font-size: 12px; font-weight: 400; opacity: 0.8; }
         
+        /* Game Icon Button */
+        .game-btn { background: rgba(255,255,255,0.2); border: none; color: white; font-size: 20px; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .game-btn:active { transform: scale(0.9); }
+        
+        /* Chat Area */
         .chat-container { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; -webkit-overflow-scrolling: touch; }
         
         .msg-row { display: flex; width: 100%; gap: 10px; }
@@ -37,6 +43,7 @@
         .dot:nth-child(2) { animation-delay: -0.16s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
 
+        /* Input Area */
         .input-area { flex-shrink: 0; background: #ffffff; padding: 10px 15px; display: flex; align-items: center; gap: 10px; border-top: 1px solid #e4e6eb; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
         .input-box { flex: 1; padding: 12px 15px; border: none; background: #f0f2f5; border-radius: 20px; font-size: 15px; outline: none; font-family: inherit; color: #050505; }
         .input-box::placeholder { color: #65676b; }
@@ -45,6 +52,19 @@
         .send-btn svg { width: 20px; height: 20px; fill: currentColor; transform: translateX(2px); }
         
         .retry-btn { background: #F39C12; color: white; border: none; border-radius: 15px; padding: 8px 15px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 5px; display: none; }
+
+        /* 🎮 GAME MODAL STYLES 🎮 */
+        .game-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
+        .game-content { background: #fff; padding: 20px; border-radius: 15px; text-align: center; width: 90%; max-width: 320px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .close-game { position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: bold; color: #888; cursor: pointer; }
+        .game-content h2 { font-size: 20px; margin-bottom: 15px; color: #111; }
+        .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; background: #e4e6eb; padding: 5px; border-radius: 10px; margin-bottom: 15px; }
+        .cell { width: 100%; aspect-ratio: 1; background: #fff; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .cell:hover { background: #f0f2f5; }
+        .cell.x { color: #1877F2; }
+        .cell.o { color: #E53935; }
+        #game-status { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 15px; }
+        .reset-btn { background: #00A859; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; width: 100%; }
     </style>
 </head>
 <body>
@@ -52,6 +72,8 @@
     <div class="header">
         <a href="menu.html" class="back-btn">←</a>
         <div class="title">SEAOX AI <span>Official Assistant</span></div>
+        <!-- Game Icon -->
+        <button class="game-btn" onclick="openGame()">🎮</button>
     </div>
 
     <div class="chat-container" id="chatContainer">
@@ -72,18 +94,35 @@
         </button>
     </div>
 
+    <!-- 🎮 GAME MODAL -->
+    <div id="gameModal" class="game-modal">
+        <div class="game-content">
+            <span class="close-game" onclick="closeGame()">×</span>
+            <h2>Tic-Tac-Toe</h2>
+            <div class="board" id="board">
+                <div class="cell" onclick="makeMove(0)"></div>
+                <div class="cell" onclick="makeMove(1)"></div>
+                <div class="cell" onclick="makeMove(2)"></div>
+                <div class="cell" onclick="makeMove(3)"></div>
+                <div class="cell" onclick="makeMove(4)"></div>
+                <div class="cell" onclick="makeMove(5)"></div>
+                <div class="cell" onclick="makeMove(6)"></div>
+                <div class="cell" onclick="makeMove(7)"></div>
+                <div class="cell" onclick="makeMove(8)"></div>
+            </div>
+            <div id="game-status">Your Turn (X)</div>
+            <button class="reset-btn" onclick="resetGame()">Restart Game</button>
+        </div>
+    </div>
+
     <script>
+        // ==========================================
+        // 1. AI CHAT LOGIC
+        // ==========================================
         const encodedKey = 'QVEuQWI4Uk42TEpYZXFCWGlwUWxMcmxaZmxUbms3b244aS1odEgxZWZqMEdycUg1ZWlqaFE=';
         const API_KEY = atob(encodedKey); 
         
-        // 🚨 Multiple Models for Fallback
-        const MODELS = [
-            'gemini-1.5-flash',
-            'gemini-1.5-flash-8b',
-            'gemini-1.5-pro',
-            'gemini-2.0-flash-exp'
-        ];
-
+        const MODELS = ['gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-1.5-pro', 'gemini-2.0-flash-exp'];
         const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
@@ -108,17 +147,11 @@ Rules:
         let lastUserMessage = "";
         let isProcessing = false;
 
-        sendBtn.addEventListener('click', () => {
-            if (!isProcessing) sendMessage();
-        });
-        
-        userInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter' && !isProcessing) sendMessage();
-        });
+        sendBtn.addEventListener('click', () => { if (!isProcessing) sendMessage(); });
+        userInput.addEventListener('keypress', function (e) { if (e.key === 'Enter' && !isProcessing) sendMessage(); });
 
         async function sendMessage(retryText = null) {
             if (isProcessing) return;
-            
             const text = retryText || userInput.value.trim();
             if (!text) return;
 
@@ -127,72 +160,50 @@ Rules:
             sendBtn.disabled = true;
             userInput.value = '';
             
-            // Add user message only if it's not a retry from the same message
-            if (!retryText) {
-                addMessage(text, 'user');
-            }
+            if (!retryText) addMessage(text, 'user');
             
             typingIndicator.style.display = 'block';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            // Create bot message row
             const botDiv = document.createElement('div');
             botDiv.className = 'message msg-bot';
-            
             const botRow = document.createElement('div');
             botRow.className = 'msg-row bot';
             botRow.innerHTML = `<div class="avatar bot-avatar">S</div>`;
             botRow.appendChild(botDiv);
-            
             chatContainer.insertBefore(botRow, typingIndicator);
 
             let success = false;
             
-            // Loop through models
             for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
                 if (success) break;
-                
                 const currentModel = MODELS[modelIndex];
                 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:streamGenerateContent?alt=sse`;
 
-                // Exponential Backoff Retries for the current model
                 for (let attempt = 0; attempt < 3; attempt++) {
                     if (success) break;
-
                     try {
                         if (attempt > 0) {
-                            // Wait time: 1s, 2s, 4s
                             const waitTime = 1000 * Math.pow(2, attempt);
-                            botDiv.innerText = `Server busy hai. ${waitTime/1000} second mein dobara try kar raha hoon...`;
+                            botDiv.innerText = `Server busy... Retrying in ${waitTime/1000}s...`;
                             await new Promise(r => setTimeout(r, waitTime));
                         }
 
                         const response = await fetch(API_URL, {
                             method: 'POST',
-                            headers: { 
-                                'Content-Type': 'application/json',
-                                'X-goog-api-key': API_KEY 
-                            },
+                            headers: { 'Content-Type': 'application/json', 'X-goog-api-key': API_KEY },
                             body: JSON.stringify({
                                 contents: [{ parts: [{ text: text }] }],
                                 systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] }
                             })
                         });
 
-                        // If 503 or 429, throw to trigger retry
-                        if (response.status === 503 || response.status === 429) {
-                            throw new Error("BUSY");
-                        }
-                        
-                        // If other error, break and try next model
-                        if (!response.ok) {
-                            throw new Error("FATAL");
-                        }
+                        if (response.status === 503 || response.status === 429) throw new Error("BUSY");
+                        if (!response.ok) throw new Error("FATAL");
 
-                        // Success! Stream the response
                         typingIndicator.style.display = 'none'; 
                         botDiv.innerText = ""; 
-                        botDiv.className = 'message msg-bot'; // Reset class if there was an error
+                        botDiv.className = 'message msg-bot';
 
                         const reader = response.body.getReader();
                         const decoder = new TextDecoder("utf-8");
@@ -202,7 +213,6 @@ Rules:
                         while (true) {
                             const { done, value } = await reader.read();
                             if (done) break;
-
                             buffer += decoder.decode(value, { stream: true });
                             let lines = buffer.split('\n');
                             buffer = lines.pop(); 
@@ -212,11 +222,9 @@ Rules:
                                     try {
                                         const dataStr = line.replace('data: ', '').trim();
                                         if (dataStr === '[DONE]') continue;
-                                        
                                         const data = JSON.parse(dataStr);
                                         if (data.candidates && data.candidates[0].content.parts[0].text) {
-                                            const textChunk = data.candidates[0].content.parts[0].text;
-                                            fullText += textChunk;
+                                            fullText += data.candidates[0].content.parts[0].text;
                                             botDiv.innerText = fullText; 
                                             chatContainer.scrollTop = chatContainer.scrollHeight;
                                         }
@@ -224,33 +232,22 @@ Rules:
                                 }
                             }
                         }
-                        
-                        if(fullText !== "") {
-                            success = true;
-                        }
-
+                        if(fullText !== "") success = true;
                     } catch (error) {
-                        console.warn(`Attempt ${attempt} failed on ${currentModel}:`, error.message);
-                        if (error.message === "FATAL") {
-                            break; // Stop retrying this model, move to next
-                        }
-                        // If "BUSY", the loop will continue to the next attempt (retry)
+                        if (error.message === "FATAL") break;
                     }
                 } 
             } 
 
             if (!success) {
-                // All models failed after all retries
                 botDiv.className = 'message msg-bot error-msg';
-                botDiv.innerText = "⚠️ Google ka AI server abhi bahut busy hai. Kripya thodi der baad 'Retry' dabayein.";
-                
-                // Show a retry button
+                botDiv.innerText = "⚠️ Google ka AI server busy hai. Kripya 'Retry' dabayein.";
                 const retryBtn = document.createElement('button');
                 retryBtn.className = 'retry-btn';
                 retryBtn.innerText = '🔄 Retry Message';
                 retryBtn.onclick = () => {
-                    botRow.remove(); // Remove the error message
-                    sendMessage(lastUserMessage); // Resend the message
+                    botRow.remove();
+                    sendMessage(lastUserMessage);
                 };
                 botRow.appendChild(retryBtn);
             }
@@ -263,20 +260,114 @@ Rules:
         function addMessage(text, sender) {
             const rowDiv = document.createElement('div');
             rowDiv.className = `msg-row ${sender}`;
-            
             const avatarDiv = document.createElement('div');
             avatarDiv.className = `avatar ${sender}-avatar`;
             avatarDiv.innerText = sender === 'user' ? 'U' : 'S';
-            
             const msgDiv = document.createElement('div');
             msgDiv.className = `message msg-${sender}`;
             msgDiv.innerText = text;
-            
             rowDiv.appendChild(avatarDiv);
             rowDiv.appendChild(msgDiv);
-            
             chatContainer.insertBefore(rowDiv, typingIndicator);
             chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // ==========================================
+        // 2. TIC-TAC-TOE GAME LOGIC
+        // ==========================================
+        let boardState = ["", "", "", "", "", "", "", "", ""];
+        let currentPlayer = "X";
+        let gameActive = true;
+        const winConditions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Cols
+            [0, 4, 8], [2, 4, 6]             // Diagonals
+        ];
+
+        function openGame() { document.getElementById('gameModal').style.display = 'flex'; }
+        function closeGame() { document.getElementById('gameModal').style.display = 'none'; }
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('gameModal')) closeGame();
+        }
+
+        function makeMove(index) {
+            // Agar cell khali hai aur game chal raha hai
+            if (boardState[index] !== "" || !gameActive || currentPlayer !== "X") return;
+
+            // Player ki turn
+            boardState[index] = "X";
+            updateBoard();
+
+            if (checkWin("X")) {
+                document.getElementById('game-status').innerText = "🎉 You Won!";
+                gameActive = false;
+                return;
+            }
+            if (!boardState.includes("")) {
+                document.getElementById('game-status').innerText = "🤝 It's a Draw!";
+                gameActive = false;
+                return;
+            }
+
+            // Ab Computer ki turn
+            currentPlayer = "O";
+            document.getElementById('game-status').innerText = "Computer is thinking...";
+            
+            setTimeout(() => {
+                computerMove();
+            }, 500); // 0.5 sec delay for realism
+        }
+
+        function computerMove() {
+            if (!gameActive) return;
+
+            // Simple AI: Find empty spots
+            let emptySpots = boardState.map((val, index) => val === "" ? index : null).filter(val => val !== null);
+            
+            if (emptySpots.length > 0) {
+                // Random move
+                let randomSpot = emptySpots[Math.floor(Math.random() * emptySpots.length)];
+                boardState[randomSpot] = "O";
+                updateBoard();
+
+                if (checkWin("O")) {
+                    document.getElementById('game-status').innerText = "🤖 Computer Won!";
+                    gameActive = false;
+                    return;
+                }
+                if (!boardState.includes("")) {
+                    document.getElementById('game-status').innerText = "🤝 It's a Draw!";
+                    gameActive = false;
+                    return;
+                }
+            }
+
+            currentPlayer = "X";
+            document.getElementById('game-status').innerText = "Your Turn (X)";
+        }
+
+        function updateBoard() {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach((cell, index) => {
+                cell.innerText = boardState[index];
+                cell.className = 'cell'; // Reset classes
+                if (boardState[index] === "X") cell.classList.add('x');
+                if (boardState[index] === "O") cell.classList.add('o');
+            });
+        }
+
+        function checkWin(player) {
+            return winConditions.some(condition => {
+                return condition.every(index => boardState[index] === player);
+            });
+        }
+
+        function resetGame() {
+            boardState = ["", "", "", "", "", "", "", "", ""];
+            currentPlayer = "X";
+            gameActive = true;
+            document.getElementById('game-status').innerText = "Your Turn (X)";
+            updateBoard();
         }
     </script>
 </body>
