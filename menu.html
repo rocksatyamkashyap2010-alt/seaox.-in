@@ -2,57 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEAOX - Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SEAOX - Tools</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
-            margin: 0; 
-            padding: 20px; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #ffffff; 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8f9fa; 
+            padding: 15px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            gap: 15px; 
-            overflow-x: hidden; 
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-        
-        /* Top Header */
-        .header { width: 100%; max-width: 450px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .logo-img { width: 110px; mix-blend-mode: multiply; }
-        
-        /* Header Right Icons Container */
-        .header-actions { display: flex; align-items: center; gap: 8px; }
 
-        /* Common Icon Style */
-        .header-icon { 
-            width: 35px; 
-            height: 35px; 
-            border-radius: 50%; 
+        /* Container for max width */
+        .app-container { width: 100%; max-width: 500px; }
+
+        /* Header Section */
+        .header { 
             display: flex; 
+            justify-content: space-between; 
             align-items: center; 
-            justify-content: center; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-            text-decoration: none;
-            transition: transform 0.2s;
-            overflow: hidden; 
-            
-            /* Animation Setup: Initially hidden, will slide from right */
-            opacity: 0; 
-            animation: popOutFromMessage 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            margin-bottom: 20px; 
+            padding: 0 5px;
         }
-        .header-icon:active { transform: scale(0.9); }
+        .header-logo { width: 120px; mix-blend-mode: multiply; }
+        
+        /* Header Icons Animation Setup */
+        .header-icons { display: flex; gap: 8px; }
+        
+        .icon-btn { 
+            width: 38px; height: 38px; border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; 
+            text-decoration: none; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            
+            /* Animation: Piche se aage aane ke liye */
+            opacity: 0;
+            animation: popOut 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
 
-        /* Staggered Delays (Right to Left se aayenge) */
-        .header-actions > *:nth-child(5) { animation-delay: 0.1s; } /* Contact (Message icon) */
-        .header-actions > *:nth-child(4) { animation-delay: 0.2s; } /* X */
-        .header-actions > *:nth-child(3) { animation-delay: 0.3s; } /* WhatsApp */
-        .header-actions > *:nth-child(2) { animation-delay: 0.4s; } /* Instagram */
-        .header-actions > *:nth-child(1) { animation-delay: 0.5s; } /* AI */
+        /* Staggered Delays for right-to-left appearance */
+        .header-icons > *:nth-child(4) { animation-delay: 0.1s; } /* Chat */
+        .header-icons > *:nth-child(3) { animation-delay: 0.2s; } /* X */
+        .header-icons > *:nth-child(2) { animation-delay: 0.3s; } /* WhatsApp */
+        .header-icons > *:nth-child(1) { animation-delay: 0.4s; } /* Instagram */
 
-        /* Animation Keyframe */
-        @keyframes popOutFromMessage {
+        @keyframes popOut {
             0% {
                 opacity: 0;
                 transform: translateX(40px) scale(0.5);
@@ -63,238 +63,270 @@
             }
         }
 
-        /* Icon Specifics */
-        .ai-header { background: #ffffff; border: 1px solid #ddd; padding: 0; }
-        .ai-header img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .insta-header { background-color: #1877F2; }
-        .insta-header svg { width: 18px; height: 18px; fill: white; }
-        
-        .wa-header { background-color: #25D366; }
-        .wa-header svg { width: 20px; height: 20px; fill: white; }
-        
-        .x-header { background-color: #000000; }
-        .x-header svg { width: 16px; height: 16px; fill: white; }
-        
-        .menu-icon { font-size: 18px; color: #333; cursor: pointer; background: #f0f0f0; }
-        .menu-icon:hover { background: #e0e0e0; }
+        .icon-btn:active { transform: scale(0.9); }
 
-        /* Common Button Style */
-        .btn-box { 
+        .icon-btn.insta { background: #1877F2; }
+        .icon-btn.wa { background: #25D366; }
+        .icon-btn.x { background: #000000; }
+        .icon-btn.chat { background: #E4E6EB; color: #333; font-size: 18px; cursor: pointer;}
+        .icon-btn svg { width: 20px; height: 20px; fill: white; }
+
+        /* Tractor Book Banner */
+        .banner { 
+            display: block; 
             width: 100%; 
-            max-width: 450px; 
-            height: 85px; 
             border-radius: 20px; 
-            padding: 0 20px; 
-            box-sizing: border-box; 
+            background: #FFD700; 
+            position: relative; 
+            overflow: hidden; 
+            padding: 15px; 
+            text-decoration: none;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+            transition: transform 0.2s;
+        }
+        .banner:active { transform: scale(0.98); }
+        
+        /* Dark Blue Curved Shape */
+        .banner-curve {
+            position: absolute;
+            top: 0; right: -50px;
+            width: 150px; height: 100%;
+            background: #0B3B5C;
+            border-top-left-radius: 100px;
+            border-bottom-left-radius: 40px;
+            z-index: 1;
+        }
+
+        .banner-content { 
             display: flex; 
             align-items: center; 
-            gap: 15px; 
-            text-decoration: none; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            transition: transform 0.2s; 
-            cursor: pointer;
-            
-            /* Menu Buttons Animation Setup */
-            opacity: 0; 
-            animation-duration: 0.6s;
-            animation-fill-mode: forwards;
-            animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative; 
+            z-index: 2; 
+            gap: 15px;
         }
-        .btn-box:active { transform: scale(0.98); }
+
+        /* Tractor Logo Circle */
+        .tractor-logo-bg {
+            width: 90px; height: 90px;
+            background: #FFF8B0;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            flex-shrink: 0;
+        }
+        .tractor-logo-bg img { width: 70px; height: 70px; object-fit: contain; }
+
+        /* Banner Text */
+        .banner-text { flex: 1; display: flex; flex-direction: column; }
+        .banner-title { font-size: 24px; font-weight: 800; color: #0B3B5C; margin-bottom: 2px; }
+        .banner-sub { font-size: 13px; color: #0B3B5C; line-height: 1.2; font-weight: 500; opacity: 0.9; }
         
-        .btn-icon { display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; }
-        .btn-text { font-weight: bold; }
-
-        /* --- SLIDE ANIMATIONS FOR MENU --- */
-        @keyframes slideInLeft {
-            from { transform: translateX(-100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        /* Downloading Badge */
+        .download-badge { 
+            display: inline-block; 
+            background: rgba(11, 59, 92, 0.1); 
+            color: #0B3B5C; 
+            font-size: 11px; 
+            font-weight: 700; 
+            padding: 4px 10px; 
+            border-radius: 12px; 
+            margin-top: 6px; 
+            width: fit-content;
         }
-        @keyframes slideInRight {
-            from { transform: translateX(100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+
+        /* Arrow Button */
+        .banner-arrow {
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 3; margin-right: 5px;
+        }
+        .banner-arrow svg { width: 20px; height: 20px; fill: white; }
+
+        /* Grid Layout */
+        .grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            width: 100%; 
         }
 
-        .btn-box:nth-of-type(odd) { animation-name: slideInLeft; }
-        .btn-box:nth-of-type(even) { animation-name: slideInRight; }
+        /* Tool Cards */
+        .card { 
+            background: #ffffff; 
+            border-radius: 18px; 
+            padding: 18px 15px; 
+            text-decoration: none; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            border: 1px solid #f0f0f0;
+            transition: transform 0.2s;
+            min-height: 120px;
+        }
+        .card:active { transform: scale(0.96); }
 
-        .btn-box:nth-of-type(1) { animation-delay: 0.1s; }
-        .btn-box:nth-of-type(2) { animation-delay: 0.2s; }
-        .btn-box:nth-of-type(3) { animation-delay: 0.3s; }
-        .btn-box:nth-of-type(4) { animation-delay: 0.4s; }
-        .btn-box:nth-of-type(5) { animation-delay: 0.5s; }
-        .btn-box:nth-of-type(6) { animation-delay: 0.6s; }
-        .btn-box:nth-of-type(7) { animation-delay: 0.7s; }
-        .btn-box:nth-of-type(8) { animation-delay: 0.8s; }
+        /* Card Icon */
+        .icon-box {
+            width: 45px; height: 45px;
+            background: #E3F2FD;
+            border-radius: 12px;
+            display: flex; justify-content: center; align-items: center;
+            margin-bottom: 15px;
+        }
+        .icon-box svg { width: 24px; height: 24px; fill: #1877F2; }
 
-        /* --- Button Colors --- */
-        .app-box { background-color: #FFD700; }
-        .app-box .btn-text { color: #111; font-size: 28px; letter-spacing: 1px; }
+        /* Card Text & Arrow */
+        .card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+        .card-title { font-size: 15px; font-weight: 700; color: #111; line-height: 1.2; }
+        .card-arrow { color: #1877F2; font-size: 18px; font-weight: bold; }
 
-        .pdf-box { background-color: #E53935; }
-        .pdf-box svg { width: 40px; height: 40px; fill: white; }
-        .pdf-box .btn-text { color: white; font-size: 24px; letter-spacing: 0.5px; }
-
-        .compressor-box { background-color: #D2691E; }
-        .compressor-box svg { width: 40px; height: 40px; fill: white; }
-        .compressor-box .btn-text { color: white; font-size: 24px; letter-spacing: 0.5px; }
-
-        .editor-box { background-color: #FF9800; }
-        .editor-box svg { width: 40px; height: 40px; fill: white; }
-        .editor-box .btn-text { color: white; font-size: 20px; letter-spacing: 0.5px; }
-
-        .invoice-box { background-color: #6B46C1; }
-        .invoice-box svg { width: 40px; height: 40px; fill: white; }
-        .invoice-box .btn-text { color: white; font-size: 20px; letter-spacing: 0.5px; }
-
-        .video-box { background-color: #E91E63; }
-        .video-box svg { width: 40px; height: 40px; fill: white; }
-        .video-box .btn-text { color: white; font-size: 20px; letter-spacing: 0.5px; }
-
-        .protect-box { background-color: #2C3E50; }
-        .protect-box svg { width: 40px; height: 40px; fill: white; }
-        .protect-box .btn-text { color: white; font-size: 20px; letter-spacing: 0.5px; }
-
-        .calc-box { background-color: #F39C12; }
-        .calc-box svg { width: 40px; height: 40px; fill: white; }
-        .calc-box .btn-text { color: white; font-size: 18px; letter-spacing: 0.5px; }
-
-        /* Popup Modal (Contact Us) */
+        /* Modal (Contact Us) */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: #fff; width: 85%; max-width: 350px; border-radius: 15px; padding: 25px 20px; text-align: center; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: popUp 0.3s ease-out; }
-        @keyframes popUp { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-content { background: #fff; width: 85%; max-width: 350px; border-radius: 15px; padding: 25px 20px; text-align: center; position: relative; }
         .close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: bold; color: #888; cursor: pointer; }
-        .modal-content h2 { margin-top: 0; color: #333; font-size: 22px; }
-        .modal-content p { color: #666; font-size: 15px; margin-bottom: 20px; font-weight: bold; line-height: 1.4; }
-        .send-msg-btn { display: block; background-color: #ff3333; color: white; text-decoration: none; padding: 15px; border-radius: 10px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 10px rgba(255, 51, 51, 0.3); transition: background 0.3s; }
-        .send-msg-btn:hover { background-color: #cc0000; }
-        .hindi-note { font-size: 13px; color: #555; margin-top: 15px; line-height: 1.4; font-style: italic; border-top: 1px solid #eee; padding-top: 15px; font-weight: normal; }
+        .modal-content h2 { margin-top: 0; color: #333; font-size: 22px; margin-bottom: 10px;}
+        .modal-content p { color: #666; font-size: 14px; margin-bottom: 20px; font-weight: 500; line-height: 1.4; }
+        .send-msg-btn { display: block; background-color: #1877F2; color: white; text-decoration: none; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3); }
     </style>
 </head>
 <body>
 
-    <!-- Header Section -->
-    <div class="header">
-        <img src="IMG_20261006_211924.png" alt="SEAOX Logo" class="logo-img">
-        
-        <div class="header-actions">
-            <!-- 1. AI Chat Icon -->
-            <a href="ai.html" class="header-icon ai-header">
-                <img src="IMG_20261019_105230.jpg" alt="AI Chat">
-            </a>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <img src="IMG_20261006_211924.png" alt="SEAOX Logo" class="header-logo">
+            <div class="header-icons">
+                <a href="https://www.instagram.com/seaoxofficial" target="_blank" class="icon-btn insta">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+                <a href="https://wa.me/919473991699" target="_blank" class="icon-btn wa">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                </a>
+                <a href="https://x.com/seaoxoffcial" target="_blank" class="icon-btn x">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+                </a>
+                <div class="icon-btn chat" onclick="openModal()">💬</div>
+            </div>
+        </div>
 
-            <!-- 2. Instagram Icon -->
-            <a href="https://www.instagram.com/seaoxofficial" target="_blank" class="header-icon insta-header">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-                </svg>
-            </a>
+        <!-- Tractor Book Banner (Direct Download) -->
+        <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="banner">
+            <div class="banner-curve"></div>
+            <div class="banner-content">
+                <div class="tractor-logo-bg">
+                    <!-- Aapka Tractor Book Logo -->
+                    <img src="IMG_20260930_225659.png" alt="Tractor Book">
+                </div>
+                <div class="banner-text">
+                    <div class="banner-title">Tractor Book</div>
+                    <div class="banner-sub">Manage tractor work & accounts</div>
+                    <div class="download-badge">Downloading: 336</div>
+                </div>
+                <div class="banner-arrow">
+                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+            </div>
+        </a>
 
-            <!-- 3. WhatsApp Icon -->
-            <a href="https://wa.me/919473991699?text=Hello%20SEAOX%20Team" target="_blank" class="header-icon wa-header">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                </svg>
-            </a>
-
-            <!-- 4. X (Twitter) Icon -->
-            <a href="https://x.com/seaoxoffcial" target="_blank" class="header-icon x-header">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
-                </svg>
-            </a>
+        <!-- Tools Grid -->
+        <div class="grid">
             
-            <!-- 5. Contact Icon (Message Box) -->
-            <div class="header-icon menu-icon" onclick="openModal()">💬</div>
+            <!-- PDF Maker -->
+            <a href="pdf-tool.html" class="card">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6" fill="none" stroke="#fff" stroke-width="2"/><path d="M8 13h8M8 17h8M8 9h2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">PDF Maker</div>
+                    <div class="card-arrow">→</div>
+                </div>
+            </a>
+
+            <!-- Photo Compressor -->
+            <a href="image-compressor.html" class="card">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">Photo<br>Compressor</div>
+                    <div class="card-arrow">→</div>
+                </div>
+            </a>
+
+            <!-- Screenshot Editor -->
+            <a href="image-editor.html" class="card">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">Screenshot<br>Editor</div>
+                    <div class="card-arrow">→</div>
+                </div>
+            </a>
+
+            <!-- Invoice Generator -->
+            <a href="invoice.html" class="card">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">Invoice<br>Generator</div>
+                    <div class="card-arrow">→</div>
+                </div>
+            </a>
+
+            <!-- Video Editor -->
+            <a href="video-editor.html" class="card">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">Video Editor</div>
+                    <div class="card-arrow">→</div>
+                </div>
+            </a>
+
+            <!-- Protect PDF -->
+            <a href="pdf-protect.html" class="card">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">Protect PDF</div>
+                    <div class="card-arrow">→</div>
+                </div>
+            </a>
+
+            <!-- QR Code Maker -->
+            <a href="qr-visual.html" class="card">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2z"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">QR Code Maker</div>
+                    <div class="card-arrow">→</div>
+                </div>
+            </a>
+
+            <!-- Smart Calculator -->
+            <a href="smart-calculator.html" class="card">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V9h10v2zm-8 8H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V9h2v2zm0-4H7V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2z"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">Smart<br>Calculator</div>
+                    <div class="card-arrow">→</div>
+                </div>
+            </a>
+
         </div>
     </div>
 
-    <!-- 1. APP Button (Yellow) -->
-    <a href="store.html" class="btn-box app-box">
-        <div class="btn-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                <line x1="12" y1="18" x2="12.01" y2="18"></line>
-            </svg>
-        </div>
-        <div class="btn-text">APP</div>
-    </a>
-
-    <!-- 2. PDF Maker Button (Red) -->
-    <a href="pdf-tool.html" class="btn-box pdf-box">
-        <div class="btn-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
-                <path d="M14 2v6h6" stroke="#E53935" stroke-width="2"/>
-                <path d="M8 13h8M8 17h8M8 9h2" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-        </div>
-        <div class="btn-text">PDF Maker</div>
-    </a>
-
-    <!-- 3. Compressor Button (Chocolate) -->
-    <a href="image-compressor.html" class="btn-box compressor-box">
-        <div class="btn-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-                <path d="M12 8v4m0 0v4m0-4h4m-4 0H8" stroke="#D2691E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </div>
-        <div class="btn-text">Compressor</div>
-    </a>
-
-    <!-- 4. Screenshot Editor Button (Orange) -->
-    <a href="image-editor.html" class="btn-box editor-box">
-        <div class="btn-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-            </svg>
-        </div>
-        <div class="btn-text">Screenshot Editor</div>
-    </a>
-
-    <!-- 5. Invoice Generator Button (Purple) -->
-    <a href="invoice.html" class="btn-box invoice-box">
-        <div class="btn-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-            </svg>
-        </div>
-        <div class="btn-text">Invoice Generator</div>
-    </a>
-
-    <!-- 6. Video Trimmer Button (Pink) -->
-    <a href="video-editor.html" class="btn-box video-box">
-        <div class="btn-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM9.5 15l-3-3 1.41-1.41L9.5 12.17l3.59-3.59L14.5 10l-5 5z"/>
-            </svg>
-        </div>
-        <div class="btn-text">Video Trimmer</div>
-    </a>
-
-    <!-- 7. Protect PDF Button (Dark Blue) -->
-    <a href="pdf-protect.html" class="btn-box protect-box">
-        <div class="btn-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
-            </svg>
-        </div>
-        <div class="btn-text">Protect PDF</div>
-    </a>
-
-    <!-- 8. Smart Calculator Button (Gold) -->
-    <a href="smart-calculator.html" class="btn-box calc-box">
-        <div class="btn-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V9h10v2zm-8 8H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V9h2v2zm0-4H7V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2z"/>
-            </svg>
-        </div>
-        <div class="btn-text">Smart Calculator</div>
-    </a>
-
-    <!-- Popup Modal (Contact Us) -->
+    <!-- Modal (Contact Us) -->
     <div id="contactModal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">×</span>
@@ -303,7 +335,6 @@
             <a href="mailto:seaoxseaox@gmail.com?subject=New Message from SEAOX Website&body=Hello SEAOX Team," class="send-msg-btn">
                 📩 Send Message
             </a>
-            <p class="hindi-note">*किसी भी तरह का यदि हमारे एप्लीकेशन में अप्डेट चाहिए या फिर कोई फीचर्स एड करना हो तो आप हमें मेल कर सकते है</p>
         </div>
     </div>
 
