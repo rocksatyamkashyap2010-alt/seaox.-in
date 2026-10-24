@@ -140,17 +140,19 @@
 
     <script>
         // ==========================================
-        // 1. OPENROUTER AI LOGIC
+        // 1. GROQ AI LOGIC (Super Fast)
         // ==========================================
-        // Aapki API Key yahan daali hui hai
-        const API_KEY = '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'; 
-        const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+        
+        //  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      const API_KEY = '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'; 
+        
+        // Groq ka API endpoint (OpenAI compatible)
+        const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
-        // Free models list (Agar ek busy ho toh dusra try karega)
+        // Groq ke sabse fast free models (Agar ek busy ho toh dusra try karega)
         const MODELS = [
-            'meta-llama/llama-3-8b-instruct:free',
-            'mistralai/mistral-7b-instruct:free',
-            'google/gemma-2-9b-it:free'
+            'llama3-8b-8192',
+            'mixtral-8x7b-32768',
+            'gemma-7b-it'
         ];
         
         const chatContainer = document.getElementById('chatContainer');
@@ -221,9 +223,7 @@ Rules:
                             method: 'POST',
                             headers: { 
                                 'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${API_KEY}`,
-                                'HTTP-Referer': 'https://seaox.in', // Optional, for OpenRouter ranking
-                                'X-Title': 'SEAOX AI' // Optional
+                                'Authorization': `Bearer ${API_KEY}`
                             },
                             body: JSON.stringify({
                                 model: currentModel,
@@ -231,7 +231,7 @@ Rules:
                                     { role: "system", content: SYSTEM_PROMPT },
                                     { role: "user", content: text }
                                 ],
-                                stream: true // Streaming ON
+                                stream: true // Streaming ON (Typewriter effect)
                             })
                         });
 
@@ -260,7 +260,6 @@ Rules:
                                         const dataStr = line.replace('data: ', '').trim();
                                         if (dataStr === '[DONE]') continue;
                                         const data = JSON.parse(dataStr);
-                                        // OpenRouter/OpenAI format
                                         if (data.choices && data.choices[0].delta && data.choices[0].delta.content) {
                                             fullText += data.choices[0].delta.content;
                                             botDiv.innerText = fullText; 
@@ -443,4 +442,4 @@ Rules:
         initMemory();
     </script>
 </body>
-        </html>
+</html>
