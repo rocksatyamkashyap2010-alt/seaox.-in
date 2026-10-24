@@ -2,36 +2,114 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SEAOX - Welcome</title>
-    <!-- Favicon (Tab wala chhota logo) -->
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
     <style>
-        body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; position: relative; overflow: hidden; }
-        .container { text-align: center; z-index: 2; }
-        
-        /* Naya Lamba Logo */
+        body { 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            background-color: #ffffff; 
+            font-family: 'Inter', sans-serif; 
+            position: relative; 
+            overflow: hidden; 
+        }
+
+        /* Container jisme logo aur text hai */
+        .container { 
+            text-align: center; 
+            z-index: 2; 
+            /* Smooth zoom aur fade ke liye transition */
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.5s ease, filter 1.5s ease;
+            transform-origin: center center;
+        }
+
+        /* Jab yeh class lagegi tab zoom shuru hoga */
+        .zoom-in {
+            transform: scale(8); /* 8 guna bada hoga */
+            opacity: 0; /* Fade out hoga */
+            filter: blur(10px); /* Halka sa blur aayega taaki smooth lage */
+        }
+
         .logo-img { 
-            width: 300px; 
-            mix-blend-mode: multiply; /* White background hatayega */
-            margin-bottom: 5px;
+            width: 250px; 
+            mix-blend-mode: multiply; 
+            margin-bottom: 10px;
         }
         
-        .welcome { font-size: 28px; color: #333; margin-top: 0px; font-weight: 400; letter-spacing: 1px; }
-        .dots { margin-top: 20px; display: flex; justify-content: center; gap: 10px; }
-        .dot { width: 12px; height: 12px; background-color: #0066FF; border-radius: 50%; opacity: 0.3; }
+        .welcome { 
+            font-size: 30px; 
+            color: #0B3B24; 
+            margin-top: 0px; 
+            font-weight: 400; 
+            letter-spacing: 2px; 
+        }
+        
+        .dots { 
+            margin-top: 20px; 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+        }
+        
+        .dot { 
+            width: 12px; 
+            height: 12px; 
+            background-color: #1877F2; 
+            border-radius: 50%; 
+            opacity: 0.3; 
+        }
+        
         .dot:nth-child(1) { animation: pulse 1.5s infinite; }
         .dot:nth-child(2) { animation: pulse 1.5s infinite 0.5s; }
         .dot:nth-child(3) { animation: pulse 1.5s infinite 1s; }
-        @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
-        .wave { position: absolute; bottom: -50px; left: -50px; width: 200%; height: 200px; background: #E8F5E9; border-radius: 45%; z-index: 1; animation: rotate 10s linear infinite; }
-        .wave2 { position: absolute; bottom: -60px; left: -50px; width: 200%; height: 200px; background: #C8E6C9; border-radius: 40%; z-index: 0; animation: rotate 15s linear infinite reverse; }
-        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        @keyframes pulse { 
+            0% { opacity: 0.3; transform: scale(1); } 
+            50% { opacity: 1; transform: scale(1.2); } 
+            100% { opacity: 0.3; transform: scale(1); } 
+        }
+
+        /* Background Waves */
+        .wave { 
+            position: absolute; 
+            bottom: -50px; 
+            left: -50px; 
+            width: 200%; 
+            height: 200px; 
+            background: #E8F5E9; 
+            border-radius: 45%; 
+            z-index: 1; 
+            animation: rotate 10s linear infinite; 
+        }
+        
+        .wave2 { 
+            position: absolute; 
+            bottom: -60px; 
+            left: -50px; 
+            width: 200%; 
+            height: 200px; 
+            background: #C8E6C9; 
+            border-radius: 40%; 
+            z-index: 0; 
+            animation: rotate 15s linear infinite reverse; 
+        }
+        
+        @keyframes rotate { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Yahan naya logo laga hai -->
+
+    <div class="container" id="welcomeContainer">
         <img src="IMG_20261006_211924.png" alt="SEAOX Logo" class="logo-img">
         <div class="welcome">Welcome</div>
         <div class="dots">
@@ -40,12 +118,23 @@
             <div class="dot"></div>
         </div>
     </div>
+    
     <div class="wave2"></div>
     <div class="wave"></div>
+
     <script>
+        // 1.5 second tak normal page dikhega
         setTimeout(function() {
-            window.location.href = 'menu.html';
-        }, 3000);
+            // Zoom aur blur effect trigger karo
+            document.getElementById('welcomeContainer').classList.add('zoom-in');
+            
+            // Zoom animation pura hone ka wait karo (1.5 second), phir page change karo
+            setTimeout(function() {
+                // Yahan aap 'menu.html' ki jagah 'ai.html' bhi likh sakte ho agar direct AI kholna ho
+                window.location.href = 'menu.html'; 
+            }, 1500); // 1500ms = 1.5 second (transition time ke barabar)
+
+        }, 1500); // 1500ms = 1.5 second (shuruaati wait time)
     </script>
 </body>
 </html>
