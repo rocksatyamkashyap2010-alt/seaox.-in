@@ -15,7 +15,7 @@
             flex-direction: column; 
             align-items: center; 
             gap: 15px; 
-            overflow-x: hidden; /* Slide animation ke waqt horizontal scrollbar na aaye */
+            overflow-x: hidden; 
         }
         
         /* Top Header */
@@ -25,7 +25,7 @@
         /* Header Right Icons Container */
         .header-actions { display: flex; align-items: center; gap: 8px; }
 
-        /* Common Icon Style for Header */
+        /* Common Icon Style */
         .header-icon { 
             width: 35px; 
             height: 35px; 
@@ -37,26 +37,45 @@
             text-decoration: none;
             transition: transform 0.2s;
             overflow: hidden; 
+            
+            /* Animation Setup: Initially hidden, will slide from right */
+            opacity: 0; 
+            animation: popOutFromMessage 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
         .header-icon:active { transform: scale(0.9); }
 
-        /* AI Chat Icon (Image) */
+        /* Staggered Delays (Right to Left se aayenge) */
+        .header-actions > *:nth-child(5) { animation-delay: 0.1s; } /* Contact (Message icon) */
+        .header-actions > *:nth-child(4) { animation-delay: 0.2s; } /* X */
+        .header-actions > *:nth-child(3) { animation-delay: 0.3s; } /* WhatsApp */
+        .header-actions > *:nth-child(2) { animation-delay: 0.4s; } /* Instagram */
+        .header-actions > *:nth-child(1) { animation-delay: 0.5s; } /* AI */
+
+        /* Animation Keyframe */
+        @keyframes popOutFromMessage {
+            0% {
+                opacity: 0;
+                transform: translateX(40px) scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        /* Icon Specifics */
         .ai-header { background: #ffffff; border: 1px solid #ddd; padding: 0; }
         .ai-header img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* Instagram Icon Specifics */
+        
         .insta-header { background-color: #1877F2; }
         .insta-header svg { width: 18px; height: 18px; fill: white; }
         
-        /* WhatsApp Icon Specifics */
         .wa-header { background-color: #25D366; }
         .wa-header svg { width: 20px; height: 20px; fill: white; }
         
-        /* X (Twitter) Icon Specifics */
         .x-header { background-color: #000000; }
         .x-header svg { width: 16px; height: 16px; fill: white; }
         
-        /* Contact Chat Icon */
         .menu-icon { font-size: 18px; color: #333; cursor: pointer; background: #f0f0f0; }
         .menu-icon:hover { background: #e0e0e0; }
 
@@ -76,7 +95,7 @@
             transition: transform 0.2s; 
             cursor: pointer;
             
-            /* Animation Setup */
+            /* Menu Buttons Animation Setup */
             opacity: 0; 
             animation-duration: 0.6s;
             animation-fill-mode: forwards;
@@ -87,7 +106,7 @@
         .btn-icon { display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; }
         .btn-text { font-weight: bold; }
 
-        /* --- SLIDE ANIMATIONS --- */
+        /* --- SLIDE ANIMATIONS FOR MENU --- */
         @keyframes slideInLeft {
             from { transform: translateX(-100px); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
@@ -97,11 +116,9 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
-        /* Alternate Left and Right Animations */
         .btn-box:nth-of-type(odd) { animation-name: slideInLeft; }
         .btn-box:nth-of-type(even) { animation-name: slideInRight; }
 
-        /* Staggered Delay (Ek ke baad ek aane ke liye) */
         .btn-box:nth-of-type(1) { animation-delay: 0.1s; }
         .btn-box:nth-of-type(2) { animation-delay: 0.2s; }
         .btn-box:nth-of-type(3) { animation-delay: 0.3s; }
@@ -112,42 +129,33 @@
         .btn-box:nth-of-type(8) { animation-delay: 0.8s; }
 
         /* --- Button Colors --- */
-
-        /* 1. APP Box (Yellow) */
         .app-box { background-color: #FFD700; }
         .app-box .btn-text { color: #111; font-size: 28px; letter-spacing: 1px; }
 
-        /* 2. PDF Maker Box (Red) */
         .pdf-box { background-color: #E53935; }
         .pdf-box svg { width: 40px; height: 40px; fill: white; }
         .pdf-box .btn-text { color: white; font-size: 24px; letter-spacing: 0.5px; }
 
-        /* 3. Compressor Box (Chocolate) */
         .compressor-box { background-color: #D2691E; }
         .compressor-box svg { width: 40px; height: 40px; fill: white; }
         .compressor-box .btn-text { color: white; font-size: 24px; letter-spacing: 0.5px; }
 
-        /* 4. Screenshot Editor Box (Orange) */
         .editor-box { background-color: #FF9800; }
         .editor-box svg { width: 40px; height: 40px; fill: white; }
         .editor-box .btn-text { color: white; font-size: 20px; letter-spacing: 0.5px; }
 
-        /* 5. Invoice Generator Box (Purple) */
         .invoice-box { background-color: #6B46C1; }
         .invoice-box svg { width: 40px; height: 40px; fill: white; }
         .invoice-box .btn-text { color: white; font-size: 20px; letter-spacing: 0.5px; }
 
-        /* 6. Video Trimmer Box (Pink) */
         .video-box { background-color: #E91E63; }
         .video-box svg { width: 40px; height: 40px; fill: white; }
         .video-box .btn-text { color: white; font-size: 20px; letter-spacing: 0.5px; }
 
-        /* 7. Protect PDF Box (Dark Blue) */
         .protect-box { background-color: #2C3E50; }
         .protect-box svg { width: 40px; height: 40px; fill: white; }
         .protect-box .btn-text { color: white; font-size: 20px; letter-spacing: 0.5px; }
 
-        /* 8. Smart Calculator Box (Gold) */
         .calc-box { background-color: #F39C12; }
         .calc-box svg { width: 40px; height: 40px; fill: white; }
         .calc-box .btn-text { color: white; font-size: 18px; letter-spacing: 0.5px; }
@@ -197,7 +205,7 @@
                 </svg>
             </a>
             
-            <!-- 5. Contact Icon -->
+            <!-- 5. Contact Icon (Message Box) -->
             <div class="header-icon menu-icon" onclick="openModal()">💬</div>
         </div>
     </div>
