@@ -6,7 +6,17 @@
     <title>SEAOX - Menu</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     <style>
-        body { margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #ffffff; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        body { 
+            margin: 0; 
+            padding: 20px; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #ffffff; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 15px; 
+            overflow-x: hidden; /* Slide animation ke waqt horizontal scrollbar na aaye */
+        }
         
         /* Top Header */
         .header { width: 100%; max-width: 450px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -26,7 +36,7 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
             text-decoration: none;
             transition: transform 0.2s;
-            overflow: hidden; /* Image ko circle mein rakhne ke liye */
+            overflow: hidden; 
         }
         .header-icon:active { transform: scale(0.9); }
 
@@ -50,7 +60,7 @@
         .menu-icon { font-size: 18px; color: #333; cursor: pointer; background: #f0f0f0; }
         .menu-icon:hover { background: #e0e0e0; }
 
-        /* Common Button Style (Neeche ke buttons) */
+        /* Common Button Style */
         .btn-box { 
             width: 100%; 
             max-width: 450px; 
@@ -65,11 +75,41 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
             transition: transform 0.2s; 
             cursor: pointer;
+            
+            /* Animation Setup */
+            opacity: 0; 
+            animation-duration: 0.6s;
+            animation-fill-mode: forwards;
+            animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .btn-box:active { transform: scale(0.98); }
         
         .btn-icon { display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; }
         .btn-text { font-weight: bold; }
+
+        /* --- SLIDE ANIMATIONS --- */
+        @keyframes slideInLeft {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideInRight {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Alternate Left and Right Animations */
+        .btn-box:nth-of-type(odd) { animation-name: slideInLeft; }
+        .btn-box:nth-of-type(even) { animation-name: slideInRight; }
+
+        /* Staggered Delay (Ek ke baad ek aane ke liye) */
+        .btn-box:nth-of-type(1) { animation-delay: 0.1s; }
+        .btn-box:nth-of-type(2) { animation-delay: 0.2s; }
+        .btn-box:nth-of-type(3) { animation-delay: 0.3s; }
+        .btn-box:nth-of-type(4) { animation-delay: 0.4s; }
+        .btn-box:nth-of-type(5) { animation-delay: 0.5s; }
+        .btn-box:nth-of-type(6) { animation-delay: 0.6s; }
+        .btn-box:nth-of-type(7) { animation-delay: 0.7s; }
+        .btn-box:nth-of-type(8) { animation-delay: 0.8s; }
 
         /* --- Button Colors --- */
 
@@ -131,7 +171,7 @@
         <img src="IMG_20261006_211924.png" alt="SEAOX Logo" class="logo-img">
         
         <div class="header-actions">
-            <!-- 1. AI Chat Icon (Links to ai.html now) -->
+            <!-- 1. AI Chat Icon -->
             <a href="ai.html" class="header-icon ai-header">
                 <img src="IMG_20261019_105230.jpg" alt="AI Chat">
             </a>
@@ -268,4 +308,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
