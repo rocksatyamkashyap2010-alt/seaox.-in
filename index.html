@@ -3,138 +3,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SEAOX - Welcome</title>
+    <title>Welcome to SEAOX</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     
+    <!-- Google Fonts for Premium Look -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
     <style>
-        body { 
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            background-color: #ffffff; 
-            font-family: 'Inter', sans-serif; 
-            position: relative; 
-            overflow: hidden; 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Container jisme logo aur text hai */
-        .container { 
-            text-align: center; 
-            z-index: 2; 
-            /* Smooth zoom aur fade ke liye transition */
-            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.5s ease, filter 1.5s ease;
-            transform-origin: center center;
+        body {
+            background-color: #040814; /* Deep Dark Blue */
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
         }
 
-        /* Jab yeh class lagegi tab zoom shuru hoga */
-        .zoom-in {
-            transform: scale(8); /* 8 guna bada hoga */
-            opacity: 0; /* Fade out hoga */
-            filter: blur(10px); /* Halka sa blur aayega taaki smooth lage */
+        /* Background Glowing Effects */
+        .bg-glow-1, .bg-glow-2 {
+            position: absolute;
+            width: 200vw;
+            height: 200vw;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 0;
+            opacity: 0.4;
+        }
+        .bg-glow-1 {
+            top: -100vw;
+            left: -50vw;
+            background: radial-gradient(circle, rgba(0,229,255,0.4) 0%, transparent 60%);
+        }
+        .bg-glow-2 {
+            bottom: -100vw;
+            right: -50vw;
+            background: radial-gradient(circle, rgba(157,0,255,0.3) 0%, transparent 60%);
         }
 
-        .logo-img { 
-            width: 250px; 
-            mix-blend-mode: multiply; 
-            margin-bottom: 10px;
+        /* Floating Particles */
+        .particle {
+            position: absolute;
+            background: #00e5ff;
+            box-shadow: 0 0 10px #00e5ff;
+            border-radius: 2px;
+            animation: float 4s infinite linear;
+            opacity: 0;
         }
-        
-        .welcome { 
-            font-size: 30px; 
-            color: #0B3B24; 
-            margin-top: 0px; 
-            font-weight: 400; 
-            letter-spacing: 2px; 
-        }
-        
-        .dots { 
-            margin-top: 20px; 
-            display: flex; 
-            justify-content: center; 
-            gap: 10px; 
-        }
-        
-        .dot { 
-            width: 12px; 
-            height: 12px; 
-            background-color: #1877F2; 
-            border-radius: 50%; 
-            opacity: 0.3; 
-        }
-        
-        .dot:nth-child(1) { animation: pulse 1.5s infinite; }
-        .dot:nth-child(2) { animation: pulse 1.5s infinite 0.5s; }
-        .dot:nth-child(3) { animation: pulse 1.5s infinite 1s; }
-        
-        @keyframes pulse { 
-            0% { opacity: 0.3; transform: scale(1); } 
-            50% { opacity: 1; transform: scale(1.2); } 
-            100% { opacity: 0.3; transform: scale(1); } 
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100px) scale(0); opacity: 0; }
         }
 
-        /* Background Waves */
-        .wave { 
-            position: absolute; 
-            bottom: -50px; 
-            left: -50px; 
-            width: 200%; 
-            height: 200px; 
-            background: #E8F5E9; 
-            border-radius: 45%; 
-            z-index: 1; 
-            animation: rotate 10s linear infinite; 
+        /* Main Container */
+        .container {
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            /* Zoom Transition Setup */
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s ease, filter 1s ease;
         }
-        
-        .wave2 { 
-            position: absolute; 
-            bottom: -60px; 
-            left: -50px; 
-            width: 200%; 
-            height: 200px; 
-            background: #C8E6C9; 
-            border-radius: 40%; 
-            z-index: 0; 
-            animation: rotate 15s linear infinite reverse; 
+
+        /* Zoom out class for transition */
+        .zoom-out {
+            transform: scale(10);
+            opacity: 0;
+            filter: blur(20px);
         }
-        
-        @keyframes rotate { 
-            0% { transform: rotate(0deg); } 
-            100% { transform: rotate(360deg); } 
+
+        /* S Logo Image */
+        .s-logo {
+            width: 140px;
+            height: 140px;
+            border-radius: 30px;
+            object-fit: cover;
+            box-shadow: 0 10px 40px rgba(0, 229, 255, 0.4), 0 10px 40px rgba(157, 0, 255, 0.4);
+            margin-bottom: 20px;
+            animation: logoFloat 3s ease-in-out infinite alternate;
+        }
+        @keyframes logoFloat {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        /* SEAOX Brand Text */
+        .brand-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #ffffff, #b3d4ff, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255,255,255,0.3);
+            margin-bottom: 30px;
+        }
+
+        /* Welcome Text */
+        .welcome-title {
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            font-size: 2.2rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+        .welcome-title span {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        /* Tagline */
+        .tagline {
+            color: #a0b0d0;
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            margin-bottom: 50px;
+        }
+
+        /* Glowing Dots */
+        .dots {
+            display: flex;
+            gap: 15px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        .dot:nth-child(1) {
+            background-color: #00e5ff; /* Cyan */
+            box-shadow: 0 0 15px #00e5ff;
+        }
+        .dot:nth-child(2) {
+            background-color: #1877F2; /* Blue */
+            box-shadow: 0 0 15px #1877F2;
+            animation-delay: 0.3s;
+        }
+        .dot:nth-child(3) {
+            background-color: #9d00ff; /* Purple */
+            box-shadow: 0 0 15px #9d00ff;
+            animation-delay: 0.6s;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0.5; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container" id="welcomeContainer">
-        <img src="IMG_20261006_211924.png" alt="SEAOX Logo" class="logo-img">
-        <div class="welcome">Welcome</div>
+    <!-- Glowing Background Elements -->
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+    
+    <!-- Generating random particles via JS later, for now some hardcoded -->
+    <div class="particle" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="top: 30%; right: 15%; animation-delay: 1s; width: 6px; height: 6px; background: #9d00ff; box-shadow: 0 0 10px #9d00ff;"></div>
+    <div class="particle" style="bottom: 25%; left: 20%; animation-delay: 2s;"></div>
+    <div class="particle" style="bottom: 15%; right: 10%; animation-delay: 1.5s; width: 8px; height: 8px;"></div>
+    <div class="particle" style="top: 15%; right: 30%; animation-delay: 0.5s; width: 4px; height: 4px;"></div>
+    <div class="particle" style="bottom: 40%; left: 5%; animation-delay: 2.5s; width: 5px; height: 5px; background: #1877F2; box-shadow: 0 0 10px #1877F2;"></div>
+
+    <!-- Main Content Container -->
+    <div class="container" id="mainContainer">
+        
+        <!-- Use existing S logo image -->
+        <img src="IMG_20261019_105230.jpg" alt="SEAOX Logo" class="s-logo">
+        
+        <!-- Brand Name -->
+        <div class="brand-text">SEAOX</div>
+        
+        <!-- Welcome Text -->
+        <div class="welcome-title">
+            Welcome to
+            <span>SEAOX</span>
+        </div>
+        
+        <!-- Tagline -->
+        <div class="tagline">Smart tools. Simple solutions.</div>
+        
+        <!-- Glowing Dots -->
         <div class="dots">
             <div class="dot"></div>
             <div class="dot"></div>
             <div class="dot"></div>
         </div>
+
     </div>
-    
-    <div class="wave2"></div>
-    <div class="wave"></div>
 
     <script>
-        // 1.5 second tak normal page dikhega
+        // 2.5 Second baad zoom animation trigger karo aur page change karo
         setTimeout(function() {
-            // Zoom aur blur effect trigger karo
-            document.getElementById('welcomeContainer').classList.add('zoom-in');
+            // Zoom out effect trigger
+            document.getElementById('mainContainer').classList.add('zoom-out');
             
-            // Zoom animation pura hone ka wait karo (1.5 second), phir page change karo
+            // Animation complete hone ka wait karo (1 second), phir menu.html kholo
             setTimeout(function() {
-                // Yahan aap 'menu.html' ki jagah 'ai.html' bhi likh sakte ho agar direct AI kholna ho
-                window.location.href = 'menu.html'; 
-            }, 1500); // 1500ms = 1.5 second (transition time ke barabar)
+                window.location.href = 'menu.html';
+            }, 1000); // 1000ms = 1 second
 
-        }, 1500); // 1500ms = 1.5 second (shuruaati wait time)
+        }, 2500); // 2500ms = 2.5 seconds wait
     </script>
 </body>
 </html>
