@@ -140,19 +140,18 @@
 
     <script>
         // ==========================================
-        // 1. GROQ AI LOGIC (Fixed Models & UI Reset)
+        // 1. GROQ AI LOGIC (FIXED MODELS)
         // ==========================================
         
-        // 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
-        const API_KEY = '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'; 
+        // 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  const API_KEY = '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'; 
         
         const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
-        // GROQ KE ASLI FREE MODELS
+        // 🔥 GROQ KE NAYE FREE MODELS
         const MODELS = [
-            'llama-3.3-70b-versatile',
-            'llama-3.1-8b-instant',
-            'gemma2-9b-it'
+            'openai/gpt-oss-120b',
+            'openai/gpt-oss-20b',
+            'qwen/qwen3.6-27b'
         ];
         
         const chatContainer = document.getElementById('chatContainer');
@@ -206,95 +205,88 @@ Rules:
 
             let success = false;
             
-            try {
-                // Loop through models for fallback
-                for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
+            for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
+                if (success) break;
+                const currentModel = MODELS[modelIndex];
+
+                for (let attempt = 0; attempt < 2; attempt++) {
                     if (success) break;
-                    const currentModel = MODELS[modelIndex];
+                    try {
+                        if (attempt > 0) {
+                            botDiv.innerText = `SEAOX server busy hai... Retry ho raha hai...`;
+                            await new Promise(r => setTimeout(r, 2000));
+                        }
 
-                    for (let attempt = 0; attempt < 2; attempt++) {
-                        if (success) break;
-                        try {
-                            if (attempt > 0) {
-                                botDiv.innerText = `SEAOX server busy hai... Retry ho raha hai...`;
-                                await new Promise(r => setTimeout(r, 2000));
-                            }
+                        const response = await fetch(API_URL, {
+                            method: 'POST',
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${API_KEY}`
+                            },
+                            body: JSON.stringify({
+                                model: currentModel,
+                                messages: [
+                                    { role: "system", content: SYSTEM_PROMPT },
+                                    { role: "user", content: text }
+                                ],
+                                stream: true 
+                            })
+                        });
 
-                            const response = await fetch(API_URL, {
-                                method: 'POST',
-                                headers: { 
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${API_KEY}`
-                                },
-                                body: JSON.stringify({
-                                    model: currentModel,
-                                    messages: [
-                                        { role: "system", content: SYSTEM_PROMPT },
-                                        { role: "user", content: text }
-                                    ],
-                                    stream: true 
-                                })
-                            });
+                        if (response.status === 503 || response.status === 429) throw new Error("BUSY");
+                        if (!response.ok) throw new Error("FATAL");
 
-                            if (response.status === 503 || response.status === 429) throw new Error("BUSY");
-                            if (!response.ok) throw new Error("FATAL");
+                        typingIndicator.style.display = 'none'; 
+                        botDiv.innerText = ""; 
+                        botDiv.className = 'message msg-bot';
 
-                            typingIndicator.style.display = 'none'; 
-                            botDiv.innerText = ""; 
-                            botDiv.className = 'message msg-bot';
+                        const reader = response.body.getReader();
+                        const decoder = new TextDecoder("utf-8");
+                        let fullText = "";
+                        let buffer = "";
 
-                            const reader = response.body.getReader();
-                            const decoder = new TextDecoder("utf-8");
-                            let fullText = "";
-                            let buffer = "";
+                        while (true) {
+                            const { done, value } = await reader.read();
+                            if (done) break;
+                            buffer += decoder.decode(value, { stream: true });
+                            let lines = buffer.split('\n');
+                            buffer = lines.pop(); 
 
-                            while (true) {
-                                const { done, value } = await reader.read();
-                                if (done) break;
-                                buffer += decoder.decode(value, { stream: true });
-                                let lines = buffer.split('\n');
-                                buffer = lines.pop(); 
-
-                                for (const line of lines) {
-                                    if (line.startsWith('data: ')) {
-                                        try {
-                                            const dataStr = line.replace('data: ', '').trim();
-                                            if (dataStr === '[DONE]') continue;
-                                            const data = JSON.parse(dataStr);
-                                            if (data.choices && data.choices[0].delta && data.choices[0].delta.content) {
-                                                fullText += data.choices[0].delta.content;
-                                                botDiv.innerText = fullText; 
-                                                chatContainer.scrollTop = chatContainer.scrollHeight;
-                                            }
-                                        } catch (e) { }
-                                    }
+                            for (const line of lines) {
+                                if (line.startsWith('data: ')) {
+                                    try {
+                                        const dataStr = line.replace('data: ', '').trim();
+                                        if (dataStr === '[DONE]') continue;
+                                        const data = JSON.parse(dataStr);
+                                        if (data.choices && data.choices[0].delta && data.choices[0].delta.content) {
+                                            fullText += data.choices[0].delta.content;
+                                            botDiv.innerText = fullText; 
+                                            chatContainer.scrollTop = chatContainer.scrollHeight;
+                                        }
+                                    } catch (e) { }
                                 }
                             }
-                            if(fullText !== "") success = true;
-                        } catch (error) {
-                            if (error.message === "FATAL") break; // Model fail, move to next
                         }
-                    } 
+                        if(fullText !== "") success = true;
+                    } catch (error) {
+                        if (error.message === "FATAL") break;
+                    }
                 } 
+            } 
 
-                if (!success) {
-                    botDiv.className = 'message msg-bot error-msg';
-                    botDiv.innerText = "⚠️ SEAOX ka server abhi busy hai. Kripya 'Retry' dabayein.";
-                    const retryBtn = document.createElement('button');
-                    retryBtn.className = 'retry-btn';
-                    retryBtn.innerText = '🔄 Retry Message';
-                    retryBtn.onclick = () => { botRow.remove(); sendMessage(lastUserMessage); };
-                    botRow.appendChild(retryBtn);
-                }
-            } catch (globalError) {
-                console.error(globalError);
-                botDiv.innerText = "Error: Kuch galat ho gaya.";
-            } finally {
-                // 🔥 YEH SABSE ZAROORI HAI: Button ko hamesha wapas enable karega chahe kuch bhi ho
-                isProcessing = false;
-                sendBtn.disabled = false;
-                chatContainer.scrollTop = chatContainer.scrollHeight;
+            if (!success) {
+                botDiv.className = 'message msg-bot error-msg';
+                botDiv.innerText = "⚠️ SEAOX ka server abhi busy hai. Kripya 'Retry' dabayein.";
+                const retryBtn = document.createElement('button');
+                retryBtn.className = 'retry-btn';
+                retryBtn.innerText = '🔄 Retry Message';
+                retryBtn.onclick = () => { botRow.remove(); sendMessage(lastUserMessage); };
+                botRow.appendChild(retryBtn);
             }
+
+            isProcessing = false;
+            sendBtn.disabled = false;
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
         function addMessage(text, sender) {
