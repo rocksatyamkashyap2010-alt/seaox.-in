@@ -40,27 +40,18 @@
             width: 38px; height: 38px; border-radius: 50%; 
             display: flex; justify-content: center; align-items: center; 
             text-decoration: none; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            
-            /* Animation: Piche se aage aane ke liye */
             opacity: 0;
             animation: popOut 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        /* Staggered Delays for right-to-left appearance */
-        .header-icons > *:nth-child(4) { animation-delay: 0.1s; } /* Chat */
-        .header-icons > *:nth-child(3) { animation-delay: 0.2s; } /* X */
-        .header-icons > *:nth-child(2) { animation-delay: 0.3s; } /* WhatsApp */
-        .header-icons > *:nth-child(1) { animation-delay: 0.4s; } /* Instagram */
+        .header-icons > *:nth-child(4) { animation-delay: 0.1s; }
+        .header-icons > *:nth-child(3) { animation-delay: 0.2s; }
+        .header-icons > *:nth-child(2) { animation-delay: 0.3s; }
+        .header-icons > *:nth-child(1) { animation-delay: 0.4s; }
 
         @keyframes popOut {
-            0% {
-                opacity: 0;
-                transform: translateX(40px) scale(0.5);
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(0) scale(1);
-            }
+            0% { opacity: 0; transform: translateX(40px) scale(0.5); }
+            100% { opacity: 1; transform: translateX(0) scale(1); }
         }
 
         .icon-btn:active { transform: scale(0.9); }
@@ -71,24 +62,37 @@
         .icon-btn.chat { background: #E4E6EB; color: #333; font-size: 18px; cursor: pointer;}
         .icon-btn svg { width: 20px; height: 20px; fill: white; }
 
-        /* Tractor Book Banner */
-        .banner { 
-            display: block; 
+        /* 🎠 SLIDER (CAROUSEL) STYLES 🎠 */
+        .slider-container { 
             width: 100%; 
-            border-radius: 20px; 
-            background: #FFD700; 
-            position: relative; 
             overflow: hidden; 
-            padding: 15px; 
-            text-decoration: none;
+            border-radius: 20px; 
+            position: relative;
             margin-bottom: 20px;
             box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
-            transition: transform 0.2s;
         }
-        .banner:active { transform: scale(0.98); }
         
+        .slider-track {
+            display: flex;
+            transition: transform 0.6s ease-in-out;
+            width: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            background: #FFD700;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            height: 120px; /* Fix height for uniformity */
+        }
+
         /* Dark Blue Curved Shape */
-        .banner-curve {
+        .slide::after {
+            content: '';
             position: absolute;
             top: 0; right: -50px;
             width: 150px; height: 100%;
@@ -98,60 +102,80 @@
             z-index: 1;
         }
 
-        .banner-content { 
+        .slide-content { 
             display: flex; 
             align-items: center; 
+            width: 100%;
             position: relative; 
             z-index: 2; 
             gap: 15px;
+            padding-right: 60px; /* Space for the curve/arrow */
         }
 
-        /* Tractor Logo Circle */
-        .tractor-logo-bg {
-            width: 90px; height: 90px;
+        /* Icon Circle */
+        .slide-icon {
+            width: 80px; height: 80px;
             background: #FFF8B0;
             border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
             flex-shrink: 0;
-            overflow: hidden; /* Circle ke bahar kuch na dikhe */
-        }
-        
-        /* 🔥 FIX: Logo ko perfect gol karne ke liye */
-        .tractor-logo-bg img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            border-radius: 50%; 
+            font-size: 35px; /* For emoji size */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        /* Banner Text */
-        .banner-text { flex: 1; display: flex; flex-direction: column; }
-        .banner-title { font-size: 24px; font-weight: 800; color: #0B3B5C; margin-bottom: 2px; }
-        .banner-sub { font-size: 13px; color: #0B3B5C; line-height: 1.2; font-weight: 500; opacity: 0.9; }
+        /* Slide Text */
+        .slide-text { flex: 1; display: flex; flex-direction: column; }
+        .slide-title { font-size: 20px; font-weight: 800; color: #0B3B5C; margin-bottom: 4px; }
+        .slide-sub { font-size: 12px; color: #0B3B5C; line-height: 1.2; font-weight: 500; opacity: 0.9; }
         
-        /* Downloading Badge */
         .download-badge { 
             display: inline-block; 
             background: rgba(11, 59, 92, 0.1); 
             color: #0B3B5C; 
-            font-size: 11px; 
+            font-size: 10px; 
             font-weight: 700; 
-            padding: 4px 10px; 
+            padding: 4px 8px; 
             border-radius: 12px; 
             margin-top: 6px; 
             width: fit-content;
         }
 
         /* Arrow Button */
-        .banner-arrow {
+        .slide-arrow {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
             width: 40px; height: 40px;
             background: rgba(255,255,255,0.1);
             border: 2px solid rgba(255,255,255,0.2);
             border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
-            z-index: 3; margin-right: 5px;
+            z-index: 3;
         }
-        .banner-arrow svg { width: 20px; height: 20px; fill: white; }
+        .slide-arrow svg { width: 20px; height: 20px; fill: white; }
+
+        /* Slider Indicators */
+        .slider-dots {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+            z-index: 5;
+        }
+        .dot {
+            width: 6px; height: 6px;
+            background: rgba(11, 59, 92, 0.3);
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .dot.active {
+            background: #0B3B5C;
+            width: 15px;
+            border-radius: 4px;
+        }
 
         /* Grid Layout */
         .grid { 
@@ -221,114 +245,163 @@
             </div>
         </div>
 
-        <!-- Tractor Book Banner (Direct Download) -->
-        <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="banner">
-            <div class="banner-curve"></div>
-            <div class="banner-content">
-                <div class="tractor-logo-bg">
-                    <!-- Aapka Tractor Book Logo (Ab Circle mein hoga) -->
-                    <img src="IMG_20260930_225659.png" alt="Tractor Book">
-                </div>
-                <div class="banner-text">
-                    <div class="banner-title">Tractor Book</div>
-                    <div class="banner-sub">Manage tractor work & accounts</div>
-                    <div class="download-badge">Downloading: 336</div>
-                </div>
-                <div class="banner-arrow">
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-            </div>
-        </a>
+        <!-- 🎠 AUTO SLIDER (Tractor Book Features) 🎠 -->
+        <div class="slider-container">
+            <div class="slider-track" id="sliderTrack">
+                
+                <!-- Slide 1 -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
+                    <div class="slide-content">
+                        <div class="slide-icon">📝</div>
+                        <div class="slide-text">
+                            <div class="slide-title">Expenses Notes</div>
+                            <div class="slide-sub">Manage tractor work & accounts easily.</div>
+                            <div class="download-badge">Download App</div>
+                        </div>
+                    </div>
+                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </a>
 
-        <!-- Tools Grid -->
+                <!-- Slide 2 -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
+                    <div class="slide-content">
+                        <div class="slide-icon">📊</div>
+                        <div class="slide-text">
+                            <div class="slide-title">Profit & Loss</div>
+                            <div class="slide-sub">All reports and detailed expenses.</div>
+                            <div class="download-badge">Download App</div>
+                        </div>
+                    </div>
+                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </a>
+
+                <!-- Slide 3 -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
+                    <div class="slide-content">
+                        <div class="slide-icon">📏</div>
+                        <div class="slide-text">
+                            <div class="slide-title">Field Measurement</div>
+                            <div class="slide-sub">Measure your fields accurately.</div>
+                            <div class="download-badge">Download App</div>
+                        </div>
+                    </div>
+                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </a>
+
+                <!-- Slide 4 -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
+                    <div class="slide-content">
+                        <div class="slide-icon">🧮</div>
+                        <div class="slide-text">
+                            <div class="slide-title">Live Calculator</div>
+                            <div class="slide-sub">Quick calculations on the go.</div>
+                            <div class="download-badge">Download App</div>
+                        </div>
+                    </div>
+                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </a>
+
+                <!-- Slide 5 -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
+                    <div class="slide-content">
+                        <div class="slide-icon">👥</div>
+                        <div class="slide-text">
+                            <div class="slide-title">Customer Manage</div>
+                            <div class="slide-sub">Keep track of all your customers.</div>
+                            <div class="download-badge">Download App</div>
+                        </div>
+                    </div>
+                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </a>
+
+                <!-- Slide 6 -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
+                    <div class="slide-content">
+                        <div class="slide-icon">📄</div>
+                        <div class="slide-text">
+                            <div class="slide-title">One Customer Statement</div>
+                            <div class="slide-sub">Get detailed statement for every customer.</div>
+                            <div class="download-badge">Download App</div>
+                        </div>
+                    </div>
+                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </a>
+
+                <!-- Slide 7 -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
+                    <div class="slide-content">
+                        <div class="slide-icon">🎁</div>
+                        <div class="slide-text">
+                            <div class="slide-title">More Feature Surprise</div>
+                            <div class="slide-sub">Download to unlock hidden features!</div>
+                            <div class="download-badge">Download App</div>
+                        </div>
+                    </div>
+                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </a>
+
+                <!-- Slide 8 -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
+                    <div class="slide-content">
+                        <div class="slide-icon">⬇️</div>
+                        <div class="slide-text">
+                            <div class="slide-title">Download Now</div>
+                            <div class="slide-sub">Manage tractor work & accounts.</div>
+                            <div class="download-badge">Downloading: 336</div>
+                        </div>
+                    </div>
+                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                </a>
+
+            </div>
+            
+            <!-- Slider Dots -->
+            <div class="slider-dots" id="sliderDots">
+                <!-- JS will populate dots -->
+            </div>
+        </div>
+
+        <!-- Tools Grid (Waisa hi rahega) -->
         <div class="grid">
             
-            <!-- PDF Maker -->
             <a href="pdf-tool.html" class="card">
-                <div class="icon-box">
-                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6" fill="none" stroke="#fff" stroke-width="2"/><path d="M8 13h8M8 17h8M8 9h2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-                </div>
-                <div class="card-bottom">
-                    <div class="card-title">PDF Maker</div>
-                    <div class="card-arrow">→</div>
-                </div>
+                <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6" fill="none" stroke="#fff" stroke-width="2"/><path d="M8 13h8M8 17h8M8 9h2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+                <div class="card-bottom"><div class="card-title">PDF Maker</div><div class="card-arrow">→</div></div>
             </a>
 
-            <!-- Photo Compressor -->
             <a href="image-compressor.html" class="card">
-                <div class="icon-box">
-                    <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-                </div>
-                <div class="card-bottom">
-                    <div class="card-title">Photo<br>Compressor</div>
-                    <div class="card-arrow">→</div>
-                </div>
+                <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
+                <div class="card-bottom"><div class="card-title">Photo<br>Compressor</div><div class="card-arrow">→</div></div>
             </a>
 
-            <!-- Screenshot Editor -->
             <a href="image-editor.html" class="card">
-                <div class="icon-box">
-                    <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                </div>
-                <div class="card-bottom">
-                    <div class="card-title">Screenshot<br>Editor</div>
-                    <div class="card-arrow">→</div>
-                </div>
+                <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div>
+                <div class="card-bottom"><div class="card-title">Screenshot<br>Editor</div><div class="card-arrow">→</div></div>
             </a>
 
-            <!-- Invoice Generator -->
             <a href="invoice.html" class="card">
-                <div class="icon-box">
-                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-                </div>
-                <div class="card-bottom">
-                    <div class="card-title">Invoice<br>Generator</div>
-                    <div class="card-arrow">→</div>
-                </div>
+                <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+                <div class="card-bottom"><div class="card-title">Invoice<br>Generator</div><div class="card-arrow">→</div></div>
             </a>
 
-            <!-- Video Editor -->
             <a href="video-editor.html" class="card">
-                <div class="icon-box">
-                    <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-                </div>
-                <div class="card-bottom">
-                    <div class="card-title">Video Editor</div>
-                    <div class="card-arrow">→</div>
-                </div>
+                <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div>
+                <div class="card-bottom"><div class="card-title">Video Editor</div><div class="card-arrow">→</div></div>
             </a>
 
-            <!-- Protect PDF -->
             <a href="pdf-protect.html" class="card">
-                <div class="icon-box">
-                    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
-                </div>
-                <div class="card-bottom">
-                    <div class="card-title">Protect PDF</div>
-                    <div class="card-arrow">→</div>
-                </div>
+                <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg></div>
+                <div class="card-bottom"><div class="card-title">Protect PDF</div><div class="card-arrow">→</div></div>
             </a>
 
-            <!-- QR Code Maker -->
             <a href="qr-visual.html" class="card">
-                <div class="icon-box">
-                    <svg viewBox="0 0 24 24"><path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2z"/></svg>
-                </div>
-                <div class="card-bottom">
-                    <div class="card-title">QR Code Maker</div>
-                    <div class="card-arrow">→</div>
-                </div>
+                <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2z"/></svg></div>
+                <div class="card-bottom"><div class="card-title">QR Code Maker</div><div class="card-arrow">→</div></div>
             </a>
 
-            <!-- Smart Calculator -->
             <a href="smart-calculator.html" class="card">
-                <div class="icon-box">
-                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V9h10v2zm-8 8H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V9h2v2zm0-4H7V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2z"/></svg>
-                </div>
-                <div class="card-bottom">
-                    <div class="card-title">Smart<br>Calculator</div>
-                    <div class="card-arrow">→</div>
-                </div>
+                <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V9h10v2zm-8 8H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V9h2v2zm0-4H7V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2z"/></svg></div>
+                <div class="card-bottom"><div class="card-title">Smart<br>Calculator</div><div class="card-arrow">→</div></div>
             </a>
 
         </div>
@@ -340,13 +413,58 @@
             <span class="close-btn" onclick="closeModal()">×</span>
             <h2>Contact Us</h2>
             <p>Want to build a website, app, or software? Let's talk!</p>
-            <a href="mailto:seaoxseaox@gmail.com?subject=New Message from SEAOX Website&body=Hello SEAOX Team," class="send-msg-btn">
-                📩 Send Message
-            </a>
+            <a href="mailto:seaoxseaox@gmail.com?subject=New Message from SEAOX Website&body=Hello SEAOX Team," class="send-msg-btn">📩 Send Message</a>
         </div>
     </div>
 
     <script>
+        // ==========================================
+        // SLIDER LOGIC (Auto Slide)
+        // ==========================================
+        const track = document.getElementById('sliderTrack');
+        const dotsContainer = document.getElementById('sliderDots');
+        const slides = document.querySelectorAll('.slide');
+        let currentIndex = 0;
+        let slideInterval;
+
+        // Create Dots
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
+        });
+        const dots = document.querySelectorAll('.dot');
+
+        function updateSlider() {
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[currentIndex].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateSlider();
+        }
+
+        function startAutoSlide() {
+            slideInterval = setInterval(nextSlide, 2500); // Change slide every 2.5 seconds
+        }
+
+        function stopAutoSlide() {
+            clearInterval(slideInterval);
+        }
+
+        // Start Auto Slide
+        startAutoSlide();
+
+        // Pause on hover (Desktop) and touch (Mobile) so users can read/click
+        track.addEventListener('mouseenter', stopAutoSlide);
+        track.addEventListener('mouseleave', startAutoSlide);
+        track.addEventListener('touchstart', stopAutoSlide);
+        track.addEventListener('touchend', startAutoSlide);
+
+        // Modal Logic
         function openModal() { document.getElementById('contactModal').style.display = 'flex'; }
         function closeModal() { document.getElementById('contactModal').style.display = 'none'; }
         window.onclick = function(event) {
