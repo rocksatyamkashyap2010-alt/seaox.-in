@@ -104,9 +104,9 @@
             <span class="close-game" onclick="closeGame()">×</span>
             
             <div class="game-tabs">
-                <button class="g-tab active" onclick="switchGame('ttt')">Tic-Tac-Toe</button>
-                <button class="g-tab" onclick="switchGame('rps')">RPS</button>
-                <button class="g-tab" onclick="switchGame('mem')">Memory</button>
+                <button class="g-tab active" onclick="switchGame('ttt', event)">Tic-Tac-Toe</button>
+                <button class="g-tab" onclick="switchGame('rps', event)">RPS</button>
+                <button class="g-tab" onclick="switchGame('mem', event)">Memory</button>
             </div>
 
             <div id="panel-ttt" class="game-panel active">
@@ -140,19 +140,19 @@
 
     <script>
         // ==========================================
-        // 1. GROQ AI LOGIC (Naye Models ke saath)
+        // 1. GROQ AI LOGIC (Fixed Models & UI Reset)
         // ==========================================
         
         // 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
-        const API_KEY = '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; 
+        const API_KEY = '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'; 
         
         const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
-        // GROQ KE NAYE FREE MODELS (Purane wale band ho gaye hain)
+        // GROQ KE ASLI FREE MODELS
         const MODELS = [
-            'openai/gpt-oss-120b',
-            'openai/gpt-oss-20b',
-            'qwen/qwen3.6-27b'
+            'llama-3.3-70b-versatile',
+            'llama-3.1-8b-instant',
+            'gemma2-9b-it'
         ];
         
         const chatContainer = document.getElementById('chatContainer');
@@ -206,88 +206,95 @@ Rules:
 
             let success = false;
             
-            for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
-                if (success) break;
-                const currentModel = MODELS[modelIndex];
-
-                for (let attempt = 0; attempt < 2; attempt++) {
+            try {
+                // Loop through models for fallback
+                for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
                     if (success) break;
-                    try {
-                        if (attempt > 0) {
-                            botDiv.innerText = `SEAOX server busy hai... Retry ho raha hai...`;
-                            await new Promise(r => setTimeout(r, 2000));
-                        }
+                    const currentModel = MODELS[modelIndex];
 
-                        const response = await fetch(API_URL, {
-                            method: 'POST',
-                            headers: { 
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${API_KEY}`
-                            },
-                            body: JSON.stringify({
-                                model: currentModel,
-                                messages: [
-                                    { role: "system", content: SYSTEM_PROMPT },
-                                    { role: "user", content: text }
-                                ],
-                                stream: true 
-                            })
-                        });
+                    for (let attempt = 0; attempt < 2; attempt++) {
+                        if (success) break;
+                        try {
+                            if (attempt > 0) {
+                                botDiv.innerText = `SEAOX server busy hai... Retry ho raha hai...`;
+                                await new Promise(r => setTimeout(r, 2000));
+                            }
 
-                        if (response.status === 503 || response.status === 429) throw new Error("BUSY");
-                        if (!response.ok) throw new Error("FATAL");
+                            const response = await fetch(API_URL, {
+                                method: 'POST',
+                                headers: { 
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${API_KEY}`
+                                },
+                                body: JSON.stringify({
+                                    model: currentModel,
+                                    messages: [
+                                        { role: "system", content: SYSTEM_PROMPT },
+                                        { role: "user", content: text }
+                                    ],
+                                    stream: true 
+                                })
+                            });
 
-                        typingIndicator.style.display = 'none'; 
-                        botDiv.innerText = ""; 
-                        botDiv.className = 'message msg-bot';
+                            if (response.status === 503 || response.status === 429) throw new Error("BUSY");
+                            if (!response.ok) throw new Error("FATAL");
 
-                        const reader = response.body.getReader();
-                        const decoder = new TextDecoder("utf-8");
-                        let fullText = "";
-                        let buffer = "";
+                            typingIndicator.style.display = 'none'; 
+                            botDiv.innerText = ""; 
+                            botDiv.className = 'message msg-bot';
 
-                        while (true) {
-                            const { done, value } = await reader.read();
-                            if (done) break;
-                            buffer += decoder.decode(value, { stream: true });
-                            let lines = buffer.split('\n');
-                            buffer = lines.pop(); 
+                            const reader = response.body.getReader();
+                            const decoder = new TextDecoder("utf-8");
+                            let fullText = "";
+                            let buffer = "";
 
-                            for (const line of lines) {
-                                if (line.startsWith('data: ')) {
-                                    try {
-                                        const dataStr = line.replace('data: ', '').trim();
-                                        if (dataStr === '[DONE]') continue;
-                                        const data = JSON.parse(dataStr);
-                                        if (data.choices && data.choices[0].delta && data.choices[0].delta.content) {
-                                            fullText += data.choices[0].delta.content;
-                                            botDiv.innerText = fullText; 
-                                            chatContainer.scrollTop = chatContainer.scrollHeight;
-                                        }
-                                    } catch (e) { }
+                            while (true) {
+                                const { done, value } = await reader.read();
+                                if (done) break;
+                                buffer += decoder.decode(value, { stream: true });
+                                let lines = buffer.split('\n');
+                                buffer = lines.pop(); 
+
+                                for (const line of lines) {
+                                    if (line.startsWith('data: ')) {
+                                        try {
+                                            const dataStr = line.replace('data: ', '').trim();
+                                            if (dataStr === '[DONE]') continue;
+                                            const data = JSON.parse(dataStr);
+                                            if (data.choices && data.choices[0].delta && data.choices[0].delta.content) {
+                                                fullText += data.choices[0].delta.content;
+                                                botDiv.innerText = fullText; 
+                                                chatContainer.scrollTop = chatContainer.scrollHeight;
+                                            }
+                                        } catch (e) { }
+                                    }
                                 }
                             }
+                            if(fullText !== "") success = true;
+                        } catch (error) {
+                            if (error.message === "FATAL") break; // Model fail, move to next
                         }
-                        if(fullText !== "") success = true;
-                    } catch (error) {
-                        if (error.message === "FATAL") break;
-                    }
+                    } 
                 } 
-            } 
 
-            if (!success) {
-                botDiv.className = 'message msg-bot error-msg';
-                botDiv.innerText = "⚠️ SEAOX ka server abhi busy hai. Kripya 'Retry' dabayein.";
-                const retryBtn = document.createElement('button');
-                retryBtn.className = 'retry-btn';
-                retryBtn.innerText = '🔄 Retry Message';
-                retryBtn.onclick = () => { botRow.remove(); sendMessage(lastUserMessage); };
-                botRow.appendChild(retryBtn);
+                if (!success) {
+                    botDiv.className = 'message msg-bot error-msg';
+                    botDiv.innerText = "⚠️ SEAOX ka server abhi busy hai. Kripya 'Retry' dabayein.";
+                    const retryBtn = document.createElement('button');
+                    retryBtn.className = 'retry-btn';
+                    retryBtn.innerText = '🔄 Retry Message';
+                    retryBtn.onclick = () => { botRow.remove(); sendMessage(lastUserMessage); };
+                    botRow.appendChild(retryBtn);
+                }
+            } catch (globalError) {
+                console.error(globalError);
+                botDiv.innerText = "Error: Kuch galat ho gaya.";
+            } finally {
+                // 🔥 YEH SABSE ZAROORI HAI: Button ko hamesha wapas enable karega chahe kuch bhi ho
+                isProcessing = false;
+                sendBtn.disabled = false;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
             }
-
-            isProcessing = false;
-            sendBtn.disabled = false;
-            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
         function addMessage(text, sender) {
@@ -311,7 +318,7 @@ Rules:
         function closeGame() { document.getElementById('gameModal').style.display = 'none'; }
         window.onclick = function(event) { if (event.target == document.getElementById('gameModal')) closeGame(); }
 
-        function switchGame(game) {
+        function switchGame(game, event) {
             document.querySelectorAll('.game-panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.g-tab').forEach(t => t.classList.remove('active'));
             document.getElementById(`panel-${game}`).classList.add('active');
@@ -349,7 +356,6 @@ Rules:
 
         function checkWin(b, p) { return winConditions.some(c => c.every(i => b[i] === p)); }
 
-        // Minimax
         function minimax(b, depth, isMax) {
             if (checkWin(b, "O")) return 10 - depth;
             if (checkWin(b, "X")) return depth - 10;
