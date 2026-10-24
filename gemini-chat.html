@@ -17,9 +17,7 @@
         .back-btn { font-size: 22px; color: white; text-decoration: none; margin-right: 12px; display: flex; align-items: center;}
         .title { font-size: 17px; font-weight: 600; flex: 1; display: flex; flex-direction: column; }
         .title span { font-size: 12px; font-weight: 400; opacity: 0.8; }
-        
-        .game-btn { background: rgba(255,255,255,0.2); border: none; color: white; font-size: 20px; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
-        .game-btn:active { transform: scale(0.9); }
+        .game-btn { background: rgba(255,255,255,0.2); border: none; color: white; font-size: 20px; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
         
         /* Chat Area */
         .chat-container { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; -webkit-overflow-scrolling: touch; }
@@ -51,7 +49,6 @@
         .game-content { background: #fff; padding: 15px; border-radius: 15px; text-align: center; width: 90%; max-width: 350px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .close-game { position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: bold; color: #888; cursor: pointer; }
         
-        /* Game Tabs */
         .game-tabs { display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         .g-tab { flex: 1; padding: 8px; border: none; background: #f0f0f0; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; }
         .g-tab.active { background: #1877F2; color: white; }
@@ -66,8 +63,7 @@
 
         /* RPS */
         .rps-buttons { display: flex; justify-content: space-around; margin: 20px 0; }
-        .rps-btn { font-size: 40px; background: none; border: none; cursor: pointer; transition: transform 0.1s; }
-        .rps-btn:active { transform: scale(0.8); }
+        .rps-btn { font-size: 40px; background: none; border: none; cursor: pointer; }
         #rps-result { font-size: 18px; font-weight: bold; margin-bottom: 10px; min-height: 25px; }
         #rps-score { font-size: 14px; color: #666; }
 
@@ -76,7 +72,6 @@
         .mem-card { aspect-ratio: 1; background: #1877F2; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; color: transparent; transition: 0.3s; }
         .mem-card.flipped { background: #fff; border: 2px solid #1877F2; color: #111; }
         .mem-card.matched { background: #e8f5e9; border: 2px solid #00A859; color: #111; cursor: default; }
-
         .reset-btn { background: #00A859; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
     </style>
 </head>
@@ -103,7 +98,7 @@
         <button class="send-btn" id="sendBtn"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg></button>
     </div>
 
-    <!-- 🎮 GAMES MODAL 🎮 -->
+    <!-- 🎮 GAMES MODAL -->
     <div id="gameModal" class="game-modal">
         <div class="game-content">
             <span class="close-game" onclick="closeGame()">×</span>
@@ -114,7 +109,6 @@
                 <button class="g-tab" onclick="switchGame('mem')">Memory</button>
             </div>
 
-            <!-- GAME 1: Tic-Tac-Toe -->
             <div id="panel-ttt" class="game-panel active">
                 <div class="board" id="board">
                     <div class="cell" onclick="makeMove(0)"></div><div class="cell" onclick="makeMove(1)"></div><div class="cell" onclick="makeMove(2)"></div>
@@ -125,7 +119,6 @@
                 <button class="reset-btn" onclick="resetTTT()">Restart</button>
             </div>
 
-            <!-- GAME 2: Rock Paper Scissors -->
             <div id="panel-rps" class="game-panel">
                 <h3>Choose your weapon:</h3>
                 <div class="rps-buttons">
@@ -137,7 +130,6 @@
                 <div id="rps-score">Wins: 0 | Losses: 0 | Ties: 0</div>
             </div>
 
-            <!-- GAME 3: Memory Match -->
             <div id="panel-mem" class="game-panel">
                 <div class="mem-grid" id="memGrid"></div>
                 <div id="mem-status">Find all pairs!</div>
@@ -148,11 +140,18 @@
 
     <script>
         // ==========================================
-        // 1. AI CHAT LOGIC
+        // 1. OPENROUTER AI LOGIC
         // ==========================================
-        const encodedKey = 'QVEuQWI4Uk42TEpYZXFCWGlwUWxMcmxaZmxUbms3b244aS1odEgxZWZqMEdycUg1ZWlqaFE=';
-        const API_KEY = atob(encodedKey); 
-        const MODELS = ['gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-1.5-pro', 'gemini-2.0-flash-exp'];
+        // Aapki API Key yahan daali hui hai
+        const API_KEY = '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'; 
+        const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+
+        // Free models list (Agar ek busy ho toh dusra try karega)
+        const MODELS = [
+            'meta-llama/llama-3-8b-instruct:free',
+            'mistralai/mistral-7b-instruct:free',
+            'google/gemma-2-9b-it:free'
+        ];
         
         const chatContainer = document.getElementById('chatContainer');
         const userInput = document.getElementById('userInput');
@@ -205,26 +204,34 @@ Rules:
 
             let success = false;
             
+            // Loop through models for fallback
             for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
                 if (success) break;
                 const currentModel = MODELS[modelIndex];
-                const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:streamGenerateContent?alt=sse`;
 
-                for (let attempt = 0; attempt < 3; attempt++) {
+                for (let attempt = 0; attempt < 2; attempt++) {
                     if (success) break;
                     try {
                         if (attempt > 0) {
-                            const waitTime = 1000 * Math.pow(2, attempt);
-                            botDiv.innerText = `SEAOX server busy hai... Retrying in ${waitTime/1000}s...`;
-                            await new Promise(r => setTimeout(r, waitTime));
+                            botDiv.innerText = `SEAOX server busy hai... Retry ho raha hai...`;
+                            await new Promise(r => setTimeout(r, 2000));
                         }
 
                         const response = await fetch(API_URL, {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json', 'X-goog-api-key': API_KEY },
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${API_KEY}`,
+                                'HTTP-Referer': 'https://seaox.in', // Optional, for OpenRouter ranking
+                                'X-Title': 'SEAOX AI' // Optional
+                            },
                             body: JSON.stringify({
-                                contents: [{ parts: [{ text: text }] }],
-                                systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] }
+                                model: currentModel,
+                                messages: [
+                                    { role: "system", content: SYSTEM_PROMPT },
+                                    { role: "user", content: text }
+                                ],
+                                stream: true // Streaming ON
                             })
                         });
 
@@ -253,8 +260,9 @@ Rules:
                                         const dataStr = line.replace('data: ', '').trim();
                                         if (dataStr === '[DONE]') continue;
                                         const data = JSON.parse(dataStr);
-                                        if (data.candidates && data.candidates[0].content.parts[0].text) {
-                                            fullText += data.candidates[0].content.parts[0].text;
+                                        // OpenRouter/OpenAI format
+                                        if (data.choices && data.choices[0].delta && data.choices[0].delta.content) {
+                                            fullText += data.choices[0].delta.content;
                                             botDiv.innerText = fullText; 
                                             chatContainer.scrollTop = chatContainer.scrollHeight;
                                         }
@@ -312,7 +320,7 @@ Rules:
             event.target.classList.add('active');
         }
 
-        // --- TIC-TAC-TOE (Unbeatable AI) ---
+        // --- TIC-TAC-TOE ---
         let board = ["", "", "", "", "", "", "", "", ""];
         let currentPlayer = "X";
         let gameActive = true;
@@ -343,37 +351,26 @@ Rules:
 
         function checkWin(b, p) { return winConditions.some(c => c.every(i => b[i] === p)); }
 
-        // Minimax Algorithm (Computer will always win or draw)
+        // Minimax
         function minimax(b, depth, isMax) {
             if (checkWin(b, "O")) return 10 - depth;
             if (checkWin(b, "X")) return depth - 10;
             if (!b.includes("")) return 0;
-
             if (isMax) {
                 let best = -Infinity;
-                for (let i = 0; i < 9; i++) {
-                    if (b[i] === "") { b[i] = "O"; best = Math.max(best, minimax(b, depth + 1, false)); b[i] = ""; }
-                }
+                for (let i = 0; i < 9; i++) { if (b[i] === "") { b[i] = "O"; best = Math.max(best, minimax(b, depth + 1, false)); b[i] = ""; } }
                 return best;
             } else {
                 let best = Infinity;
-                for (let i = 0; i < 9; i++) {
-                    if (b[i] === "") { b[i] = "X"; best = Math.min(best, minimax(b, depth + 1, true)); b[i] = ""; }
-                }
+                for (let i = 0; i < 9; i++) { if (b[i] === "") { b[i] = "X"; best = Math.min(best, minimax(b, depth + 1, true)); b[i] = ""; } }
                 return best;
             }
         }
 
         function getBestMove(b) {
-            let bestVal = -Infinity;
-            let bestMove = -1;
+            let bestVal = -Infinity, bestMove = -1;
             for (let i = 0; i < 9; i++) {
-                if (b[i] === "") {
-                    b[i] = "O";
-                    let moveVal = minimax(b, 0, false);
-                    b[i] = "";
-                    if (moveVal > bestVal) { bestVal = moveVal; bestMove = i; }
-                }
+                if (b[i] === "") { b[i] = "O"; let moveVal = minimax(b, 0, false); b[i] = ""; if (moveVal > bestVal) { bestVal = moveVal; bestMove = i; } }
             }
             return bestMove;
         }
@@ -388,32 +385,23 @@ Rules:
         }
         function resetTTT() { board = ["", "", "", "", "", "", "", "", ""]; currentPlayer = "X"; gameActive = true; document.getElementById('ttt-status').innerText = "Your Turn (X)"; updateBoard(); }
 
-        // --- ROCK PAPER SCISSORS ---
+        // --- RPS ---
         let wins = 0, losses = 0, ties = 0;
         function playRPS(userChoice) {
             const choices = ['rock', 'paper', 'scissors'];
             const aiChoice = choices[Math.floor(Math.random() * 3)];
             const emojis = { rock: '✊', paper: '✋', scissors: '✌️' };
-
             let result = "";
             if (userChoice === aiChoice) { result = "🤝 It's a Tie!"; ties++; }
-            else if (
-                (userChoice === 'rock' && aiChoice === 'scissors') ||
-                (userChoice === 'paper' && aiChoice === 'rock') ||
-                (userChoice === 'scissors' && aiChoice === 'paper')
-            ) { result = "🎉 You Win!"; wins++; }
+            else if ((userChoice === 'rock' && aiChoice === 'scissors') || (userChoice === 'paper' && aiChoice === 'rock') || (userChoice === 'scissors' && aiChoice === 'paper')) { result = "🎉 You Win!"; wins++; }
             else { result = "🤖 Computer Wins!"; losses++; }
-
             document.getElementById('rps-result').innerHTML = `${emojis[userChoice]} vs ${emojis[aiChoice]} <br> ${result}`;
             document.getElementById('rps-score').innerText = `Wins: ${wins} | Losses: ${losses} | Ties: ${ties}`;
         }
 
-        // --- MEMORY MATCH ---
+        // --- MEMORY ---
         const emojis = ['🐶', '🐱', '🦊', '🐻', '🐼', '🦁', '🐸', '🐵'];
-        let deck = [];
-        let flippedCards = [];
-        let matchedCount = 0;
-        let lockBoard = false;
+        let deck = [], flippedCards = [], matchedCount = 0, lockBoard = false;
 
         function initMemory() {
             deck = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
@@ -421,7 +409,6 @@ Rules:
             const grid = document.getElementById('memGrid');
             grid.innerHTML = '';
             document.getElementById('mem-status').innerText = "Find all pairs!";
-
             deck.forEach((emoji, index) => {
                 const card = document.createElement('div');
                 card.className = 'mem-card';
@@ -434,7 +421,6 @@ Rules:
 
         function flipCard(card) {
             if (lockBoard || card.classList.contains('flipped') || card.classList.contains('matched')) return;
-            
             card.classList.add('flipped');
             card.innerText = card.dataset.emoji;
             flippedCards.push(card);
@@ -442,27 +428,19 @@ Rules:
             if (flippedCards.length === 2) {
                 lockBoard = true;
                 if (flippedCards[0].dataset.emoji === flippedCards[1].dataset.emoji) {
-                    flippedCards[0].classList.add('matched');
-                    flippedCards[1].classList.add('matched');
-                    flippedCards = [];
-                    matchedCount++;
-                    lockBoard = false;
+                    flippedCards[0].classList.add('matched'); flippedCards[1].classList.add('matched');
+                    flippedCards = []; matchedCount++; lockBoard = false;
                     if (matchedCount === 8) document.getElementById('mem-status').innerText = "🎉 You Won!";
                 } else {
                     setTimeout(() => {
-                        flippedCards[0].classList.remove('flipped');
-                        flippedCards[0].innerText = "";
-                        flippedCards[1].classList.remove('flipped');
-                        flippedCards[1].innerText = "";
-                        flippedCards = [];
-                        lockBoard = false;
+                        flippedCards[0].classList.remove('flipped'); flippedCards[0].innerText = "";
+                        flippedCards[1].classList.remove('flipped'); flippedCards[1].innerText = "";
+                        flippedCards = []; lockBoard = false;
                     }, 1000);
                 }
             }
         }
-
-        // Initialize games on load
         initMemory();
     </script>
 </body>
-</html>
+        </html>
