@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SEAOX AI - Official Assistant</title>
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; font-family: 'Inter', sans-serif; background-color: #f0f2f5; }
+        body { display: flex; flex-direction: column; height: 100dvh; overflow: hidden; }
+        
+        /* Header */
+        .header { flex-shrink: 0; background: #1877F2; color: white; padding: 12px 15px; display: flex; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 10; }
+        .back-btn { font-size: 22px; color: white; text-decoration: none; margin-right: 12px; display: flex; align-items: center;}
+        .title { font-size: 17px; font-weight: 600; flex: 1; display: flex; flex-direction: column; }
+        .title span { font-size: 12px; font-weight: 400; opacity: 0.8; }
+        .game-btn { background: rgba(255,255,255,0.2); border: none; color: white; font-size: 20px; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
+        
+        /* Chat Area */
+        .chat-container { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; -webkit-overflow-scrolling: touch; }
+        .msg-row { display: flex; width: 100%; gap: 10px; }
+        .msg-row.user { flex-direction: row-reverse; }
+        .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 16px; flex-shrink: 0; font-weight: bold; }
+        .bot-avatar { background: #000; color: #fff; }
+        .user-avatar { background: #e4e6eb; color: #050505; }
+        .message { max-width: 78%; padding: 10px 14px; border-radius: 18px; font-size: 15px; line-height: 1.5; word-wrap: break-word; white-space: pre-wrap; position: relative; }
+        .msg-bot { background: #ffffff; color: #050505; border-bottom-left-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .msg-user { background: #1877F2; color: white; border-bottom-right-radius: 4px; box-shadow: 0 1px 2px rgba(24, 119, 242, 0.2); }
+        .error-msg { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; font-size: 14px; }
+        
+        .typing { display: none; align-self: flex-start; background: #ffffff; padding: 12px 15px; border-radius: 18px; border-bottom-left-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin-left: 42px; }
+        .dot { display: inline-block; width: 6px; height: 6px; background: #999; border-radius: 50%; margin: 0 2px; animation: bounce 1.4s infinite ease-in-out both; }
+        .dot:nth-child(1) { animation-delay: -0.32s; } .dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+        /* Input Area */
+        .input-area { flex-shrink: 0; background: #ffffff; padding: 10px 15px; display: flex; align-items: center; gap: 10px; border-top: 1px solid #e4e6eb; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+        .input-box { flex: 1; padding: 12px 15px; border: none; background: #f0f2f5; border-radius: 20px; font-size: 15px; outline: none; font-family: inherit; color: #050505; }
+        .send-btn { background: #1877F2; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 16px; flex-shrink: 0; }
+        .send-btn:disabled { background: #e4e6eb; color: #bcc0c4; cursor: not-allowed; }
+        .send-btn svg { width: 20px; height: 20px; fill: currentColor; transform: translateX(2px); }
+        .retry-btn { background: #F39C12; color: white; border: none; border-radius: 15px; padding: 8px 15px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 5px; display: none; }
+
+        /* 🎮 GAMES MODAL STYLES 🎮 */
+        .game-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
+        .game-content { background: #fff; padding: 15px; border-radius: 15px; text-align: center; width: 90%; max-width: 350px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .close-game { position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: bold; color: #888; cursor: pointer; }
+        
+        .game-tabs { display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .g-tab { flex: 1; padding: 8px; border: none; background: #f0f0f0; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; }
+        .g-tab.active { background: #1877F2; color: white; }
+        .game-panel { display: none; }
+        .game-panel.active { display: block; }
+
+        /* Tic-Tac-Toe */
+        .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; background: #e4e6eb; padding: 5px; border-radius: 10px; margin-bottom: 15px; }
+        .cell { width: 100%; aspect-ratio: 1; background: #fff; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 40px; font-weight: bold; cursor: pointer; }
+        .cell.x { color: #1877F2; } .cell.o { color: #E53935; }
+        #ttt-status { font-size: 16px; font-weight: bold; margin-bottom: 10px; }
+
+        /* RPS */
+        .rps-buttons { display: flex; justify-content: space-around; margin: 20px 0; }
+        .rps-btn { font-size: 40px; background: none; border: none; cursor: pointer; }
+        #rps-result { font-size: 18px; font-weight: bold; margin-bottom: 10px; min-height: 25px; }
+        #rps-score { font-size: 14px; color: #666; }
+
+        /* Memory Match */
+        .mem-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 15px; }
+        .mem-card { aspect-ratio: 1; background: #1877F2; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; color: transparent; transition: 0.3s; }
+        .mem-card.flipped { background: #fff; border: 2px solid #1877F2; color: #111; }
+        .mem-card.matched { background: #e8f5e9; border: 2px solid #00A859; color: #111; cursor: default; }
+        .reset-btn { background: #00A859; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="menu.html" class="back-btn">←</a>
+        <div class="title">SEAOX AI <span>Official Assistant</span></div>
+        <button class="game-btn" onclick="openGame()">🎮</button>
+    </div>
+
+    <div class="chat-container" id="chatContainer">
+        <div class="msg-row bot">
+            <div class="avatar bot-avatar">S</div>
+            <div class="message msg-bot">Namaste! Main SEAOX ka official AI assistant hoon. Main aapko humari company, services, Tractor Book app, ya kisi bhi software/web development ke baare mein jankari de sakta hoon. Aap kya jaanna chahte hain?</div>
+        </div>
+        <div class="typing" id="typingIndicator">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <input type="text" id="userInput" class="input-box" placeholder="Message SEAOX AI..." autocomplete="off">
+        <button class="send-btn" id="sendBtn"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg></button>
+    </div>
+
+    <!-- 🎮 GAMES MODAL -->
+    <div id="gameModal" class="game-modal">
+        <div class="game-content">
+            <span class="close-game" onclick="closeGame()">×</span>
+            
+            <div class="game-tabs">
+                <button class="g-tab active" onclick="switchGame('ttt')">Tic-Tac-Toe</button>
+                <button class="g-tab" onclick="switchGame('rps')">RPS</button>
+                <button class="g-tab" onclick="switchGame('mem')">Memory</button>
+            </div>
+
+            <div id="panel-ttt" class="game-panel active">
+                <div class="board" id="board">
+                    <div class="cell" onclick="makeMove(0)"></div><div class="cell" onclick="makeMove(1)"></div><div class="cell" onclick="makeMove(2)"></div>
+                    <div class="cell" onclick="makeMove(3)"></div><div class="cell" onclick="makeMove(4)"></div><div class="cell" onclick="makeMove(5)"></div>
+                    <div class="cell" onclick="makeMove(6)"></div><div class="cell" onclick="makeMove(7)"></div><div class="cell" onclick="makeMove(8)"></div>
+                </div>
+                <div id="ttt-status">Your Turn (X)</div>
+                <button class="reset-btn" onclick="resetTTT()">Restart</button>
+            </div>
+
+            <div id="panel-rps" class="game-panel">
+                <h3>Choose your weapon:</h3>
+                <div class="rps-buttons">
+                    <button class="rps-btn" onclick="playRPS('rock')">✊</button>
+                    <button class="rps-btn" onclick="playRPS('paper')">✋</button>
+                    <button class="rps-btn" onclick="playRPS('scissors')">✌️</button>
+                </div>
+                <div id="rps-result">Make a move!</div>
+                <div id="rps-score">Wins: 0 | Losses: 0 | Ties: 0</div>
+            </div>
+
+            <div id="panel-mem" class="game-panel">
+                <div class="mem-grid" id="memGrid"></div>
+                <div id="mem-status">Find all pairs!</div>
+                <button class="reset-btn" onclick="initMemory()">Restart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. GROQ AI LOGIC
+        // ==========================================
+        
+        // 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
+        const API_KEY = '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'; 
+        
+        const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
+        const MODELS = [
+            'llama3-8b-8192',
+            'mixtral-8x7b-32768',
+            'gemma-7b-it'
+        ];
+        
+        const chatContainer = document.getElementById('chatContainer');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        const SYSTEM_PROMPT = `You are the official AI assistant for 'SEAOX'. 
+Company Knowledge:
+- SEAOX is a freelancing startup by two brothers.
+- CEO: Shivam Kashyap, Director Head: Satyam Kashyap.
+- Builds software, mobile apps, websites.
+- Creator of 'Tractor Book' app for tractor owners.
+- Net worth is NOT public.
+- Email: seaoxseaox@gmail.com, WhatsApp: 09473991699.
+
+Rules:
+1. Be polite and professional.
+2. Use ONLY the knowledge above for SEAOX/company questions. Do not hallucinate.
+3. For contact/build requests, provide the email and WhatsApp number.
+4. Keep answers short (max 3 lines).
+5. Reply in the user's language.`;
+
+        let lastUserMessage = "";
+        let isProcessing = false;
+
+        sendBtn.addEventListener('click', () => { if (!isProcessing) sendMessage(); });
+        userInput.addEventListener('keypress', function (e) { if (e.key === 'Enter' && !isProcessing) sendMessage(); });
+
+        async function sendMessage(retryText = null) {
+            if (isProcessing) return;
+            const text = retryText || userInput.value.trim();
+            if (!text) return;
+
+            lastUserMessage = text;
+            isProcessing = true;
+            sendBtn.disabled = true;
+            userInput.value = '';
+            if (!retryText) addMessage(text, 'user');
+            
+            typingIndicator.style.display = 'block';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            const botDiv = document.createElement('div');
+            botDiv.className = 'message msg-bot';
+            const botRow = document.createElement('div');
+            botRow.className = 'msg-row bot';
+            botRow.innerHTML = `<div class="avatar bot-avatar">S</div>`;
+            botRow.appendChild(botDiv);
+            chatContainer.insertBefore(botRow, typingIndicator);
+
+            let success = false;
+            
+            for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
+                if (success) break;
+                const currentModel = MODELS[modelIndex];
+
+                for (let attempt = 0; attempt < 2; attempt++) {
+                    if (success) break;
+                    try {
+                        if (attempt > 0) {
+                            botDiv.innerText = `SEAOX server busy hai... Retry ho raha hai...`;
+                            await new Promise(r => setTimeout(r, 2000));
+                        }
+
+                        const response = await fetch(API_URL, {
+                            method: 'POST',
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${API_KEY}`
+                            },
+                            body: JSON.stringify({
+                                model: currentModel,
+                                messages: [
+                                    { role: "system", content: SYSTEM_PROMPT },
+                                    { role: "user", content: text }
+                                ],
+                                stream: true 
+                            })
+                        });
+
+                        if (response.status === 503 || response.status === 429) throw new Error("BUSY");
+                        if (!response.ok) throw new Error("FATAL");
+
+                        typingIndicator.style.display = 'none'; 
+                        botDiv.innerText = ""; 
+                        botDiv.className = 'message msg-bot';
+
+                        const reader = response.body.getReader();
+                        const decoder = new TextDecoder("utf-8");
+                        let fullText = "";
+                        let buffer = "";
+
+                        while (true) {
+                            const { done, value } = await reader.read();
+                            if (done) break;
+                            buffer += decoder.decode(value, { stream: true });
+                            let lines = buffer.split('\n');
+                            buffer = lines.pop(); 
+
+                            for (const line of lines) {
+                                if (line.startsWith('data: ')) {
+                                    try {
+                                        const dataStr = line.replace('data: ', '').trim();
+                                        if (dataStr === '[DONE]') continue;
+                                        const data = JSON.parse(dataStr);
+                                        if (data.choices && data.choices[0].delta && data.choices[0].delta.content) {
+                                            fullText += data.choices[0].delta.content;
+                                            botDiv.innerText = fullText; 
+                                            chatContainer.scrollTop = chatContainer.scrollHeight;
+                                        }
+                                    } catch (e) { }
+                                }
+                            }
+                        }
+                        if(fullText !== "") success = true;
+                    } catch (error) {
+                        if (error.message === "FATAL") break;
+                    }
+                } 
+            } 
+
+            if (!success) {
+                botDiv.className = 'message msg-bot error-msg';
+                botDiv.innerText = "⚠️ SEAOX ka server abhi busy hai. Kripya 'Retry' dabayein.";
+                const retryBtn = document.createElement('button');
+                retryBtn.className = 'retry-btn';
+                retryBtn.innerText = '🔄 Retry Message';
+                retryBtn.onclick = () => { botRow.remove(); sendMessage(lastUserMessage); };
+                botRow.appendChild(retryBtn);
+            }
+
+            isProcessing = false;
+            sendBtn.disabled = false;
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function addMessage(text, sender) {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = `msg-row ${sender}`;
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = `avatar ${sender}-avatar`;
+            avatarDiv.innerText = sender === 'user' ? 'U' : 'S';
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message msg-${sender}`;
+            msgDiv.innerText = text;
+            rowDiv.appendChild(avatarDiv); rowDiv.appendChild(msgDiv);
+            chatContainer.insertBefore(rowDiv, typingIndicator);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // ==========================================
+        // 2. GAMES LOGIC
+        // ==========================================
+        function openGame() { document.getElementById('gameModal').style.display = 'flex'; }
+        function closeGame() { document.getElementById('gameModal').style.display = 'none'; }
+        window.onclick = function(event) { if (event.target == document.getElementById('gameModal')) closeGame(); }
+
+        function switchGame(game) {
+            document.querySelectorAll('.game-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.g-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(`panel-${game}`).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // --- TIC-TAC-TOE ---
+        let board = ["", "", "", "", "", "", "", "", ""];
+        let currentPlayer = "X";
+        let gameActive = true;
+        const winConditions = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+        function makeMove(index) {
+            if (board[index] !== "" || !gameActive || currentPlayer !== "X") return;
+            board[index] = "X";
+            updateBoard();
+
+            if (checkWin(board, "X")) { document.getElementById('ttt-status').innerText = "🎉 You Won!"; gameActive = false; return; }
+            if (!board.includes("")) { document.getElementById('ttt-status').innerText = "🤝 It's a Draw!"; gameActive = false; return; }
+
+            currentPlayer = "O";
+            document.getElementById('ttt-status').innerText = "Computer is thinking...";
+            setTimeout(() => {
+                let bestMove = getBestMove(board);
+                board[bestMove] = "O";
+                updateBoard();
+
+                if (checkWin(board, "O")) { document.getElementById('ttt-status').innerText = "🤖 Computer Won!"; gameActive = false; return; }
+                if (!board.includes("")) { document.getElementById('ttt-status').innerText = "🤝 It's a Draw!"; gameActive = false; return; }
+
+                currentPlayer = "X";
+                document.getElementById('ttt-status').innerText = "Your Turn (X)";
+            }, 500);
+        }
+
+        function checkWin(b, p) { return winConditions.some(c => c.every(i => b[i] === p)); }
+
+        // Minimax
+        function minimax(b, depth, isMax) {
+            if (checkWin(b, "O")) return 10 - depth;
+            if (checkWin(b, "X")) return depth - 10;
+            if (!b.includes("")) return 0;
+            if (isMax) {
+                let best = -Infinity;
+                for (let i = 0; i < 9; i++) { if (b[i] === "") { b[i] = "O"; best = Math.max(best, minimax(b, depth + 1, false)); b[i] = ""; } }
+                return best;
+            } else {
+                let best = Infinity;
+                for (let i = 0; i < 9; i++) { if (b[i] === "") { b[i] = "X"; best = Math.min(best, minimax(b, depth + 1, true)); b[i] = ""; } }
+                return best;
+            }
+        }
+
+        function getBestMove(b) {
+            let bestVal = -Infinity, bestMove = -1;
+            for (let i = 0; i < 9; i++) {
+                if (b[i] === "") { b[i] = "O"; let moveVal = minimax(b, 0, false); b[i] = ""; if (moveVal > bestVal) { bestVal = moveVal; bestMove = i; } }
+            }
+            return bestMove;
+        }
+
+        function updateBoard() {
+            document.querySelectorAll('.cell').forEach((cell, i) => {
+                cell.innerText = board[i];
+                cell.className = 'cell';
+                if (board[i] === "X") cell.classList.add('x');
+                if (board[i] === "O") cell.classList.add('o');
+            });
+        }
+        function resetTTT() { board = ["", "", "", "", "", "", "", "", ""]; currentPlayer = "X"; gameActive = true; document.getElementById('ttt-status').innerText = "Your Turn (X)"; updateBoard(); }
+
+        // --- RPS ---
+        let wins = 0, losses = 0, ties = 0;
+        function playRPS(userChoice) {
+            const choices = ['rock', 'paper', 'scissors'];
+            const aiChoice = choices[Math.floor(Math.random() * 3)];
+            const emojis = { rock: '✊', paper: '✋', scissors: '✌️' };
+            let result = "";
+            if (userChoice === aiChoice) { result = "🤝 It's a Tie!"; ties++; }
+            else if ((userChoice === 'rock' && aiChoice === 'scissors') || (userChoice === 'paper' && aiChoice === 'rock') || (userChoice === 'scissors' && aiChoice === 'paper')) { result = "🎉 You Win!"; wins++; }
+            else { result = "🤖 Computer Wins!"; losses++; }
+            document.getElementById('rps-result').innerHTML = `${emojis[userChoice]} vs ${emojis[aiChoice]} <br> ${result}`;
+            document.getElementById('rps-score').innerText = `Wins: ${wins} | Losses: ${losses} | Ties: ${ties}`;
+        }
+
+        // --- MEMORY ---
+        const emojis = ['🐶', '🐱', '🦊', '🐻', '🐼', '🦁', '🐸', '🐵'];
+        let deck = [], flippedCards = [], matchedCount = 0, lockBoard = false;
+
+        function initMemory() {
+            deck = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+            flippedCards = []; matchedCount = 0; lockBoard = false;
+            const grid = document.getElementById('memGrid');
+            grid.innerHTML = '';
+            document.getElementById('mem-status').innerText = "Find all pairs!";
+            deck.forEach((emoji, index) => {
+                const card = document.createElement('div');
+                card.className = 'mem-card';
+                card.dataset.emoji = emoji;
+                card.dataset.index = index;
+                card.onclick = () => flipCard(card);
+                grid.appendChild(card);
+            });
+        }
+
+        function flipCard(card) {
+            if (lockBoard || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+            card.classList.add('flipped');
+            card.innerText = card.dataset.emoji;
+            flippedCards.push(card);
+
+            if (flippedCards.length === 2) {
+                lockBoard = true;
+                if (flippedCards[0].dataset.emoji === flippedCards[1].dataset.emoji) {
+                    flippedCards[0].classList.add('matched'); flippedCards[1].classList.add('matched');
+                    flippedCards = []; matchedCount++; lockBoard = false;
+                    if (matchedCount === 8) document.getElementById('mem-status').innerText = "🎉 You Won!";
+                } else {
+                    setTimeout(() => {
+                        flippedCards[0].classList.remove('flipped'); flippedCards[0].innerText = "";
+                        flippedCards[1].classList.remove('flipped'); flippedCards[1].innerText = "";
+                        flippedCards = []; lockBoard = false;
+                    }, 1000);
+                }
+            }
+        }
+        initMemory();
+    </script>
+</body>
+</html>
