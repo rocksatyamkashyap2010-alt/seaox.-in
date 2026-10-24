@@ -66,7 +66,8 @@
             border-radius: 20px; 
             position: relative;
             margin-bottom: 20px;
-            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            background: #FFD700; /* Fallback color */
         }
         
         .slider-track {
@@ -87,7 +88,7 @@
             height: 120px;
         }
 
-        /* Dark Blue Curved Shape */
+        /* Dark Blue Curved Shape for standard slides */
         .slide::after {
             content: '';
             position: absolute;
@@ -97,6 +98,22 @@
             border-top-left-radius: 100px;
             border-bottom-left-radius: 40px;
             z-index: 1;
+        }
+
+        /* 🔥 SPECIAL STYLE FOR THE NEW IMAGE SLIDE 🔥 */
+        .slide.image-slide {
+            padding: 0;
+            background: transparent;
+            display: block;
+            height: auto; /* Height image ke hisaab se adjust hogi */
+        }
+        .slide.image-slide::after {
+            display: none; /* Curve hata diya */
+        }
+        .slide.image-slide img {
+            width: 100%;
+            display: block;
+            object-fit: contain;
         }
 
         .slide-content { 
@@ -228,7 +245,6 @@
                 <!-- 1. Tractor Book Main App (FIRST SLIDE) -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
                     <div class="slide-content">
-                        <!-- Actual Logo Image here -->
                         <div class="slide-icon" style="padding: 0; background: white; overflow: hidden;">
                             <img src="IMG_20260930_225659.png" alt="Tractor Book" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
@@ -241,7 +257,12 @@
                     <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 </a>
 
-                <!-- 2. Expenses Notes -->
+                <!-- 2. NEW PROMOTIONAL IMAGE SLIDE -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="file_000000006388820895278973abb59e1a.png" alt="Tractor Book Promo">
+                </a>
+
+                <!-- 3. Expenses Notes -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
                     <div class="slide-content">
                         <div class="slide-icon">📝</div>
@@ -254,7 +275,7 @@
                     <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 </a>
 
-                <!-- 3. Profit & Loss -->
+                <!-- 4. Profit & Loss -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
                     <div class="slide-content">
                         <div class="slide-icon">📊</div>
@@ -267,7 +288,7 @@
                     <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 </a>
 
-                <!-- 4. Field Measurement -->
+                <!-- 5. Field Measurement -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
                     <div class="slide-content">
                         <div class="slide-icon">📏</div>
@@ -280,7 +301,7 @@
                     <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 </a>
 
-                <!-- 5. Live Calculator -->
+                <!-- 6. Live Calculator -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
                     <div class="slide-content">
                         <div class="slide-icon">🧮</div>
@@ -293,7 +314,7 @@
                     <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 </a>
 
-                <!-- 6. Customer Manage -->
+                <!-- 7. Customer Manage -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
                     <div class="slide-content">
                         <div class="slide-icon">👥</div>
@@ -306,7 +327,7 @@
                     <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 </a>
 
-                <!-- 7. One Customer Statement -->
+                <!-- 8. One Customer Statement -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
                     <div class="slide-content">
                         <div class="slide-icon">📄</div>
@@ -319,7 +340,7 @@
                     <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 </a>
 
-                <!-- 8. Surprise Feature -->
+                <!-- 9. Surprise Feature -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
                     <div class="slide-content">
                         <div class="slide-icon">🎁</div>
