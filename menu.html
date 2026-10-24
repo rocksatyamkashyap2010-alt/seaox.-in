@@ -67,13 +67,14 @@
             position: relative;
             margin-bottom: 20px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            background: #FFD700; /* Fallback color */
+            background: #FFD700; 
         }
         
         .slider-track {
             display: flex;
             transition: transform 0.6s ease-in-out;
             width: 100%;
+            align-items: center; /* 🔥 IMPORTANT: Isse banners stretch nahi honge */
         }
 
         .slide {
@@ -85,10 +86,10 @@
             text-decoration: none;
             position: relative;
             overflow: hidden;
-            height: 120px;
+            height: 120px; /* Original size for banners */
         }
 
-        /* Dark Blue Curved Shape for standard slides */
+        /* Dark Blue Curved Shape */
         .slide::after {
             content: '';
             position: absolute;
@@ -100,15 +101,15 @@
             z-index: 1;
         }
 
-        /* 🔥 SPECIAL STYLE FOR THE NEW IMAGE SLIDE 🔥 */
+        /* 🔥 SPECIAL STYLE FOR THE PROMOTIONAL IMAGE SLIDE 🔥 */
         .slide.image-slide {
             padding: 0;
             background: transparent;
             display: block;
-            height: auto; /* Height image ke hisaab se adjust hogi */
+            height: auto; /* Image apne real size mein aayegi */
         }
         .slide.image-slide::after {
-            display: none; /* Curve hata diya */
+            display: none; 
         }
         .slide.image-slide img {
             width: 100%;
@@ -238,7 +239,7 @@
             </div>
         </div>
 
-        <!-- 🎠 AUTO SLIDER (Tractor Book Features) 🎠 -->
+        <!-- 🎠 AUTO SLIDER 🎠 -->
         <div class="slider-container">
             <div class="slider-track" id="sliderTrack">
                 
@@ -257,7 +258,7 @@
                     <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 </a>
 
-                <!-- 2. NEW PROMOTIONAL IMAGE SLIDE -->
+                <!-- 2. NEW PROMOTIONAL IMAGE SLIDE (Real Size) -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
                     <img src="file_000000006388820895278973abb59e1a.png" alt="Tractor Book Promo">
                 </a>
