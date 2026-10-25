@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Welcome to SEAOX</title>
+    <title>SEAOX - Smart Tools & Apps</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     
+    <!-- 🔥 GOOGLE SEARCH KE LIYE NAYA DESCRIPTION 🔥 -->
+    <meta name="description" content="SEAOX Powered Apps: PDF Maker • Video Editor • Photo Compressor • Screenshot Editor • Invoice Generator • Protect PDF • QR Code Maker • Smart Calculator. Download Tractor Book App!">
+    <meta name="keywords" content="SEAOX, PDF Maker, Video Editor, Tractor Book, Photo Compressor, Smart Calculator, QR Maker">
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -58,11 +62,11 @@
             justify-content: center;
             text-align: center;
             
-            /* 🔥 SLIDE ANIMATION SETUP: 2 Second ka smooth slide */
+            /* SLIDE ANIMATION SETUP: 2 Second ka smooth slide */
             transition: transform 2s cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-        /* 🔥 Class to trigger the slide left */
+        /* Class to trigger the slide left */
         .slide-out {
             transform: translateX(-100vw);
         }
@@ -159,10 +163,10 @@
     <div class="container" id="mainContainer">
         
         <!-- S Icon Logo -->
-        <img src="IMG_20261019_105230.jpg" alt="SEAOX S Logo" class="s-logo">
+        <img src="IMG_20261019_105230.jpg" alt="SEAOX Logo" class="s-logo">
         
-        <!-- Nayi Transparent SEAOX Text Logo -->
-        <img src="1000060185-removebg-preview.png" alt="SEAOX Text Logo" class="brand-logo-img">
+        <!-- Transparent SEAOX Text Logo -->
+        <img src="1000060185-removebg-preview.png" alt="SEAOX Text" class="brand-logo-img">
         
         <div class="welcome-title">
             Welcome to
@@ -182,7 +186,6 @@
     <script>
         // Page load hone ke 2.5 second baad slide trigger hoga
         setTimeout(function() {
-            // Slide left class add karo
             document.getElementById('mainContainer').classList.add('slide-out');
             
             // 2 second (2000ms) ka wait karo jab tak slide poora ho jaye, phir menu kholo
