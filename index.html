@@ -6,7 +6,6 @@
     <title>Welcome to SEAOX</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     
-    <!-- Google Fonts for Premium Look -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -48,21 +47,6 @@
             background: radial-gradient(circle, rgba(157,0,255,0.3) 0%, transparent 60%);
         }
 
-        /* Floating Particles */
-        .particle {
-            position: absolute;
-            background: #00e5ff;
-            box-shadow: 0 0 10px #00e5ff;
-            border-radius: 2px;
-            animation: float 4s infinite linear;
-            opacity: 0;
-        }
-        @keyframes float {
-            0% { transform: translateY(0) scale(1); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-100px) scale(0); opacity: 0; }
-        }
-
         /* Main Container */
         .container {
             z-index: 2;
@@ -70,11 +54,9 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            /* Zoom Transition Setup */
             transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s ease, filter 1s ease;
         }
 
-        /* Zoom out class for transition */
         .zoom-out {
             transform: scale(10);
             opacity: 0;
@@ -83,9 +65,9 @@
 
         /* S Logo Image */
         .s-logo {
-            width: 140px;
-            height: 140px;
-            border-radius: 30px;
+            width: 120px;
+            height: 120px;
+            border-radius: 28px;
             object-fit: cover;
             box-shadow: 0 10px 40px rgba(0, 229, 255, 0.4), 0 10px 40px rgba(157, 0, 255, 0.4);
             margin-bottom: 20px;
@@ -96,42 +78,42 @@
             to { transform: translateY(-10px); }
         }
 
-        /* SEAOX Brand Text */
-        .brand-text {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            background: linear-gradient(90deg, #ffffff, #b3d4ff, #ffffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(255,255,255,0.3);
-            margin-bottom: 30px;
+        /* 🔥 NAYA: Transparent Text Logo 🔥 */
+        .brand-logo-img {
+            width: 250px; 
+            max-width: 85%;
+            margin-bottom: 20px;
+            
+            /* Logo ko bright karne ke liye taaki dark background par dikhe */
+            filter: brightness(1.5) drop-shadow(0 0 10px rgba(0, 229, 255, 0.5));
         }
 
         /* Welcome Text */
         .welcome-title {
             font-family: 'Poppins', sans-serif;
             color: #ffffff;
-            font-size: 2.2rem;
-            font-weight: 700;
+            font-size: 1.8rem;
+            font-weight: 600;
             line-height: 1.2;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         .welcome-title span {
             display: block;
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 800;
             letter-spacing: 1px;
+            background: linear-gradient(90deg, #00e5ff, #9d00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         /* Tagline */
         .tagline {
             color: #a0b0d0;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 400;
             letter-spacing: 0.5px;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
 
         /* Glowing Dots */
@@ -146,16 +128,16 @@
             animation: pulse 1.5s infinite;
         }
         .dot:nth-child(1) {
-            background-color: #00e5ff; /* Cyan */
+            background-color: #00e5ff; 
             box-shadow: 0 0 15px #00e5ff;
         }
         .dot:nth-child(2) {
-            background-color: #1877F2; /* Blue */
+            background-color: #1877F2; 
             box-shadow: 0 0 15px #1877F2;
             animation-delay: 0.3s;
         }
         .dot:nth-child(3) {
-            background-color: #9d00ff; /* Purple */
+            background-color: #9d00ff; 
             box-shadow: 0 0 15px #9d00ff;
             animation-delay: 0.6s;
         }
@@ -169,37 +151,24 @@
 </head>
 <body>
 
-    <!-- Glowing Background Elements -->
     <div class="bg-glow-1"></div>
     <div class="bg-glow-2"></div>
-    
-    <!-- Generating random particles via JS later, for now some hardcoded -->
-    <div class="particle" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
-    <div class="particle" style="top: 30%; right: 15%; animation-delay: 1s; width: 6px; height: 6px; background: #9d00ff; box-shadow: 0 0 10px #9d00ff;"></div>
-    <div class="particle" style="bottom: 25%; left: 20%; animation-delay: 2s;"></div>
-    <div class="particle" style="bottom: 15%; right: 10%; animation-delay: 1.5s; width: 8px; height: 8px;"></div>
-    <div class="particle" style="top: 15%; right: 30%; animation-delay: 0.5s; width: 4px; height: 4px;"></div>
-    <div class="particle" style="bottom: 40%; left: 5%; animation-delay: 2.5s; width: 5px; height: 5px; background: #1877F2; box-shadow: 0 0 10px #1877F2;"></div>
 
-    <!-- Main Content Container -->
     <div class="container" id="mainContainer">
         
-        <!-- Use existing S logo image -->
-        <img src="IMG_20261019_105230.jpg" alt="SEAOX Logo" class="s-logo">
+        <!-- S Icon Logo -->
+        <img src="IMG_20261019_105230.jpg" alt="SEAOX S Logo" class="s-logo">
         
-        <!-- Brand Name -->
-        <div class="brand-text">SEAOX</div>
+        <!-- 🔥 Nayi Transparent SEAOX Text Logo 🔥 -->
+        <img src="1000060185-removebg-preview.png" alt="SEAOX Text Logo" class="brand-logo-img">
         
-        <!-- Welcome Text -->
         <div class="welcome-title">
             Welcome to
             <span>SEAOX</span>
         </div>
         
-        <!-- Tagline -->
         <div class="tagline">Smart tools. Simple solutions.</div>
         
-        <!-- Glowing Dots -->
         <div class="dots">
             <div class="dot"></div>
             <div class="dot"></div>
@@ -209,17 +178,12 @@
     </div>
 
     <script>
-        // 2.5 Second baad zoom animation trigger karo aur page change karo
         setTimeout(function() {
-            // Zoom out effect trigger
             document.getElementById('mainContainer').classList.add('zoom-out');
-            
-            // Animation complete hone ka wait karo (1 second), phir menu.html kholo
             setTimeout(function() {
                 window.location.href = 'menu.html';
-            }, 1000); // 1000ms = 1 second
-
-        }, 2500); // 2500ms = 2.5 seconds wait
+            }, 1000); 
+        }, 2500); 
     </script>
 </body>
 </html>
