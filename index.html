@@ -36,7 +36,8 @@
             margin-bottom: 20px; 
             padding: 0 5px;
         }
-        .header-logo { width: 120px; mix-blend-mode: multiply; }
+        /* Logo ki jagah text use kiya hai */
+        .header-logo { font-size: 26px; font-weight: 800; color: #0B3B5C; letter-spacing: 1px; }
         .header-icons { display: flex; gap: 8px; }
         
         .icon-btn { 
@@ -163,6 +164,7 @@
         }
         .slide-arrow svg { width: 20px; height: 20px; fill: white; }
 
+        /* Slider Indicators */
         .slider-dots {
             position: absolute;
             bottom: 8px; left: 50%;
@@ -246,7 +248,8 @@
     <div class="app-container">
         <!-- Header -->
         <div class="header">
-            <img src="IMG_20261006_211924.png" alt="SEAOX Logo" class="header-logo">
+            <!-- TEXT LOGO (Kyunki image upload nahi hui) -->
+            <div class="header-logo">SEAOX</div>
             <div class="header-icons">
                 <a href="https://www.instagram.com/seaoxofficial" target="_blank" class="icon-btn insta"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
                 <a href="https://wa.me/919473991699" target="_blank" class="icon-btn wa"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
@@ -259,11 +262,11 @@
         <div class="slider-container">
             <div class="slider-track" id="sliderTrack">
                 
-                <!-- 1. Tractor Book Main App (Yellow Banner) -->
+                <!-- 1. Tractor Book Main App (Yellow Banner) - EMOJI use kiya hai -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
                     <div class="slide-content">
-                        <div class="slide-icon" style="padding: 0; background: white; overflow: hidden;">
-                            <img src="IMG_20260930_225659.png" alt="Tractor Book" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="slide-icon" style="background: #0B3B5C; color: #FFD700; font-size: 35px; display: flex; justify-content: center; align-items: center;">
+                            🚜
                         </div>
                         <div class="slide-text">
                             <div class="slide-title">Tractor Book</div>
@@ -274,39 +277,41 @@
                     <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 </a>
 
-                <!-- 2. Download App -->
+                <!-- Baaki saari images ke EXACT naam jo GitHub par hain -->
+
+                <!-- Download App -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="download-app.png" alt="Download App">
+                    <img src="file_00000000a11081faae1e6aba0030f2076.png" alt="Download App">
                 </a>
 
-                <!-- 3. Implements -->
+                <!-- Implements -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="implements.png" alt="Implements Management">
+                    <img src="file_00000000acf88211bd9890e44652fe5a.png" alt="Implements Management">
                 </a>
 
-                <!-- 4. Customer Records -->
+                <!-- Customer Records -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="customer-records.png" alt="Customer Records">
+                    <img src="file_0000000086288208acc968fed8f7c4b8.png" alt="Customer Records">
                 </a>
 
-                <!-- 5. Smart Reports -->
+                <!-- Smart Reports -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="smart-reports.png" alt="Smart Reports">
+                    <img src="file_0000000046dc820880fa6784fa1c2cd7.png" alt="Smart Reports">
                 </a>
 
-                <!-- 6. Live Calculator -->
+                <!-- Live Calculator -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="live-calculator.png" alt="Live Calculator">
+                    <img src="file_000000000217c820895205de4b6ee467b.png" alt="Live Calculator">
                 </a>
                 
-                <!-- 7. Field Measurement -->
+                <!-- Field Measurement -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="field-measurement.png" alt="Field Measurement">
+                    <img src="file_00000000e4108208861e8e0bee31ce82.png" alt="Field Measurement">
                 </a>
 
-                <!-- 8. Diesel & Other Expenses -->
+                <!-- Diesel & Other Expenses -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="diesel-expenses.png" alt="Diesel & Expenses">
+                    <img src="file_0000000037588208a574ac7c8ebbfbea.png" alt="Diesel & Expenses">
                 </a>
 
             </div>
@@ -317,6 +322,7 @@
 
         <!-- Tools Grid -->
         <div class="grid">
+            <!-- 1. PDF Maker -->
             <a href="pdf-tool.html" class="card">
                 <div class="card-inner">
                     <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6" fill="none" stroke="#fff" stroke-width="2"/><path d="M8 13h8M8 17h8M8 9h2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
@@ -324,6 +330,7 @@
                 </div>
             </a>
             
+            <!-- 2. Photo Compressor -->
             <a href="image-compressor.html" class="card">
                 <div class="card-inner">
                     <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
@@ -331,6 +338,7 @@
                 </div>
             </a>
             
+            <!-- 3. Screenshot Editor -->
             <a href="image-editor.html" class="card">
                 <div class="card-inner">
                     <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div>
@@ -338,6 +346,7 @@
                 </div>
             </a>
             
+            <!-- 4. Invoice Generator -->
             <a href="invoice.html" class="card">
                 <div class="card-inner">
                     <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
@@ -345,6 +354,7 @@
                 </div>
             </a>
             
+            <!-- 5. Video Editor -->
             <a href="video-editor.html" class="card">
                 <div class="card-inner">
                     <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div>
@@ -352,6 +362,7 @@
                 </div>
             </a>
             
+            <!-- 6. Protect PDF -->
             <a href="pdf-protect.html" class="card">
                 <div class="card-inner">
                     <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg></div>
@@ -359,6 +370,7 @@
                 </div>
             </a>
             
+            <!-- 7. QR Code Maker -->
             <a href="upi-qr.html" class="card">
                 <div class="card-inner">
                     <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2z"/></svg></div>
@@ -366,6 +378,7 @@
                 </div>
             </a>
             
+            <!-- 8. Smart Calculator -->
             <a href="smart-calculator.html" class="card">
                 <div class="card-inner">
                     <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V9h10v2zm-8 8H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V9h2v2zm0-4H7V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2z"/></svg></div>
@@ -375,6 +388,7 @@
         </div>
     </div>
 
+    <!-- Modal (Contact Us) -->
     <div id="contactModal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">×</span>
@@ -411,7 +425,7 @@
         }
 
         function startAutoSlide() {
-            slideInterval = setInterval(nextSlide, 3000);
+            slideInterval = setInterval(nextSlide, 3000); // 3 seconds per slide
         }
 
         function stopAutoSlide() {
@@ -425,6 +439,7 @@
         track.addEventListener('touchstart', stopAutoSlide);
         track.addEventListener('touchend', startAutoSlide);
 
+        // Modal Logic
         function openModal() { document.getElementById('contactModal').style.display = 'flex'; }
         function closeModal() { document.getElementById('contactModal').style.display = 'none'; }
         window.onclick = function(event) {
