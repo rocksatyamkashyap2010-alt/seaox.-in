@@ -95,7 +95,7 @@
             overflow: hidden;
         }
 
-        /* Dark Blue Curved Shape */
+        /* Dark Blue Curved Shape (Only for text slides) */
         .slide::after {
             content: '';
             position: absolute;
@@ -107,7 +107,7 @@
             z-index: 1;
         }
 
-        /* Special Style for Promo Image */
+        /* 🔥 SPECIAL STYLE FOR IMAGE SLIDES 🔥 */
         .slide.image-slide {
             padding: 0;
             background: transparent;
@@ -193,22 +193,18 @@
             text-decoration: none; 
             min-height: 125px;
             
-            /* Start state for slide up */
             opacity: 0;
             transform: translateY(50px);
             
-            /* Gradient Background for Border */
             background: conic-gradient(from var(--angle), #FFD700, #00BFFF, #FFD700); 
-            padding: 3px; /* This acts as the border thickness */
+            padding: 3px; 
             
-            /* Two animations: Slide up (delayed), and Rotate border (continuous) */
             animation: slideUpFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, rotateBorder 3s linear infinite;
         }
 
-        /* Inner White Box */
         .card-inner {
             background: #ffffff;
-            border-radius: 15px; /* Slightly less than 18px to fit inside */
+            border-radius: 15px; 
             width: 100%;
             height: 100%;
             padding: 15px;
@@ -218,20 +214,11 @@
             box-sizing: border-box;
         }
 
-        .card:active .card-inner { 
-            background: #f5f5f5; 
-        }
+        .card:active .card-inner { background: #f5f5f5; }
 
-        /* Animation Keyframes */
-        @keyframes rotateBorder {
-            to { --angle: 360deg; }
-        }
+        @keyframes rotateBorder { to { --angle: 360deg; } }
+        @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes slideUpFade {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Staggered Delays (First value is for slide, second is for rotate) */
         .card:nth-child(1) { animation-delay: 0.2s, 0s; }
         .card:nth-child(2) { animation-delay: 0.5s, 0s; }
         .card:nth-child(3) { animation-delay: 0.8s, 0s; }
@@ -279,6 +266,7 @@
         <div class="slider-container">
             <div class="slider-track" id="sliderTrack">
                 
+                <!-- 1. Tractor Book Main App (Yellow Banner) -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
                     <div class="slide-content">
                         <div class="slide-icon" style="padding: 0; background: white; overflow: hidden;">
@@ -293,92 +281,34 @@
                     <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 </a>
 
+                <!-- 2. Promotional Image Slide (Purani wali) -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
                     <img src="file_000000006388820895278973abb59e1a.png" alt="Tractor Book Promo">
                 </a>
 
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
-                    <div class="slide-content">
-                        <div class="slide-icon">📝</div>
-                        <div class="slide-text">
-                            <div class="slide-title">Expenses Notes</div>
-                            <div class="slide-sub">Keep detailed notes of every tractor expense in one place.</div>
-                            <div class="download-badge">Download App</div>
-                        </div>
-                    </div>
-                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <!-- 3. New Image: Implements -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="file_00000000acf88211bd9890e44652fe5a.png" alt="Implements Management">
                 </a>
 
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
-                    <div class="slide-content">
-                        <div class="slide-icon">📊</div>
-                        <div class="slide-text">
-                            <div class="slide-title">Profit & Loss</div>
-                            <div class="slide-sub">Get complete P&L reports and track your farm's financial health.</div>
-                            <div class="download-badge">Download App</div>
-                        </div>
-                    </div>
-                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <!-- 4. New Image: Download App -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="file_00000000a11081faae1e6aba0030f2076.png" alt="Download App">
                 </a>
 
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
-                    <div class="slide-content">
-                        <div class="slide-icon">📏</div>
-                        <div class="slide-text">
-                            <div class="slide-title">Field Measurement</div>
-                            <div class="slide-sub">Accurately measure your fields using GPS technology.</div>
-                            <div class="download-badge">Download App</div>
-                        </div>
-                    </div>
-                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <!-- 5. New Image: Customer Records -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="file_0000000086288208acc968fed8f7c4b8.png" alt="Customer Records">
                 </a>
 
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
-                    <div class="slide-content">
-                        <div class="slide-icon">🧮</div>
-                        <div class="slide-text">
-                            <div class="slide-title">Live Calculator</div>
-                            <div class="slide-sub">Calculate costs on the go with our smart calculator.</div>
-                            <div class="download-badge">Download App</div>
-                        </div>
-                    </div>
-                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <!-- 6. New Image: Smart Reports -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="file_0000000046dc820880fa6784fa1c2cd7.png" alt="Smart Reports">
                 </a>
 
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
-                    <div class="slide-content">
-                        <div class="slide-icon">👥</div>
-                        <div class="slide-text">
-                            <div class="slide-title">Customer Manage</div>
-                            <div class="slide-sub">Maintain a database of all your customers and their details.</div>
-                            <div class="download-badge">Download App</div>
-                        </div>
-                    </div>
-                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                </a>
-
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
-                    <div class="slide-content">
-                        <div class="slide-icon">📄</div>
-                        <div class="slide-text">
-                            <div class="slide-title">Customer Statement</div>
-                            <div class="slide-sub">Generate detailed account statements for each customer.</div>
-                            <div class="download-badge">Download App</div>
-                        </div>
-                    </div>
-                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                </a>
-
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
-                    <div class="slide-content">
-                        <div class="slide-icon">🎁</div>
-                        <div class="slide-text">
-                            <div class="slide-title">More Surprises</div>
-                            <div class="slide-sub">Download the app to unlock hidden features and tools!</div>
-                            <div class="download-badge">Download App</div>
-                        </div>
-                    </div>
-                    <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <!-- 7. New Image: Live Calculator -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="file_000000000217c820895205de4b6ee467b.png" alt="Live Calculator">
                 </a>
 
             </div>
@@ -516,4 +446,4 @@
         }
     </script>
 </body>
-                </html>
+</html>
