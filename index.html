@@ -22,7 +22,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f8f9fa;
+    background: #f8f9fa;
     padding: 15px;
     display: flex;
     flex-direction: column;
@@ -69,23 +69,20 @@ body {
     animation: popOut 0.4s cubic-bezier(0.2,0.8,0.2,1) forwards;
 }
 
-.header-icons > *:nth-child(4) { animation-delay: 0.1s; }
-.header-icons > *:nth-child(3) { animation-delay: 0.2s; }
-.header-icons > *:nth-child(2) { animation-delay: 0.3s; }
-.header-icons > *:nth-child(1) { animation-delay: 0.4s; }
+.header-icons > *:nth-child(4) { animation-delay: .1s; }
+.header-icons > *:nth-child(3) { animation-delay: .2s; }
+.header-icons > *:nth-child(2) { animation-delay: .3s; }
+.header-icons > *:nth-child(1) { animation-delay: .4s; }
 
 @keyframes popOut {
-    0% { opacity: 0; transform: translateX(40px) scale(0.5); }
+    0% { opacity: 0; transform: translateX(40px) scale(.5); }
     100% { opacity: 1; transform: translateX(0) scale(1); }
 }
 
-.icon-btn:active {
-    transform: scale(0.9);
-}
-
+.icon-btn:active { transform: scale(.9); }
 .icon-btn.insta { background: #1877F2; }
 .icon-btn.wa { background: #25D366; }
-.icon-btn.x { background: #000000; }
+.icon-btn.x { background: #000; }
 .icon-btn.chat {
     background: #E4E6EB;
     color: #333;
@@ -99,7 +96,7 @@ body {
     fill: white;
 }
 
-/* AUTO IMAGE SLIDER */
+/* IMAGE SLIDER */
 
 .slider-container {
     width: 100%;
@@ -107,19 +104,21 @@ body {
     border-radius: 20px;
     position: relative;
     margin-bottom: 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,.1);
     background: #FFD700;
 }
 
 .slider-track {
     display: flex;
-    transition: transform 0.6s ease-in-out;
+    transition: transform .6s ease-in-out;
     width: 100%;
     align-items: stretch;
+    touch-action: pan-y;
 }
 
 .slide {
     min-width: 100%;
+    width: 100%;
     background: #FFD700;
     padding: 20px 15px;
     display: flex;
@@ -127,9 +126,10 @@ body {
     text-decoration: none;
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
-/* TEXT SLIDE DESIGN */
+/* Yellow banner curved shape */
 
 .slide::after {
     content: '';
@@ -142,6 +142,28 @@ body {
     border-top-left-radius: 100px;
     border-bottom-left-radius: 40px;
     z-index: 1;
+}
+
+/* Image slides */
+
+.slide.image-slide {
+    padding: 0;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide.image-slide::after {
+    display: none;
+}
+
+.slide.image-slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    border-radius: 0;
 }
 
 .slide-content {
@@ -164,7 +186,7 @@ body {
     align-items: center;
     flex-shrink: 0;
     font-size: 40px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,.1);
     overflow: hidden;
 }
 
@@ -186,12 +208,12 @@ body {
     color: #0B3B5C;
     line-height: 1.3;
     font-weight: 500;
-    opacity: 0.9;
+    opacity: .9;
 }
 
 .download-badge {
     display: inline-block;
-    background: rgba(11,59,92,0.1);
+    background: rgba(11,59,92,.1);
     color: #0B3B5C;
     font-size: 11px;
     font-weight: 700;
@@ -208,8 +230,8 @@ body {
     transform: translateY(-50%);
     width: 40px;
     height: 40px;
-    background: rgba(255,255,255,0.1);
-    border: 2px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,.1);
+    border: 2px solid rgba(255,255,255,.2);
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -223,26 +245,7 @@ body {
     fill: white;
 }
 
-/* IMAGE SLIDES */
-
-.slide.image-slide {
-    padding: 0;
-    background: transparent;
-    display: block;
-}
-
-.slide.image-slide::after {
-    display: none;
-}
-
-.slide.image-slide img {
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: contain;
-}
-
-/* GRID & ROTATING BORDER */
+/* GRID */
 
 .grid {
     display: grid;
@@ -260,12 +263,12 @@ body {
     background: conic-gradient(from var(--angle), #FFD700, #00BFFF, #FFD700);
     padding: 3px;
     animation:
-        slideUpFade 0.8s cubic-bezier(0.2,0.8,0.2,1) forwards,
+        slideUpFade .8s cubic-bezier(.2,.8,.2,1) forwards,
         rotateBorder 3s linear infinite;
 }
 
 .card-inner {
-    background: #ffffff;
+    background: #fff;
     border-radius: 15px;
     width: 100%;
     height: 100%;
@@ -273,7 +276,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-sizing: border-box;
 }
 
 .card:active .card-inner {
@@ -291,13 +293,13 @@ body {
     }
 }
 
-.card:nth-child(1) { animation-delay: 0.2s, 0s; }
-.card:nth-child(2) { animation-delay: 0.5s, 0s; }
-.card:nth-child(3) { animation-delay: 0.8s, 0s; }
+.card:nth-child(1) { animation-delay: .2s, 0s; }
+.card:nth-child(2) { animation-delay: .5s, 0s; }
+.card:nth-child(3) { animation-delay: .8s, 0s; }
 .card:nth-child(4) { animation-delay: 1.1s, 0s; }
 .card:nth-child(5) { animation-delay: 1.4s, 0s; }
 .card:nth-child(6) { animation-delay: 1.7s, 0s; }
-.card:nth-child(7) { animation-delay: 2.0s, 0s; }
+.card:nth-child(7) { animation-delay: 2s, 0s; }
 .card:nth-child(8) { animation-delay: 2.3s, 0s; }
 
 .icon-box {
@@ -345,7 +347,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,.6);
     z-index: 1000;
     justify-content: center;
     align-items: center;
@@ -372,7 +374,6 @@ body {
 }
 
 .modal-content h2 {
-    margin-top: 0;
     color: #333;
     font-size: 22px;
     margin-bottom: 10px;
@@ -388,14 +389,26 @@ body {
 
 .send-msg-btn {
     display: block;
-    background-color: #1877F2;
+    background: #1877F2;
     color: white;
     text-decoration: none;
     padding: 15px;
     border-radius: 10px;
     font-size: 16px;
     font-weight: bold;
-    box-shadow: 0 4px 10px rgba(24,119,242,0.3);
+    box-shadow: 0 4px 10px rgba(24,119,242,.3);
+}
+
+@media(max-width:350px) {
+    .slide-icon {
+        width: 65px;
+        height: 65px;
+    }
+    .slide-title { font-size: 18px; }
+    .slide-sub { font-size: 11px; }
+    .header-logo { width: 95px; }
+    .header-icons { gap: 5px; }
+    .icon-btn { width: 34px; height: 34px; }
 }
 </style>
 </head>
@@ -404,270 +417,242 @@ body {
 
 <div class="app-container">
 
-<!-- HEADER -->
+    <!-- HEADER -->
 
-<div class="header">
+    <div class="header">
+        <img src="IMG_20261006_211924.png" alt="SEAOX Logo" class="header-logo">
 
-    <img src="IMG_20261006_211924.png" alt="SEAOX Logo" class="header-logo">
+        <div class="header-icons">
 
-    <div class="header-icons">
-
-        <a href="https://www.instagram.com/seaoxofficial" target="_blank" class="icon-btn insta">
-            <svg viewBox="0 0 24 24">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-            </svg>
-        </a>
-
-        <a href="https://wa.me/919473991699" target="_blank" class="icon-btn wa">
-            <svg viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/>
-            </svg>
-        </a>
-
-        <a href="https://x.com/seaoxoffcial" target="_blank" class="icon-btn x">
-            <svg viewBox="0 0 24 24">
-                <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
-            </svg>
-        </a>
-
-        <div class="icon-btn chat" onclick="openModal()">💬</div>
-
-    </div>
-</div>
-
-
-<!-- TRACTOR BOOK AUTO SLIDER -->
-
-<div class="slider-container">
-
-    <div class="slider-track" id="sliderTrack">
-
-        <!-- 1. TRAILER FEATURE -->
-        <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
-            <img src="file_000000002aa082088e705d622068d47a.png" alt="Tractor Book Trailer Feature">
-        </a>
-
-        <!-- 2. OLD MAIN TRACTOR BOOK SLIDE -->
-        <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
-
-            <div class="slide-content">
-
-                <div class="slide-icon" style="padding:0;background:white;">
-                    <img src="IMG_20260930_225659.png" alt="Tractor Book" style="width:100%;height:100%;object-fit:cover;">
-                </div>
-
-                <div class="slide-text">
-                    <div class="slide-title">Tractor Book</div>
-                    <div class="slide-sub">Manage tractor work & accounts.</div>
-                    <div class="download-badge">Downloading: 336</div>
-                </div>
-
-            </div>
-
-            <div class="slide-arrow">
+            <a href="https://www.instagram.com/seaoxofficial" target="_blank" class="icon-btn insta">
                 <svg viewBox="0 0 24 24">
-                    <path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919C8.267.014 8.741 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324z"/>
                 </svg>
-            </div>
+            </a>
 
-        </a>
+            <a href="https://wa.me/919473991699" target="_blank" class="icon-btn wa">
+                <svg viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487z"/>
+                </svg>
+            </a>
 
-        <!-- 3. PROMOTIONAL IMAGE -->
-        <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
-            <img src="file_000000006388820895278973abb59e1a.png" alt="Tractor Book Promo">
-        </a>
+            <a href="https://x.com/seaoxoffcial" target="_blank" class="icon-btn x">
+                <svg viewBox="0 0 24 24">
+                    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
+                </svg>
+            </a>
 
-        <!-- 4. IMPLEMENTS -->
-        <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
-            <img src="file_00000000acf88211bd9890e44652fe5a.png" alt="Implements Management">
-        </a>
+            <div class="icon-btn chat" onclick="openModal()">💬</div>
 
-        <!-- 5. DOWNLOAD APP -->
-        <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
-            <img src="file_00000000a11081faae1e6aba0030f2076.png" alt="Download App">
-        </a>
+        </div>
+    </div>
 
-        <!-- 6. CUSTOMER RECORDS -->
-        <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
-            <img src="file_0000000086288208acc968fed8f7c4b8.png" alt="Customer Records">
-        </a>
+    <!-- AUTO IMAGE SLIDER -->
 
-        <!-- 7. SMART REPORTS -->
-        <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
-            <img src="file_0000000046dc820880fa6784fa1c2cd7.png" alt="Smart Reports">
-        </a>
+    <div class="slider-container">
 
-        <!-- 8. LIVE CALCULATOR -->
-        <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
-            <img src="file_000000000217c820895205de4b6ee467b.png" alt="Live Calculator">
-        </a>
+        <div class="slider-track" id="sliderTrack">
 
-        <!-- 9. DIESEL AND OTHER EXPENSES -->
-        <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
-            <img src="file_0000000037588208a574ac7c8ebbfbea.png" alt="Diesel and Other Expenses">
-        </a>
+            <!-- 1. YELLOW TRACTOR BOOK BANNER - FIRST -->
 
-        <!-- 10. FIELD MEASUREMENT -->
-        <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
-            <img src="file_00000000e4108208861e0bee31ce82.png" alt="Field Measurement">
-        </a>
+            <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide">
+
+                <div class="slide-content">
+
+                    <div class="slide-icon" style="padding:0;background:white;">
+                        <img src="IMG_20260930_225659.png" alt="Tractor Book" style="width:100%;height:100%;object-fit:cover;">
+                    </div>
+
+                    <div class="slide-text">
+                        <div class="slide-title">Tractor Book</div>
+                        <div class="slide-sub">Manage tractor work & accounts.</div>
+                        <div class="download-badge">Downloading: 336</div>
+                    </div>
+
+                </div>
+
+                <div class="slide-arrow">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+
+            </a>
+
+            <!-- 2. IMPLEMENTS IMAGE -->
+
+            <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
+                <img src="file_00000000acf88211bd9890e44652fe5a.png" alt="Tractor Book Implements">
+            </a>
+
+            <!-- 3. DOWNLOAD APP IMAGE -->
+
+            <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
+                <img src="file_00000000a11081faae1e6aba0030f2076.png" alt="Download Tractor Book App">
+            </a>
+
+            <!-- 4. CUSTOMER RECORDS IMAGE -->
+
+            <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
+                <img src="file_0000000086288208acc968fed8f7c4b8.png" alt="Customer Records">
+            </a>
+
+            <!-- 5. SMART REPORTS IMAGE -->
+
+            <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
+                <img src="file_0000000046dc820880fa6784fa1c2cd7.png" alt="Smart Reports">
+            </a>
+
+            <!-- 6. LIVE CALCULATOR IMAGE -->
+
+            <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
+                <img src="file_000000000217c820895205de4b6ee467b.png" alt="Live Calculator">
+            </a>
+
+            <!-- 7. TRAILER PROMOTIONAL IMAGE - LAST -->
+
+            <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" class="slide image-slide">
+                <img src="file_000000006388820895278973abb59e1a.png" alt="Tractor Book Trailer Feature">
+            </a>
+
+        </div>
 
     </div>
 
-</div>
+    <!-- TOOLS GRID -->
 
+    <div class="grid">
 
-<!-- TOOLS GRID -->
+        <!-- PDF MAKER -->
 
-<div class="grid">
+        <a href="pdf-tool.html" class="card">
+            <div class="card-inner">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6" fill="none" stroke="#fff" stroke-width="2"/><path d="M8 13h8M8 17h8M8 9h2" fill="none" stroke="#fff" stroke-width="2"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">PDF Maker</div>
+                    <div class="card-arrow">→</div>
+                </div>
+            </div>
+        </a>
 
-    <!-- 1 PDF MAKER -->
-    <a href="pdf-tool.html" class="card">
-        <div class="card-inner">
-            <div class="icon-box">
-                <svg viewBox="0 0 24 24">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
-                    <path d="M14 2v6h6" fill="none" stroke="#fff" stroke-width="2"/>
-                    <path d="M8 13h8M8 17h8M8 9h2" fill="none" stroke="#fff" stroke-width="2"/>
-                </svg>
-            </div>
-            <div class="card-bottom">
-                <div class="card-title">PDF Maker</div>
-                <div class="card-arrow">→</div>
-            </div>
-        </div>
-    </a>
+        <!-- PHOTO COMPRESSOR -->
 
-    <!-- 2 PHOTO COMPRESSOR -->
-    <a href="image-compressor.html" class="card">
-        <div class="card-inner">
-            <div class="icon-box">
-                <svg viewBox="0 0 24 24">
-                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5z"/>
-                </svg>
+        <a href="image-compressor.html" class="card">
+            <div class="card-inner">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5z"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">Photo<br>Compressor</div>
+                    <div class="card-arrow">→</div>
+                </div>
             </div>
-            <div class="card-bottom">
-                <div class="card-title">Photo<br>Compressor</div>
-                <div class="card-arrow">→</div>
-            </div>
-        </div>
-    </a>
+        </a>
 
-    <!-- 3 SCREENSHOT EDITOR -->
-    <a href="image-editor.html" class="card">
-        <div class="card-inner">
-            <div class="icon-box">
-                <svg viewBox="0 0 24 24">
-                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75z"/>
-                </svg>
-            </div>
-            <div class="card-bottom">
-                <div class="card-title">Screenshot<br>Editor</div>
-                <div class="card-arrow">→</div>
-            </div>
-        </div>
-    </a>
+        <!-- SCREENSHOT EDITOR -->
 
-    <!-- 4 INVOICE GENERATOR -->
-    <a href="invoice.html" class="card">
-        <div class="card-inner">
-            <div class="icon-box">
-                <svg viewBox="0 0 24 24">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-                </svg>
+        <a href="image-editor.html" class="card">
+            <div class="card-inner">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75z"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">Screenshot<br>Editor</div>
+                    <div class="card-arrow">→</div>
+                </div>
             </div>
-            <div class="card-bottom">
-                <div class="card-title">Invoice<br>Generator</div>
-                <div class="card-arrow">→</div>
-            </div>
-        </div>
-    </a>
+        </a>
 
-    <!-- 5 VIDEO EDITOR -->
-    <a href="video-editor.html" class="card">
-        <div class="card-inner">
-            <div class="icon-box">
-                <svg viewBox="0 0 24 24">
-                    <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11z"/>
-                </svg>
-            </div>
-            <div class="card-bottom">
-                <div class="card-title">Video Editor</div>
-                <div class="card-arrow">→</div>
-            </div>
-        </div>
-    </a>
+        <!-- INVOICE GENERATOR -->
 
-    <!-- 6 PROTECT PDF -->
-    <a href="pdf-protect.html" class="card">
-        <div class="card-inner">
-            <div class="icon-box">
-                <svg viewBox="0 0 24 24">
-                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/>
-                </svg>
+        <a href="invoice.html" class="card">
+            <div class="card-inner">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">Invoice<br>Generator</div>
+                    <div class="card-arrow">→</div>
+                </div>
             </div>
-            <div class="card-bottom">
-                <div class="card-title">Protect PDF</div>
-                <div class="card-arrow">→</div>
-            </div>
-        </div>
-    </a>
+        </a>
 
-    <!-- 7 QR CODE MAKER -->
-    <a href="upi-qr.html" class="card">
-        <div class="card-inner">
-            <div class="icon-box">
-                <svg viewBox="0 0 24 24">
-                    <path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2z"/>
-                </svg>
-            </div>
-            <div class="card-bottom">
-                <div class="card-title">QR Code Maker</div>
-                <div class="card-arrow">→</div>
-            </div>
-        </div>
-    </a>
+        <!-- VIDEO EDITOR -->
 
-    <!-- 8 SMART CALCULATOR -->
-    <a href="smart-calculator.html" class="card">
-        <div class="card-inner">
-            <div class="icon-box">
-                <svg viewBox="0 0 24 24">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H7v-2h10zm0-4H7v-2h10zm0-4H7V9h10z"/>
-                </svg>
+        <a href="video-editor.html" class="card">
+            <div class="card-inner">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11z"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">Video Editor</div>
+                    <div class="card-arrow">→</div>
+                </div>
             </div>
-            <div class="card-bottom">
-                <div class="card-title">Smart<br>Calculator</div>
-                <div class="card-arrow">→</div>
+        </a>
+
+        <!-- PROTECT PDF -->
+
+        <a href="pdf-protect.html" class="card">
+            <div class="card-inner">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9zm9 14H6V10h12z"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">Protect PDF</div>
+                    <div class="card-arrow">→</div>
+                </div>
             </div>
-        </div>
-    </a>
+        </a>
+
+        <!-- QR CODE MAKER -->
+
+        <a href="upi-qr.html" class="card">
+            <div class="card-inner">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M3 3h6v6H3zm2 2v2h2V5zm8-2h6v6h-6zm2 2v2h2V5zM3 13h6v6H3zm2 2v2h2v-2zm13-2h3v2h-3zm-3 0h2v2h-2zm-3 0h2v2h-2zm6 3h3v2h-3zm-3 0h2v2h-2zm-3 0h2v2h-2z"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">QR Code Maker</div>
+                    <div class="card-arrow">→</div>
+                </div>
+            </div>
+        </a>
+
+        <!-- SMART CALCULATOR -->
+
+        <a href="smart-calculator.html" class="card">
+            <div class="card-inner">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H7v-2h10zm0-4H7v-2h10zm0-4H7V9h10zm-8 8H7v-2h2zm0-4H7v-2h2zm0-4H7V9h2z"/></svg>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-title">Smart<br>Calculator</div>
+                    <div class="card-arrow">→</div>
+                </div>
+            </div>
+        </a>
+
+    </div>
 
 </div>
 
-</div>
-
-
-<!-- CONTACT US MODAL -->
+<!-- CONTACT MODAL -->
 
 <div id="contactModal" class="modal-overlay">
-
     <div class="modal-content">
-
         <span class="close-btn" onclick="closeModal()">×</span>
-
         <h2>Contact Us</h2>
-
         <p>Want to build a website, app, or software? Let's talk!</p>
-
         <a href="mailto:seaoxseaox@gmail.com?subject=New Message from SEAOX Website&body=Hello SEAOX Team," class="send-msg-btn">
             📩 Send Message
         </a>
-
     </div>
-
 </div>
 
+<!-- JAVASCRIPT -->
 
 <script>
 
@@ -679,35 +664,46 @@ const slides = document.querySelectorAll('.slide');
 let currentIndex = 0;
 let slideInterval;
 
+/* Update slide */
+
 function updateSlider() {
     track.style.transform =
         `translateX(-${currentIndex * 100}%)`;
 }
+
+/* Next slide */
 
 function nextSlide() {
     currentIndex = (currentIndex + 1) % slides.length;
     updateSlider();
 }
 
+/* Start automatic slider */
+
 function startAutoSlide() {
-    clearInterval(slideInterval);
+    stopAutoSlide();
     slideInterval = setInterval(nextSlide, 3000);
 }
+
+/* Stop slider */
 
 function stopAutoSlide() {
     clearInterval(slideInterval);
 }
 
+/* Start */
+
 startAutoSlide();
 
-/* PAUSE WHEN TOUCHING OR HOVERING */
-
-track.addEventListener('mouseenter', stopAutoSlide);
-track.addEventListener('mouseleave', startAutoSlide);
+/* Pause when user touches slider */
 
 track.addEventListener('touchstart', stopAutoSlide);
+
 track.addEventListener('touchend', startAutoSlide);
 
+track.addEventListener('mouseenter', stopAutoSlide);
+
+track.addEventListener('mouseleave', startAutoSlide);
 
 /* CONTACT MODAL */
 
@@ -722,7 +718,7 @@ function closeModal() {
 window.onclick = function(event) {
     const modal = document.getElementById('contactModal');
 
-    if (event.target == modal) {
+    if (event.target === modal) {
         modal.style.display = 'none';
     }
 };
