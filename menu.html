@@ -288,14 +288,8 @@
 
         /* Game Modal */
         .game-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
-        .game-modal-content { background: #fff; width: 95%; max-width: 600px; height: 90vh; border-radius: 15px; padding: 10px; text-align: center; position: relative; display: flex; flex-direction: column; }
-        .close-game { position: absolute; top: 10px; right: 15px; font-size: 30px; font-weight: bold; color: #333; cursor: pointer; z-index: 10; background: #fff; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2);}
-        
-        /* Battle Iframe Area */
-        .iframe-container { width: 100%; height: 100%; border: none; border-radius: 10px; overflow: hidden; background: #000; display: flex; justify-content: center; align-items: center; }
-        .iframe-container iframe { width: 100%; height: 100%; border: none; }
-        
-        .play-btn-fallback { background: #e94560; color: white; padding: 15px 30px; font-size: 20px; font-weight: bold; border-radius: 10px; text-decoration: none; display: inline-block; margin-top: 20px; }
+        .game-modal-content { background: #fff; width: 95%; max-width: 600px; height: 80vh; border-radius: 15px; padding: 15px; text-align: center; position: relative; display: flex; flex-direction: column; overflow-y: auto; }
+        .close-game { position: absolute; top: 10px; right: 15px; font-size: 30px; font-weight: bold; color: #333; cursor: pointer; z-index: 10; }
         
         /* Other Games */
         .ttt-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin: 20px auto; width: 250px;}
@@ -332,14 +326,14 @@
             </div>
         </div>
 
-        <!-- 🎮 BATTLE ROYALE (Free Fire Style) BANNER 🎮 -->
-        <div class="battle-banner" onclick="openBattleGame()">
+        <!-- 🎮 BATTLE ROYALE BANNER (Opens in New Tab) 🎮 -->
+        <a href="https://zombsroyale.io/" target="_blank" class="battle-banner">
             <div class="battle-text">
                 <h2>Battle Royale</h2>
                 <p>Play multiplayer shooting game online!</p>
             </div>
             <div class="battle-icon">🔫</div>
-        </div>
+        </a>
 
         <!-- 🎠 AUTO SLIDER 🎠 -->
         <div class="slider-container">
@@ -396,12 +390,6 @@
         <div class="game-modal-content">
             <span class="close-game" onclick="closeGamePlay()">×</span>
             <h2 id="gameTitle" style="color:#111; margin-bottom: 10px;">Game Name</h2>
-            
-            <!-- Battle Game (Iframe) -->
-            <div id="area-battle" class="iframe-container" style="display:none;">
-                <!-- Hum yahan Zombs Royale (ek famous web battle royale) load kar rahe hain -->
-                <iframe id="battleIframe" src="" allow="fullscreen; autoplay; encrypted-media"></iframe>
-            </div>
             
             <!-- Game Areas -->
             <div id="area-ttt" style="display:none; padding: 20px;">
@@ -533,31 +521,10 @@
         // ==========================================
         const gamePlayModal = document.getElementById('gamePlayModal');
         const gameTitle = document.getElementById('gameTitle');
-        const battleIframe = document.getElementById('battleIframe');
         
-        function openBattleGame() {
-            gamePlayModal.style.display = 'flex';
-            gameTitle.innerText = "🔫 Battle Royale";
-            
-            // Hide all
-            document.getElementById('area-ttt').style.display = 'none';
-            document.getElementById('area-rps').style.display = 'none';
-            document.getElementById('area-mem').style.display = 'none';
-            document.getElementById('area-guess').style.display = 'none';
-            document.getElementById('area-click').style.display = 'none';
-
-            // Show battle iframe
-            document.getElementById('area-battle').style.display = 'flex';
-            // Zombs Royale (Famous Web Battle Royale)
-            battleIframe.src = "https://zombsroyale.io/"; 
-        }
-
         function openGamePlay(type, name) {
             gamePlayModal.style.display = 'flex';
             gameTitle.innerText = name;
-            
-            document.getElementById('area-battle').style.display = 'none';
-            battleIframe.src = ""; // Stop game when closed
             
             document.getElementById('area-ttt').style.display = 'none';
             document.getElementById('area-rps').style.display = 'none';
@@ -582,7 +549,6 @@
 
         function closeGamePlay() {
             gamePlayModal.style.display = 'none';
-            battleIframe.src = ""; // Stop game to save memory
         }
 
         // ==========================================
