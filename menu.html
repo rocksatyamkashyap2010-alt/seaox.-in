@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SEAOX - Tools & Games</title>
+    <title>SEAOX - Tools</title>
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -65,35 +65,6 @@
         .icon-btn.chat { background: #E4E6EB; color: #333; font-size: 18px; cursor: pointer;}
         .icon-btn svg { width: 20px; height: 20px; fill: white; }
 
-        /* 🎮 BATTLE ROYALE BANNER 🎮 */
-        .battle-banner {
-            width: 100%;
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-decoration: none;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            border: 1px solid #e94560;
-            position: relative;
-            overflow: hidden;
-        }
-        .battle-banner::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(233, 69, 96, 0.4), transparent);
-            animation: scan 3s infinite;
-        }
-        @keyframes scan { to { left: 100%; } }
-        .battle-text h2 { color: #fff; margin: 0 0 5px 0; font-size: 24px; font-weight: 800; text-shadow: 0 0 10px #e94560; }
-        .battle-text p { color: #aaa; margin: 0; font-size: 12px; }
-        .battle-icon { font-size: 45px; z-index: 2; animation: pulse 2s infinite; }
-
         /* 🎠 SLIDER STYLES 🎠 */
         .slider-container { 
             width: 100%; 
@@ -134,13 +105,14 @@
             z-index: 1;
         }
 
+        /* Image slides */
         .slide.image-slide {
             padding: 0;
             background: #ffffff; 
             display: flex; 
             justify-content: center;
             align-items: center;
-            height: 220px; 
+            height: 220px; /* Height set for images */
         }
         .slide.image-slide::after { display: none; }
         .slide.image-slide img { 
@@ -218,8 +190,8 @@
             border-radius: 4px;
         }
 
-        /* 🔥 GRID & ROTATING BORDER SETUP (TOOLS) 🔥 */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; margin-bottom: 30px;}
+        /* Tools Grid */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
 
         .card { 
             border-radius: 18px; 
@@ -269,41 +241,7 @@
         .card-title { font-size: 14px; font-weight: 700; color: #111; line-height: 1.2; }
         .card-arrow { color: #1877F2; font-size: 16px; font-weight: bold; }
 
-        /* 🎮 GAMES SECTION 🎮 */
-        .section-title {
-            font-size: 22px; font-weight: 800; color: #111; 
-            margin-bottom: 15px; width: 100%; display: flex; align-items: center; gap: 10px;
-        }
-        .games-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%;
-        }
-        .game-item {
-            background: #fff; border-radius: 12px; padding: 10px 5px; text-align: center;
-            text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer;
-            transition: transform 0.2s; border: 1px solid #eee;
-        }
-        .game-item:active { transform: scale(0.9); }
-        .game-icon { font-size: 24px; margin-bottom: 5px; }
-        .game-name { font-size: 10px; font-weight: 600; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-        /* Game Modal */
-        .game-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
-        .game-modal-content { background: #fff; width: 95%; max-width: 600px; height: 80vh; border-radius: 15px; padding: 15px; text-align: center; position: relative; display: flex; flex-direction: column; overflow-y: auto; }
-        .close-game { position: absolute; top: 10px; right: 15px; font-size: 30px; font-weight: bold; color: #333; cursor: pointer; z-index: 10; }
-        
-        /* Other Games */
-        .ttt-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin: 20px auto; width: 250px;}
-        .ttt-cell { width: 100%; aspect-ratio: 1; background: #f0f0f0; display: flex; justify-content: center; align-items: center; font-size: 40px; font-weight: bold; cursor: pointer; border-radius: 10px; }
-        .ttt-cell.x { color: #1877F2; } .ttt-cell.o { color: #E53935; }
-        .rps-btns { display: flex; justify-content: space-around; margin: 20px 0; }
-        .rps-b { font-size: 40px; background: none; border: none; cursor: pointer; }
-        .mem-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 20px auto; width: 100%; max-width: 300px; }
-        .mem-c { aspect-ratio: 1; background: #1877F2; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; color: transparent; }
-        .mem-c.flip { background: #fff; border: 2px solid #1877F2; color: #111; }
-        .mem-c.match { background: #e8f5e9; border: 2px solid #00A859; color: #111; }
-        .btn-reset { background: #00A859; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; width: 100%;}
-        
-        /* Modal (Contact Us) */
+        /* Modal */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: #fff; width: 85%; max-width: 350px; border-radius: 15px; padding: 25px 20px; text-align: center; position: relative; }
         .close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: bold; color: #888; cursor: pointer; }
@@ -326,19 +264,11 @@
             </div>
         </div>
 
-        <!-- 🎮 BATTLE ROYALE BANNER (Opens in New Tab) 🎮 -->
-        <a href="https://zombsroyale.io/" target="_blank" class="battle-banner">
-            <div class="battle-text">
-                <h2>Battle Royale</h2>
-                <p>Play multiplayer shooting game online!</p>
-            </div>
-            <div class="battle-icon">🔫</div>
-        </a>
-
         <!-- 🎠 AUTO SLIDER 🎠 -->
         <div class="slider-container">
             <div class="slider-track" id="sliderTrack">
                 
+                <!-- 1. Tractor Book Main App (Yellow Banner) -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
                     <div class="slide-content">
                         <div class="slide-icon" style="padding: 0; background: white; overflow: hidden;">
@@ -353,15 +283,44 @@
                     <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 </a>
 
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide"><img src="Budhau.png" alt="Feature"></a>
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide"><img src="Diesel.png" alt="Feature"></a>
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide"><img src="Impliments.png" alt="Feature"></a>
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide"><img src="Live%20calculator.png" alt="Feature"></a>
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide"><img src="Pushpa.png" alt="Feature"></a>
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide"><img src="Recipt.png" alt="Feature"></a>
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide"><img src="Reports.png" alt="Feature"></a>
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide"><img src="Website%20(1).png" alt="Feature"></a>
+                <!-- New Images Slides -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="Budhau.png" alt="Tractor Book Feature">
+                </a>
+                
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="Diesel.png" alt="Tractor Book Feature">
+                </a>
+
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="Impliments.png" alt="Tractor Book Feature">
+                </a>
+
+                <!-- Space encoded as %20 for safe loading -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="Live%20calculator.png" alt="Tractor Book Feature">
+                </a>
+
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="Pushpa.png" alt="Tractor Book Feature">
+                </a>
+
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="Recipt.png" alt="Tractor Book Feature">
+                </a>
+
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="Reports.png" alt="Tractor Book Feature">
+                </a>
+
+                <!-- Space and brackets encoded for safe loading -->
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="Website%20(1).png" alt="Tractor Book Feature">
+                </a>
+
             </div>
+            
+            <!-- Slider Dots -->
             <div class="slider-dots" id="sliderDots"></div>
         </div>
 
@@ -376,61 +335,6 @@
             <a href="upi-qr.html" class="card"><div class="card-inner"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2z"/></svg></div><div class="card-bottom"><div class="card-title">QR Code Maker</div><div class="card-arrow">→</div></div></div></a>
             <a href="smart-calculator.html" class="card"><div class="card-inner"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V9h10v2zm-8 8H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V9h2v2zm0-4H7V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2z"/></svg></div><div class="card-bottom"><div class="card-title">Smart<br>Calculator</div><div class="card-arrow">→</div></div></div></a>
         </div>
-
-        <!-- 🎮 50 OFFLINE GAMES SECTION 🎮 -->
-        <div class="section-title">🎮 50+ Offline Games</div>
-        <div class="games-grid" id="gamesGrid">
-            <!-- JS will populate 50 games here -->
-        </div>
-
-    </div>
-
-    <!-- 🔥 GAME PLAY MODAL 🔥 -->
-    <div id="gamePlayModal" class="game-modal">
-        <div class="game-modal-content">
-            <span class="close-game" onclick="closeGamePlay()">×</span>
-            <h2 id="gameTitle" style="color:#111; margin-bottom: 10px;">Game Name</h2>
-            
-            <!-- Game Areas -->
-            <div id="area-ttt" style="display:none; padding: 20px;">
-                <div class="ttt-board" id="tttBoard">
-                    <div class="ttt-cell" onclick="tttMove(0)"></div><div class="ttt-cell" onclick="tttMove(1)"></div><div class="ttt-cell" onclick="tttMove(2)"></div>
-                    <div class="ttt-cell" onclick="tttMove(3)"></div><div class="ttt-cell" onclick="tttMove(4)"></div><div class="ttt-cell" onclick="tttMove(5)"></div>
-                    <div class="ttt-cell" onclick="tttMove(6)"></div><div class="ttt-cell" onclick="tttMove(7)"></div><div class="ttt-cell" onclick="tttMove(8)"></div>
-                </div>
-                <div id="tttStatus" style="font-weight:bold; margin-bottom:10px;">Your Turn (X)</div>
-                <button class="btn-reset" onclick="resetTTT()">Restart Game</button>
-            </div>
-
-            <div id="area-rps" style="display:none; padding: 20px;">
-                <div class="rps-btns">
-                    <button class="rps-b" onclick="playRPS('rock')">✊</button>
-                    <button class="rps-b" onclick="playRPS('paper')">✋</button>
-                    <button class="rps-b" onclick="playRPS('scissors')">✌️</button>
-                </div>
-                <div id="rpsResult" style="font-weight:bold; font-size:18px; margin-bottom:10px;">Make a move!</div>
-            </div>
-
-            <div id="area-mem" style="display:none; padding: 20px;">
-                <div class="mem-grid" id="memGrid"></div>
-                <div id="memStatus" style="font-weight:bold; margin-bottom:10px;">Find all pairs!</div>
-                <button class="btn-reset" onclick="initMemory()">Restart Game</button>
-            </div>
-
-            <div id="area-guess" style="display:none; padding: 20px;">
-                <p style="margin-bottom:10px;">Guess a number between 1 and 100</p>
-                <input type="number" id="guessInput" style="padding:10px; width:80%; font-size:16px; margin-bottom:10px; border-radius:5px; border:1px solid #ccc;">
-                <button class="btn-reset" onclick="checkGuess()">Guess</button>
-                <div id="guessResult" style="font-weight:bold; margin-top:10px;"></div>
-            </div>
-
-            <div id="area-click" style="display:none; padding: 20px;">
-                <p style="margin-bottom:10px;">Click as fast as you can in 5 seconds!</p>
-                <button id="clickBtn" onclick="doClick()" style="font-size:40px; padding:20px 40px; border-radius:50%; background:#FFC107; border:none; cursor:pointer;">👆</button>
-                <div id="clickScore" style="font-weight:bold; margin-top:10px; font-size:20px;">Score: 0</div>
-            </div>
-
-        </div>
     </div>
 
     <!-- Modal (Contact Us) -->
@@ -444,9 +348,6 @@
     </div>
 
     <script>
-        // ==========================================
-        // SLIDER LOGIC
-        // ==========================================
         const track = document.getElementById('sliderTrack');
         const dotsContainer = document.getElementById('sliderDots');
         const slides = document.querySelectorAll('.slide');
@@ -484,208 +385,6 @@
         track.addEventListener('touchstart', stopAutoSlide);
         track.addEventListener('touchend', startAutoSlide);
 
-        // ==========================================
-        // GENERATE 50 GAMES
-        // ==========================================
-        const gameNames = [
-            "Tic-Tac-Toe", "Rock Paper", "Memory Match", "Guess Number", "Speed Clicker",
-            "Chess", "Ludo", "Snake & Ladder", "Sudoku", "Crossword",
-            "Puzzle 15", "Word Search", "Checkers", "Minesweeper", "Solitaire",
-            "Bubble Shooter", "Candy Crush", "Angry Birds", "Cut the Rope", "Temple Run",
-            "Subway Surf", "Flappy Bird", "2048", "Tetris", "Pac-Man",
-            "Space Invaders", "Pong", "Breakout", "Asteroids", "Frogger",
-            "Tic Tac", "Memory Flip", "RPS Lite", "Guess 1-50", "Clicker Pro",
-            "Snakes", "Puzzle 2048", "Bricks", "Shooter", "Racer"
-        ];
-
-        const gamesGrid = document.getElementById('gamesGrid');
-        const gameTypes = ['ttt', 'rps', 'mem', 'guess', 'click'];
-
-        for (let i = 1; i <= 50; i++) {
-            let gName = gameNames[i-1] || `Game ${i}`;
-            let gType = gameTypes[(i-1) % 5]; 
-            let icon = gType === 'ttt' ? '❌' : gType === 'rps' ? '✊' : gType === 'mem' ? '🧠' : gType === 'guess' ? '🔢' : '👆';
-
-            let card = document.createElement('div');
-            card.className = 'game-item';
-            card.onclick = () => openGamePlay(gType, gName);
-            card.innerHTML = `
-                <div class="game-icon">${icon}</div>
-                <div class="game-name">${gName}</div>
-            `;
-            gamesGrid.appendChild(card);
-        }
-
-        // ==========================================
-        // GAME MODAL LOGIC
-        // ==========================================
-        const gamePlayModal = document.getElementById('gamePlayModal');
-        const gameTitle = document.getElementById('gameTitle');
-        
-        function openGamePlay(type, name) {
-            gamePlayModal.style.display = 'flex';
-            gameTitle.innerText = name;
-            
-            document.getElementById('area-ttt').style.display = 'none';
-            document.getElementById('area-rps').style.display = 'none';
-            document.getElementById('area-mem').style.display = 'none';
-            document.getElementById('area-guess').style.display = 'none';
-            document.getElementById('area-click').style.display = 'none';
-
-            document.getElementById('area-' + type).style.display = 'block';
-
-            if(type === 'ttt') resetTTT();
-            if(type === 'mem') initMemory();
-            if(type === 'guess') {
-                secretNumber = Math.floor(Math.random() * 100) + 1;
-                document.getElementById('guessResult').innerText = "";
-                document.getElementById('guessInput').value = "";
-            }
-            if(type === 'click') {
-                clickCount = 0;
-                document.getElementById('clickScore').innerText = "Score: 0";
-            }
-        }
-
-        function closeGamePlay() {
-            gamePlayModal.style.display = 'none';
-        }
-
-        // ==========================================
-        // GAME 1: TIC TAC TOE
-        // ==========================================
-        let board = ["", "", "", "", "", "", "", "", ""];
-        let currentPlayer = "X";
-        let gameActive = true;
-        const winConds = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-
-        function tttMove(index) {
-            if (board[index] !== "" || !gameActive || currentPlayer !== "X") return;
-            board[index] = "X";
-            updateTTT();
-
-            if (checkTTTWin("X")) { document.getElementById('tttStatus').innerText = "🎉 You Won!"; gameActive = false; return; }
-            if (!board.includes("")) { document.getElementById('tttStatus').innerText = "🤝 It's a Draw!"; gameActive = false; return; }
-
-            currentPlayer = "O";
-            document.getElementById('tttStatus').innerText = "Computer...";
-            setTimeout(() => {
-                let empty = board.map((v, i) => v === "" ? i : null).filter(v => v !== null);
-                if(empty.length > 0) {
-                    let move = empty[Math.floor(Math.random() * empty.length)];
-                    board[move] = "O";
-                    updateTTT();
-                    if (checkTTTWin("O")) { document.getElementById('tttStatus').innerText = "🤖 Computer Won!"; gameActive = false; return; }
-                    if (!board.includes("")) { document.getElementById('tttStatus').innerText = "🤝 Draw!"; gameActive = false; return; }
-                    currentPlayer = "X";
-                    document.getElementById('tttStatus').innerText = "Your Turn (X)";
-                }
-            }, 400);
-        }
-
-        function checkTTTWin(p) { return winConds.some(c => c.every(i => board[i] === p)); }
-        function updateTTT() {
-            document.querySelectorAll('.ttt-cell').forEach((cell, i) => {
-                cell.innerText = board[i];
-                cell.className = 'ttt-cell';
-                if(board[i] === 'X') cell.classList.add('x');
-                if(board[i] === 'O') cell.classList.add('o');
-            });
-        }
-        function resetTTT() { board = ["","","","","","","","",""]; currentPlayer = "X"; gameActive = true; document.getElementById('tttStatus').innerText = "Your Turn (X)"; updateTTT(); }
-
-        // ==========================================
-        // GAME 2: ROCK PAPER SCISSORS
-        // ==========================================
-        function playRPS(user) {
-            const choices = ['rock', 'paper', 'scissors'];
-            const ai = choices[Math.floor(Math.random() * 3)];
-            const emojis = { rock: '✊', paper: '✋', scissors: '✌️' };
-            let res = "";
-            if (user === ai) res = "🤝 Tie!";
-            else if ((user === 'rock' && ai === 'scissors') || (user === 'paper' && ai === 'rock') || (user === 'scissors' && ai === 'paper')) res = "🎉 You Win!";
-            else res = "🤖 Computer Wins!";
-            document.getElementById('rpsResult').innerHTML = `${emojis[user]} vs ${emojis[ai]}<br>${res}`;
-        }
-
-        // ==========================================
-        // GAME 3: MEMORY MATCH
-        // ==========================================
-        let memCards = [];
-        let flipped = [];
-        let matched = 0;
-        let lockBoard = false;
-
-        function initMemory() {
-            const icons = ['🐶', '🐱', '🦊', '🐻', '🐼', '🦁', '🐸', '🐵'];
-            memCards = [...icons, ...icons].sort(() => Math.random() - 0.5);
-            flipped = []; matched = 0; lockBoard = false;
-            const grid = document.getElementById('memGrid');
-            grid.innerHTML = '';
-            document.getElementById('memStatus').innerText = "Find all pairs!";
-            
-            memCards.forEach((emoji, i) => {
-                const card = document.createElement('div');
-                card.className = 'mem-c';
-                card.dataset.emoji = emoji;
-                card.dataset.index = i;
-                card.onclick = () => flipMemCard(card);
-                grid.appendChild(card);
-            });
-        }
-
-        function flipMemCard(card) {
-            if(lockBoard || card.classList.contains('flip') || card.classList.contains('match')) return;
-            card.classList.add('flip');
-            card.innerText = card.dataset.emoji;
-            flipped.push(card);
-
-            if(flipped.length === 2) {
-                lockBoard = true;
-                if(flipped[0].dataset.emoji === flipped[1].dataset.emoji) {
-                    flipped[0].classList.add('match');
-                    flipped[1].classList.add('match');
-                    flipped = []; matched++; lockBoard = false;
-                    if(matched === 8) document.getElementById('memStatus').innerText = "🎉 You Won!";
-                } else {
-                    setTimeout(() => {
-                        flipped[0].classList.remove('flip'); flipped[0].innerText = "";
-                        flipped[1].classList.remove('flip'); flipped[1].innerText = "";
-                        flipped = []; lockBoard = false;
-                    }, 800);
-                }
-            }
-        }
-
-        // ==========================================
-        // GAME 4: GUESS THE NUMBER
-        // ==========================================
-        let secretNumber = Math.floor(Math.random() * 100) + 1;
-        function checkGuess() {
-            const val = parseInt(document.getElementById('guessInput').value);
-            const res = document.getElementById('guessResult');
-            if(!val || val < 1 || val > 100) { res.innerText = "Enter 1-100"; res.style.color = "red"; return; }
-            if(val === secretNumber) { res.innerText = "🎉 You Got It!"; res.style.color = "green"; }
-            else if(val < secretNumber) { res.innerText = "📈 Too Low!"; res.style.color = "blue"; }
-            else { res.innerText = "📉 Too High!"; res.style.color = "orange"; }
-        }
-
-        // ==========================================
-        // GAME 5: CLICKER (5 Secs)
-        // ==========================================
-        let clickCount = 0;
-        function doClick() {
-            clickCount++;
-            document.getElementById('clickScore').innerText = "Score: " + clickCount;
-            if(clickCount === 1) {
-                setTimeout(() => {
-                    document.getElementById('clickScore').innerText = "Time's Up! Score: " + clickCount;
-                    clickCount = -999; // lock
-                }, 5000);
-            }
-        }
-
-        // Modal Logic
         function openModal() { document.getElementById('contactModal').style.display = 'flex'; }
         function closeModal() { document.getElementById('contactModal').style.display = 'none'; }
         window.onclick = function(event) {
