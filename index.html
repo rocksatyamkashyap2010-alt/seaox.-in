@@ -53,7 +53,7 @@
         body {
             background-color: #040814; /* Deep Dark Blue */
             height: 100vh;
-            overflow: hidden; /* Slide hone par scrollbar na aaye */
+            overflow: hidden;
             font-family: 'Poppins', sans-serif;
             position: relative;
         }
@@ -79,7 +79,7 @@
             background: radial-gradient(circle, rgba(157,0,255,0.3) 0%, transparent 60%);
         }
 
-        /* Main Container - Full width/height for sliding */
+        /* Main Container - Welcome Screen */
         .container {
             z-index: 2;
             position: absolute;
@@ -92,14 +92,13 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            
-            /* SLIDE ANIMATION SETUP: 2 Second ka smooth slide */
-            transition: transform 2s cubic-bezier(0.65, 0, 0.35, 1);
+            transition: opacity 0.5s ease;
         }
 
-        /* Class to trigger the slide left */
-        .slide-out {
-            transform: translateX(-100vw);
+        /* Fade out class for welcome screen */
+        .fade-out {
+            opacity: 0;
+            pointer-events: none;
         }
 
         /* S Logo Image */
@@ -164,26 +163,100 @@
             border-radius: 50%;
             animation: pulse 1.5s infinite;
         }
-        .dot:nth-child(1) {
-            background-color: #00e5ff; 
-            box-shadow: 0 0 15px #00e5ff;
-        }
-        .dot:nth-child(2) {
-            background-color: #1877F2; 
-            box-shadow: 0 0 15px #1877F2;
-            animation-delay: 0.3s;
-        }
-        .dot:nth-child(3) {
-            background-color: #9d00ff; 
-            box-shadow: 0 0 15px #9d00ff;
-            animation-delay: 0.6s;
-        }
+        .dot:nth-child(1) { background-color: #00e5ff; box-shadow: 0 0 15px #00e5ff; }
+        .dot:nth-child(2) { background-color: #1877F2; box-shadow: 0 0 15px #1877F2; animation-delay: 0.3s; }
+        .dot:nth-child(3) { background-color: #9d00ff; box-shadow: 0 0 15px #9d00ff; animation-delay: 0.6s; }
 
         @keyframes pulse {
             0% { transform: scale(0.8); opacity: 0.5; }
             50% { transform: scale(1.2); opacity: 1; }
             100% { transform: scale(0.8); opacity: 0.5; }
         }
+
+        /* ========================================= */
+        /* 🔥 NAYA ANIMATION SECTION (Black Screen, Boy, Torch) 🔥 */
+        /* ========================================= */
+        
+        .transition-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background-color: #000;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .show-black {
+            opacity: 1;
+            pointer-events: auto;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Ladke ki Image */
+        .boy-img {
+            height: 55vh;
+            width: auto;
+            opacity: 0;
+            transform: translateY(20px);
+            z-index: 101;
+        }
+
+        /* Hi Text */
+        .hi-text {
+            position: absolute;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            top: 20%;
+            opacity: 0;
+            transform: scale(0.5);
+            z-index: 102;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Torch Light Effect */
+        .torch-glow {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 10px; height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 100px 150px #fff;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 103;
+        }
+
+        /* Animation Classes to trigger via JS */
+        .animate-boy {
+            animation: boyIn 0.6s ease forwards;
+        }
+        @keyframes boyIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-hi {
+            animation: hiPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes hiPop {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .animate-torch {
+            animation: torchExpand 1.2s ease-in forwards;
+        }
+        @keyframes torchExpand {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(5); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(50); background-color: #fff; }
+        }
+
     </style>
 </head>
 <body>
@@ -191,12 +264,9 @@
     <div class="bg-glow-1"></div>
     <div class="bg-glow-2"></div>
 
+    <!-- 1. WELCOME SCREEN -->
     <div class="container" id="mainContainer">
-        
-        <!-- S Icon Logo -->
         <img src="IMG_20261019_105230.jpg" alt="SEAOX Logo" class="s-logo">
-        
-        <!-- Transparent SEAOX Text Logo -->
         <img src="1000060185-removebg-preview.png" alt="SEAOX Text" class="brand-logo-img">
         
         <div class="welcome-title">
@@ -211,20 +281,48 @@
             <div class="dot"></div>
             <div class="dot"></div>
         </div>
-
     </div>
 
-    <script>
-        // Page load hone ke 2.5 second baad slide trigger hoga
-        setTimeout(function() {
-            document.getElementById('mainContainer').classList.add('slide-out');
-            
-            // 2 second (2000ms) ka wait karo jab tak slide poora ho jaye, phir menu kholo
-            setTimeout(function() {
-                window.location.href = 'menu.html';
-            }, 2000); 
+    <!-- 2. TRANSITION SCREEN (LADKA + TORCH) -->
+    <div class="transition-screen" id="transitionScreen">
+        <!-- Yahan tu apne ladke ki image ka naam dalna (PNG hona chahiye) -->
+        <img src="boy-transparent.png" alt="Boy" class="boy-img" id="boyImg">
+        <div class="hi-text" id="hiText">Hi!</div>
+        <div class="torch-glow" id="torchGlow"></div>
+    </div>
 
-        }, 2500); 
+    <!-- 3. JAVASCRIPT LOGIC (4 Second Timing) -->
+    <script>
+        // 1. Welcome Screen ko 2 second (2000ms) dikhao
+        setTimeout(function() {
+            // Welcome screen fade out karo
+            document.getElementById('mainContainer').classList.add('fade-out');
+            
+            // Black screen show karo
+            const transScreen = document.getElementById('transitionScreen');
+            transScreen.classList.add('show-black');
+
+            // 2. Ladke ko 2.2 second par laao (Black screen ke thik baad)
+            setTimeout(() => {
+                document.getElementById('boyImg').classList.add('animate-boy');
+            }, 200);
+
+            // 3. "Hi" text ko 2.6 second par dikhao
+            setTimeout(() => {
+                document.getElementById('hiText').classList.add('animate-hi');
+            }, 600);
+
+            // 4. Torch Light ko 3.0 second par chalao
+            setTimeout(() => {
+                document.getElementById('torchGlow').classList.add('animate-torch');
+            }, 1000);
+
+            // 5. Exact 4 second (4000ms) par Menu page par redirect karo
+            setTimeout(() => {
+                window.location.href = 'menu.html';
+            }, 2000); // 2s welcome + 2s animation = 4s total
+
+        }, 2000); 
     </script>
 </body>
 </html>
