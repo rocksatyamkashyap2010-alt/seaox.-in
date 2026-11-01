@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* 🔥 PROPERTY FOR ROTATING BORDER ANIMATION 🔥 */
         @property --angle {
             syntax: "<angle>";
             initial-value: 0deg;
@@ -66,7 +65,7 @@
         .icon-btn.chat { background: #E4E6EB; color: #333; font-size: 18px; cursor: pointer;}
         .icon-btn svg { width: 20px; height: 20px; fill: white; }
 
-        /* 🎠 SLIDER (CAROUSEL) STYLES 🎠 */
+        /* 🎠 SLIDER STYLES 🎠 */
         .slider-container { 
             width: 100%; 
             overflow: hidden; 
@@ -95,7 +94,6 @@
             overflow: hidden;
         }
 
-        /* Dark Blue Curved Shape (Only for text slides) */
         .slide::after {
             content: '';
             position: absolute;
@@ -107,14 +105,22 @@
             z-index: 1;
         }
 
-        /* 🔥 SPECIAL STYLE FOR IMAGE SLIDES 🔥 */
+        /* Image slides */
         .slide.image-slide {
             padding: 0;
-            background: transparent;
-            display: block;
+            background: #ffffff; 
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            height: 220px; /* Height set for images */
         }
         .slide.image-slide::after { display: none; }
-        .slide.image-slide img { width: 100%; display: block; object-fit: contain; }
+        .slide.image-slide img { 
+            width: 100%; 
+            height: 100%;
+            object-fit: contain; 
+            display: block; 
+        }
 
         .slide-content { 
             display: flex; 
@@ -166,7 +172,6 @@
         }
         .slide-arrow svg { width: 20px; height: 20px; fill: white; }
 
-        /* Slider Indicators */
         .slider-dots {
             position: absolute;
             bottom: 8px; left: 50%;
@@ -185,20 +190,17 @@
             border-radius: 4px;
         }
 
-        /* 🔥 GRID & ROTATING BORDER SETUP 🔥 */
+        /* Tools Grid */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
 
         .card { 
             border-radius: 18px; 
             text-decoration: none; 
             min-height: 125px;
-            
             opacity: 0;
             transform: translateY(50px);
-            
             background: conic-gradient(from var(--angle), #FFD700, #00BFFF, #FFD700); 
             padding: 3px; 
-            
             animation: slideUpFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, rotateBorder 3s linear infinite;
         }
 
@@ -239,7 +241,7 @@
         .card-title { font-size: 14px; font-weight: 700; color: #111; line-height: 1.2; }
         .card-arrow { color: #1877F2; font-size: 16px; font-weight: bold; }
 
-        /* Modal (Contact Us) */
+        /* Modal */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: #fff; width: 85%; max-width: 350px; border-radius: 15px; padding: 25px 20px; text-align: center; position: relative; }
         .close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: bold; color: #888; cursor: pointer; }
@@ -281,44 +283,39 @@
                     <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 </a>
 
-                <!-- 2. Nayi Image 1 -->
+                <!-- New Images Slides -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="file_00000000217c820895205de4b6ee467b.png" alt="Tractor Book Feature">
+                    <img src="Budhau.png" alt="Tractor Book Feature">
+                </a>
+                
+                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
+                    <img src="Diesel.png" alt="Tractor Book Feature">
                 </a>
 
-                <!-- 3. Nayi Image 2 -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="file_0000000037588208a574ac7c8ebbfbea.png" alt="Tractor Book Feature">
+                    <img src="Impliments.png" alt="Tractor Book Feature">
                 </a>
 
-                <!-- 4. Nayi Image 3 -->
+                <!-- Space encoded as %20 for safe loading -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="file_0000000046dc820880fa6784fa1c2cd7.png" alt="Tractor Book Feature">
+                    <img src="Live%20calculator.png" alt="Tractor Book Feature">
                 </a>
 
-                <!-- 5. Nayi Image 4 -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="file_0000000086288208acc968fed8f7c4b8.png" alt="Tractor Book Feature">
+                    <img src="Pushpa.png" alt="Tractor Book Feature">
                 </a>
 
-                <!-- 6. Nayi Image 5 -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="file_00000000a11081faa1e6aba0030f2076.png" alt="Tractor Book Feature">
+                    <img src="Recipt.png" alt="Tractor Book Feature">
                 </a>
 
-                <!-- 7. Nayi Image 6 -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="file_00000000acf88211bd9890e44652fe5a.png" alt="Tractor Book Feature">
+                    <img src="Reports.png" alt="Tractor Book Feature">
                 </a>
 
-                <!-- 8. Nayi Image 7 -->
+                <!-- Space and brackets encoded for safe loading -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="file_00000000e4108208861e8e0bee31ce82.png" alt="Tractor Book Feature">
-                </a>
-
-                <!-- 9. Nayi Image 8 -->
-                <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
-                    <img src="file_000000002aa082088e705d622068d47a.png" alt="Tractor Book Feature">
+                    <img src="Website%20(1).png" alt="Tractor Book Feature">
                 </a>
 
             </div>
@@ -329,69 +326,14 @@
 
         <!-- Tools Grid -->
         <div class="grid">
-            <!-- 1. PDF Maker -->
-            <a href="pdf-tool.html" class="card">
-                <div class="card-inner">
-                    <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6" fill="none" stroke="#fff" stroke-width="2"/><path d="M8 13h8M8 17h8M8 9h2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
-                    <div class="card-bottom"><div class="card-title">PDF Maker</div><div class="card-arrow">→</div></div>
-                </div>
-            </a>
-            
-            <!-- 2. Photo Compressor -->
-            <a href="image-compressor.html" class="card">
-                <div class="card-inner">
-                    <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
-                    <div class="card-bottom"><div class="card-title">Photo<br>Compressor</div><div class="card-arrow">→</div></div>
-                </div>
-            </a>
-            
-            <!-- 3. Screenshot Editor -->
-            <a href="image-editor.html" class="card">
-                <div class="card-inner">
-                    <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div>
-                    <div class="card-bottom"><div class="card-title">Screenshot<br>Editor</div><div class="card-arrow">→</div></div>
-                </div>
-            </a>
-            
-            <!-- 4. Invoice Generator -->
-            <a href="invoice.html" class="card">
-                <div class="card-inner">
-                    <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
-                    <div class="card-bottom"><div class="card-title">Invoice<br>Generator</div><div class="card-arrow">→</div></div>
-                </div>
-            </a>
-            
-            <!-- 5. Video Editor -->
-            <a href="video-editor.html" class="card">
-                <div class="card-inner">
-                    <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div>
-                    <div class="card-bottom"><div class="card-title">Video Editor</div><div class="card-arrow">→</div></div>
-                </div>
-            </a>
-            
-            <!-- 6. Protect PDF -->
-            <a href="pdf-protect.html" class="card">
-                <div class="card-inner">
-                    <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg></div>
-                    <div class="card-bottom"><div class="card-title">Protect PDF</div><div class="card-arrow">→</div></div>
-                </div>
-            </a>
-            
-            <!-- 7. QR Code Maker -->
-            <a href="upi-qr.html" class="card">
-                <div class="card-inner">
-                    <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2z"/></svg></div>
-                    <div class="card-bottom"><div class="card-title">QR Code Maker</div><div class="card-arrow">→</div></div>
-                </div>
-            </a>
-            
-            <!-- 8. Smart Calculator -->
-            <a href="smart-calculator.html" class="card">
-                <div class="card-inner">
-                    <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V9h10v2zm-8 8H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V9h2v2zm0-4H7V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2z"/></svg></div>
-                    <div class="card-bottom"><div class="card-title">Smart<br>Calculator</div><div class="card-arrow">→</div></div>
-                </div>
-            </a>
+            <a href="pdf-tool.html" class="card"><div class="card-inner"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6" fill="none" stroke="#fff" stroke-width="2"/><path d="M8 13h8M8 17h8M8 9h2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div><div class="card-bottom"><div class="card-title">PDF Maker</div><div class="card-arrow">→</div></div></div></a>
+            <a href="image-compressor.html" class="card"><div class="card-inner"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div><div class="card-bottom"><div class="card-title">Photo<br>Compressor</div><div class="card-arrow">→</div></div></div></a>
+            <a href="image-editor.html" class="card"><div class="card-inner"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div><div class="card-bottom"><div class="card-title">Screenshot<br>Editor</div><div class="card-arrow">→</div></div></div></a>
+            <a href="invoice.html" class="card"><div class="card-inner"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div><div class="card-bottom"><div class="card-title">Invoice<br>Generator</div><div class="card-arrow">→</div></div></div></a>
+            <a href="video-editor.html" class="card"><div class="card-inner"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div><div class="card-bottom"><div class="card-title">Video Editor</div><div class="card-arrow">→</div></div></div></a>
+            <a href="pdf-protect.html" class="card"><div class="card-inner"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg></div><div class="card-bottom"><div class="card-title">Protect PDF</div><div class="card-arrow">→</div></div></div></a>
+            <a href="upi-qr.html" class="card"><div class="card-inner"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2zm6 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm-3 0h2v2h-2v-2z"/></svg></div><div class="card-bottom"><div class="card-title">QR Code Maker</div><div class="card-arrow">→</div></div></div></a>
+            <a href="smart-calculator.html" class="card"><div class="card-inner"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V9h10v2zm-8 8H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V9h2v2zm0-4H7V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2z"/></svg></div><div class="card-bottom"><div class="card-title">Smart<br>Calculator</div><div class="card-arrow">→</div></div></div></a>
         </div>
     </div>
 
@@ -406,7 +348,6 @@
     </div>
 
     <script>
-        // Slider Logic
         const track = document.getElementById('sliderTrack');
         const dotsContainer = document.getElementById('sliderDots');
         const slides = document.querySelectorAll('.slide');
@@ -433,21 +374,17 @@
         }
 
         function startAutoSlide() {
-            slideInterval = setInterval(nextSlide, 3000); // 3 seconds per slide
+            slideInterval = setInterval(nextSlide, 3000); 
         }
 
-        function stopAutoSlide() {
-            clearInterval(slideInterval);
-        }
+        function stopAutoSlide() { clearInterval(slideInterval); }
 
         startAutoSlide();
-
         track.addEventListener('mouseenter', stopAutoSlide);
         track.addEventListener('mouseleave', startAutoSlide);
         track.addEventListener('touchstart', stopAutoSlide);
         track.addEventListener('touchend', startAutoSlide);
 
-        // Modal Logic
         function openModal() { document.getElementById('contactModal').style.display = 'flex'; }
         function closeModal() { document.getElementById('contactModal').style.display = 'none'; }
         window.onclick = function(event) {
