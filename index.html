@@ -7,8 +7,7 @@
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     
     <meta name="description" content="SEAOX Powered Apps: PDF Maker • Video Editor • Photo Compressor • Screenshot Editor • Invoice Generator • Protect PDF • QR Code Maker • Smart Calculator. Download Tractor Book App!">
-    <meta name="keywords" content="SEAOX, PDF Maker, Video Editor, Tractor Book, Photo Compressor, Smart Calculator, QR Maker, Shivam Kashyap, Satyam Kashyap">
-
+    
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -26,27 +25,21 @@
             position: relative;
         }
 
-        /* === WELCOME SCREEN CSS === */
+        /* ========================================= */
+        /* 1. WELCOME SCREEN CSS */
+        /* ========================================= */
         .bg-glow-1, .bg-glow-2 {
-            position: absolute;
-            width: 200vw; height: 200vw;
-            border-radius: 50%;
-            filter: blur(100px);
-            z-index: 0;
-            opacity: 0.4;
+            position: absolute; width: 200vw; height: 200vw;
+            border-radius: 50%; filter: blur(100px); z-index: 0; opacity: 0.4;
         }
         .bg-glow-1 { top: -100vw; left: -50vw; background: radial-gradient(circle, rgba(0,229,255,0.4) 0%, transparent 60%); }
         .bg-glow-2 { bottom: -100vw; right: -50vw; background: radial-gradient(circle, rgba(157,0,255,0.3) 0%, transparent 60%); }
 
         .welcome-container {
-            z-index: 2;
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100vh;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center;
+            z-index: 10; position: absolute; top: 0; left: 0; width: 100%; height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
             transition: opacity 0.8s ease;
         }
-
         .fade-out { opacity: 0; pointer-events: none; }
 
         .s-logo {
@@ -56,19 +49,13 @@
         }
         @keyframes logoFloat { from { transform: translateY(0); } to { transform: translateY(-10px); } }
 
-        .brand-logo-img {
-            width: 250px; max-width: 85%; margin-bottom: 20px;
-            filter: brightness(1.5) drop-shadow(0 0 10px rgba(0, 229, 255, 0.5));
-        }
-
+        .brand-logo-img { width: 250px; max-width: 85%; margin-bottom: 20px; filter: brightness(1.5) drop-shadow(0 0 10px rgba(0, 229, 255, 0.5)); }
         .welcome-title { color: #ffffff; font-size: 1.8rem; font-weight: 600; line-height: 1.2; margin-bottom: 10px; }
         .welcome-title span {
             display: block; font-size: 2rem; font-weight: 800; letter-spacing: 1px;
-            background: linear-gradient(90deg, #00e5ff, #9d00ff);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background: linear-gradient(90deg, #00e5ff, #9d00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .tagline { color: #a0b0d0; font-size: 0.9rem; margin-bottom: 40px; }
-
         .dots { display: flex; gap: 15px; }
         .dot { width: 12px; height: 12px; border-radius: 50%; animation: pulse 1.5s infinite; }
         .dot:nth-child(1) { background-color: #00e5ff; box-shadow: 0 0 15px #00e5ff; }
@@ -77,167 +64,127 @@
         @keyframes pulse { 0% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.5; } }
 
 
-        /* === 🔥 NAYA BOY ANIMATION STAGE 🔥 === */
+        /* ========================================= */
+        /* 2. BLACK SCREEN ANIMATION STAGE */
+        /* ========================================= */
         .animation-stage {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #000;
-            z-index: 100;
-            display: none; /* Initially hidden */
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000; z-index: 100;
+            display: flex; justify-content: center; align-items: center; overflow: hidden;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
         }
+        .animation-stage.active { opacity: 1; pointer-events: auto; }
 
-        /* CSS se bana hua ladka */
+        /* ========================================= */
+        /* 3. CUSTOM CSS LADKA (Boy Design) */
+        /* ========================================= */
         .css-boy {
-            position: absolute;
-            left: -100vw; /* Start from left */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 102;
+            display: flex; flex-direction: column; align-items: center; position: relative;
+            opacity: 0; transform: translateX(-100vw);
+        }
+        .animate-slide-in { animation: slideIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateX(-100vw); }
+            100% { opacity: 1; transform: translateX(0); }
         }
 
-        /* Boy Body Parts */
+        /* Head */
         .head {
-            width: 80px; height: 80px;
-            background-color: #fcd2b3; /* Skin color */
-            border-radius: 50%;
-            position: relative;
-            border: 4px solid #000;
+            width: 90px; height: 90px; background-color: #fcd2b3;
+            border-radius: 45px; position: relative; border: 3px solid #222; z-index: 3;
         }
         .hair {
-            position: absolute; top: -5px; left: -5px; right: -5px; height: 40px;
-            background-color: #000;
-            border-radius: 40px 40px 0 0;
+            position: absolute; top: -5px; left: -5px; right: -5px; height: 45px;
+            background-color: #222; border-radius: 45px 45px 0 0;
+            clip-path: polygon(0% 100%, 10% 20%, 30% 40%, 50% 0%, 70% 40%, 90% 20%, 100% 100%);
         }
-        .eye { position: absolute; top: 35px; width: 8px; height: 8px; background: #000; border-radius: 50%; }
+        .eye { position: absolute; top: 45px; width: 10px; height: 12px; background-color: #222; border-radius: 50%; }
         .eye.left { left: 20px; }
         .eye.right { right: 20px; }
-        .smile {
-            position: absolute; bottom: 15px; left: 25px; width: 30px; height: 15px;
-            border-bottom: 3px solid #000; border-radius: 0 0 20px 20px;
+        .smile { position: absolute; bottom: 20px; left: 25px; width: 40px; height: 20px; border-bottom: 3px solid #222; border-radius: 0 0 20px 20px; }
+
+        /* Torso */
+        .torso {
+            width: 110px; height: 130px; background-color: #e74c3c; /* Red jacket */
+            border-radius: 20px; margin-top: -15px; position: relative; border: 3px solid #222; z-index: 2;
         }
-        
-        .body {
-            width: 90px; height: 110px;
-            background-color: #e74c3c; /* Red Jacket */
-            border-radius: 20px;
-            margin-top: -5px;
-            position: relative;
-            border: 4px solid #000;
+        .shirt-stripe {
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 50px; height: 100%;
+            background: repeating-linear-gradient(0deg, #fff, #fff 15px, #2ecc71 15px, #2ecc71 30px);
+            border-left: 2px solid #222; border-right: 2px solid #222;
         }
-        .stripe { width: 40px; height: 100%; background: repeating-linear-gradient(0deg, #fff, #fff 10px, #2ecc71 10px, #2ecc71 20px); margin: 0 auto; }
-        
-        .legs { display: flex; gap: 10px; margin-top: -5px; }
-        .leg { width: 30px; height: 60px; background-color: #2c3e50; border-radius: 0 0 10px 10px; border: 4px solid #000; }
 
         /* Arms */
         .arm {
-            position: absolute;
-            width: 20px; height: 60px;
-            background-color: #e74c3c;
-            border-radius: 10px;
-            border: 4px solid #000;
-            top: 10px;
-            transform-origin: top center;
-            transition: transform 0.5s ease;
+            position: absolute; width: 30px; height: 80px; background-color: #e74c3c;
+            border-radius: 15px; border: 3px solid #222; top: 10px;
+            transform-origin: top center; transition: transform 0.5s ease; z-index: 4;
         }
-        .arm.left { left: -20px; }
-        .arm.right { right: -20px; }
+        .arm.left { left: -25px; }
+        .arm.right { right: -25px; }
+        .hand {
+            position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+            width: 25px; height: 25px; background-color: #fcd2b3; border-radius: 50%; border: 3px solid #222;
+        }
 
-        /* Torch Element */
+        /* Legs & Shoes */
+        .legs { display: flex; gap: 15px; margin-top: -10px; z-index: 1; }
+        .leg {
+            width: 40px; height: 90px; background-color: #2c3e50;
+            border-radius: 10px 10px 5px 5px; border: 3px solid #222; position: relative;
+        }
+        .shoe {
+            position: absolute; bottom: -15px; left: -5px; right: -5px; height: 25px;
+            background-color: #e74c3c; border-radius: 10px; border: 3px solid #222;
+        }
+
+        /* Torch */
         .torch {
-            position: absolute;
-            bottom: -20px; left: -5px;
-            width: 15px; height: 30px;
-            background: #f1c40f;
-            border: 3px solid #000;
-            border-radius: 5px;
-            display: none; /* Hidden until pulled out */
+            position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%) translateY(20px);
+            width: 18px; height: 35px; background-color: #f1c40f; border-radius: 4px; border: 3px solid #222;
+            opacity: 0; transition: all 0.5s ease; z-index: 5;
         }
-
-        /* Torch Light Beam */
-        .light-beam {
-            position: absolute;
-            width: 10px; height: 10px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 100px 100px #fff;
-            opacity: 0;
-            z-index: 103;
-            transform: scale(0);
+        .torch::before { /* glass */
+            content: ''; position: absolute; top: -8px; left: 0; right: 0; height: 8px;
+            background-color: #fff; border-radius: 4px 4px 0 0; border: 3px solid #222; border-bottom: none;
         }
+        .torch.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* Text Bubble */
+        /* Hi Bubble */
         .hi-bubble {
-            position: absolute;
-            top: -50px; right: -60px;
-            background: #fff; color: #000;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: 900;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 24px;
-            opacity: 0;
-            transform: scale(0);
-            box-shadow: 0 5px 15px rgba(255,255,255,0.3);
+            position: absolute; top: -40px; right: -100px; background: #fff; color: #000;
+            padding: 10px 25px; border-radius: 20px; font-weight: 900; font-size: 32px;
+            font-family: 'Montserrat', sans-serif; opacity: 0; transform: scale(0);
+            box-shadow: 0 5px 15px rgba(255,255,255,0.3); border: 3px solid #222; z-index: 10;
         }
         .hi-bubble::after {
-            content: ''; position: absolute; bottom: -10px; left: 20px;
-            border-width: 10px 10px 0; border-style: solid; border-color: #fff transparent transparent transparent;
+            content: ''; position: absolute; bottom: -15px; left: 20px;
+            border-width: 15px 15px 0; border-style: solid; border-color: #fff transparent transparent transparent;
+            filter: drop-shadow(0 3px 0 #222);
         }
 
-        /* === ANIMATION KEYFRAMES === */
+        /* Light Beam */
+        .light-beam {
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%) scale(0);
+            width: 10px; height: 10px; background: #fff; border-radius: 50%;
+            box-shadow: 0 0 50px 50px #fff; opacity: 0; z-index: 105;
+        }
+
+        /* ========================================= */
+        /* 4. ANIMATION CLASSES (Trigger via JS) */
+        /* ========================================= */
+        .wave-hand { animation: wave 0.6s ease-in-out infinite alternate; }
+        @keyframes wave { 0% { transform: rotate(0deg); } 100% { transform: rotate(-140deg); } }
         
-        /* 1. Ladka Left se aayega */
-        .animate-slide-in {
-            animation: slideIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        @keyframes slideIn {
-            0% { left: -100vw; }
-            100% { left: 50%; transform: translateX(-50%); }
-        }
-
-        /* 2. Hath uthana (Waving Hand) */
-        .wave-hand {
-            animation: wave 0.6s ease-in-out 2 alternate;
-        }
-        @keyframes wave {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(-140deg); }
-        }
-
-        /* 3. Hi Bubble Popup */
-        .pop-hi {
-            animation: popHi 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        @keyframes popHi {
-            0% { opacity: 0; transform: scale(0); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        /* 4. Torch nikalna */
-        .pull-torch {
-            animation: pullTorch 0.5s ease forwards;
-        }
-        @keyframes pullTorch {
-            0% { transform: rotate(-140deg); }
-            100% { transform: rotate(-90deg); } /* Torch straight forward */
-        }
-
-        /* 5. Torch Light On */
-        .torch-on {
-            display: block;
-        }
-        .light-expand {
-            animation: lightExpand 1.5s ease-in forwards;
-        }
-        @keyframes lightExpand {
-            0% { opacity: 1; transform: scale(1); }
-            80% { opacity: 1; transform: scale(50); background: #fff; }
-            100% { opacity: 1; transform: scale(150); background: #fff; box-shadow: none; }
+        .point-torch { transform: rotate(-100deg); } /* Arm pointing towards screen */
+        
+        .pop-hi { animation: popHi 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes popHi { 0% { opacity: 0; transform: scale(0); } 100% { opacity: 1; transform: scale(1); } }
+        
+        .expand-light { animation: expandLight 2s ease-in forwards; }
+        @keyframes expandLight {
+            0% { opacity: 1; transform: translateX(-50%) scale(1); }
+            100% { opacity: 1; transform: translateX(-50%) scale(400); } /* 400x scale puri screen white kar dega */
         }
     </style>
 </head>
@@ -255,9 +202,7 @@
             Welcome to
             <span>SEAOX</span>
         </div>
-        
         <div class="tagline">Smart tools. Simple solutions.</div>
-        
         <div class="dots">
             <div class="dot"></div>
             <div class="dot"></div>
@@ -265,15 +210,13 @@
         </div>
     </div>
 
-    <!-- 2. ANIMATION STAGE (BLACK SCREEN) -->
+    <!-- 2. BLACK ANIMATION STAGE -->
     <div class="animation-stage" id="animationStage">
         
-        <!-- CSS Boy -->
+        <!-- CSS Ladka -->
         <div class="css-boy" id="boy">
-            <!-- Hi Bubble -->
             <div class="hi-bubble" id="hiBubble">Hi!</div>
-
-            <!-- Head -->
+            
             <div class="head">
                 <div class="hair"></div>
                 <div class="eye left"></div>
@@ -281,63 +224,68 @@
                 <div class="smile"></div>
             </div>
             
-            <!-- Body -->
-            <div class="body">
-                <div class="stripe"></div>
-                <!-- Left Arm (Holding Torch) -->
+            <div class="torso">
+                <div class="shirt-stripe"></div>
+                
+                <!-- Left Arm (Torch wala) -->
                 <div class="arm left" id="leftArm">
-                    <div class="torch" id="torch"></div>
+                    <div class="hand"></div>
+                    <div class="torch" id="torch">
+                        <div class="light-beam" id="lightBeam"></div>
+                    </div>
                 </div>
-                <!-- Right Arm (Waving) -->
-                <div class="arm right" id="rightArm"></div>
+                
+                <!-- Right Arm (Hath hilane wala) -->
+                <div class="arm right" id="rightArm">
+                    <div class="hand"></div>
+                </div>
             </div>
 
-            <!-- Legs -->
             <div class="legs">
-                <div class="leg"></div>
-                <div class="leg"></div>
+                <div class="leg"><div class="shoe"></div></div>
+                <div class="leg"><div class="shoe"></div></div>
             </div>
         </div>
-
-        <!-- Torch Light -->
-        <div class="light-beam" id="lightBeam"></div>
     </div>
 
-    <!-- 3. JAVASCRIPT LOGIC (Timing) -->
+    <!-- 3. JAVASCRIPT TIMING LOGIC -->
     <script>
-        // Total Time: 4.5 Seconds (Thoda slow taaki animation samajh aaye)
-
-        // 1. 2 Second baad Welcome screen fade out aur Black screen start
+        // Total Time: ~7.5 Seconds (Welcome + Ladka aana + Hi + Torch + Light + Screen Open)
+        
+        // 1. 2 Second baad Welcome fade out
         setTimeout(function() {
             document.getElementById('welcomeScreen').classList.add('fade-out');
-            document.getElementById('animationStage').style.display = 'flex';
+            document.getElementById('animationStage').classList.add('active');
             
-            // Black screen aane ke baad (0.5s delay), Ladka left se slide hoga
+            // 2. 0.5 Second baad Ladka left se aayega
             setTimeout(() => {
                 document.getElementById('boy').classList.add('animate-slide-in');
             }, 500);
 
-            // 2. Ladka aane ke baad (2.0s), Hath uthayega aur "Hi" bolega
+            // 3. Ladka rukne ke baad (1.5s), Hath uthayega aur "Hi" bolega
             setTimeout(() => {
                 document.getElementById('rightArm').classList.add('wave-hand');
                 document.getElementById('hiBubble').classList.add('pop-hi');
             }, 2000);
 
-            // 3. "Hi" bolne ke baad (3.0s), Torch nikalega
+            // 4. Fir 2 second baad (Total 4s), hath niche karke torch nikalega
             setTimeout(() => {
-                document.getElementById('torch').classList.add('torch-on');
-                document.getElementById('leftArm').classList.add('pull-torch');
-            }, 3000);
+                document.getElementById('rightArm').classList.remove('wave-hand'); // Hath niche
+                document.getElementById('hiBubble').style.opacity = 0; // Bubble gayab
+                
+                document.getElementById('torch').classList.add('show'); // Torch show
+                document.getElementById('leftArm').classList.add('point-torch'); // Torch point karega
+            }, 4000);
 
-            // 4. Torch nikalne ke baad (3.5s), Torch ki light ON aur expand hogi
+            // 5. Torch point karne ke 1 second baad (Total 5s), Torch Light ON
             setTimeout(() => {
-                document.getElementById('lightBeam').classList.add('light-expand');
-            }, 3500);
+                document.getElementById('lightBeam').classList.add('expand-light');
+            }, 5000);
 
-            // 5. Light expand hone ke baad (4.8s), Menu page open hoga
+            // 6. Light failne ke baad (Total 7s), Menu page open
             setTimeout(() => {
                 window.location.href = 'menu.html';
-            }, 4800); // Thoda wait kiya taaki white light puri screen cover kar le
+            }, 7000); 
 
         }, 2000); 
     </script>
