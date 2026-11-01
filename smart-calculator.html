@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,7 @@
 
 body{
 margin:0;padding:12px;
-font-family:'Segoe UI',sans-serif;
+font-family:'Segoe UI',Arial,sans-serif;
 background:#f4f7f6;
 display:flex;flex-direction:column;
 align-items:center;min-height:100vh;
@@ -34,7 +34,7 @@ text-decoration:none;margin-right:15px;
 
 .card{
 background:white;padding:16px;
-border-radius:16px;
+border-radius:18px;
 box-shadow:0 8px 20px rgba(0,0,0,.08);
 max-width:500px;width:100%;
 text-align:center;
@@ -43,30 +43,35 @@ text-align:center;
 .tabs{
 display:flex;gap:7px;
 border-bottom:1px solid #eee;
-padding-bottom:12px;margin-bottom:16px;
+padding-bottom:14px;margin-bottom:18px;
 }
 
 .tab-btn{
-flex:1;padding:12px 5px;
-border:0;border-radius:9px;
+flex:1;padding:14px 5px;
+border:0;border-radius:12px;
 background:#eee;color:#333;
-font-weight:bold;font-size:15px;
+font-weight:bold;font-size:16px;
 cursor:pointer;
 }
 
-.tab-btn.active{background:#1877F2;color:white}
+.tab-btn.active{
+background:#1877F2;color:white;
+}
 
 .tab-content{display:none}
 .tab-content.active{display:block}
 
 .btn{
-padding:15px;border-radius:10px;
-font-size:16px;font-weight:bold;
+padding:17px 10px;border-radius:12px;
+font-size:17px;font-weight:bold;
 cursor:pointer;border:none;
-width:100%;color:white;margin-bottom:10px;
+width:100%;color:white;margin-bottom:12px;
 }
 
-.btn-mic{background:#E53935;font-size:18px}
+.btn-mic{
+background:#E53935;
+box-shadow:0 4px 10px rgba(229,57,53,.2);
+}
 
 .btn-mic.recording{
 background:#00A859;
@@ -80,95 +85,109 @@ animation:pulse 1.5s infinite;
 .btn-upload{background:#00A859}
 .btn-calc{background:#F39C12;font-size:18px}
 
-.language{
-width:100%;padding:12px;
-border:1px solid #ddd;border-radius:8px;
-margin-bottom:12px;font-size:15px;
+.hint{
+font-size:15px;color:#777;
+line-height:1.7;margin-bottom:15px;
 }
 
-.hint{
-font-size:13px;color:#777;
-line-height:1.6;
+.language{
+width:100%;padding:14px;
+border:1px solid #ddd;border-radius:10px;
+margin-bottom:14px;font-size:16px;
+background:#f1f1f1;
 }
 
 .voice-transcript{
-font-size:16px;color:#1877F2;
-min-height:45px;padding:12px;
-background:#e3f2fd;border-radius:8px;
-text-align:left;margin-bottom:10px;
+font-size:18px;color:#1877F2;
+min-height:55px;padding:13px;
+background:#e3f2fd;border-radius:10px;
+text-align:left;margin:12px 0;
 overflow-wrap:anywhere;
 }
 
 .voice-total{
 background:#00A859;color:white;
-border-radius:12px;padding:15px;
-margin:12px 0;display:none;
+border-radius:13px;padding:18px;
+margin:14px 0;display:none;
 }
 
 .voice-total small{
-display:block;font-size:13px;
+display:block;font-size:14px;
 }
 
-.voice-total strong{font-size:30px}
+.voice-total strong{
+display:block;font-size:36px;
+margin-top:5px;
+}
 
 .result-area{
-text-align:left;margin-top:12px;
-background:#f9f9f9;padding:13px;
-border-radius:10px;border:1px solid #ddd;
+text-align:left;margin-top:14px;
+background:#f9f9f9;padding:15px;
+border-radius:14px;border:1px solid #ddd;
 }
 
 .result-header{
 display:flex;justify-content:space-between;
-align-items:center;margin-bottom:10px;
+align-items:center;margin-bottom:12px;
+font-size:17px;
 }
 
 textarea{
-width:100%;height:150px;
-padding:10px;font-size:20px;
+width:100%;height:155px;
+padding:12px;font-size:22px;
 font-family:monospace;
 border:2px solid #1877F2;
-border-radius:8px;resize:vertical;
-margin-bottom:12px;line-height:1.5;
+border-radius:10px;resize:vertical;
+margin-bottom:13px;line-height:1.6;
 text-align:right;background:white;
 }
 
 .total-box{
 background:#00A859;color:white;
-padding:16px;border-radius:10px;
-text-align:center;font-size:30px;
-font-weight:bold;margin-top:12px;
+padding:20px;border-radius:12px;
+text-align:center;font-size:34px;
+font-weight:bold;margin-top:14px;
 display:none;overflow-wrap:anywhere;
 }
 
 .btn-clear{
 background:none;border:none;
 color:#E53935;font-weight:bold;
-cursor:pointer;font-size:14px;
+cursor:pointer;font-size:16px;
 }
 
-.loader-container{display:none;margin:18px 0}
+.loader-container{
+display:none;margin:20px 0;
+}
 
 .loader{
 border:4px solid #eee;
 border-top:4px solid #00A859;
-border-radius:50%;width:32px;height:32px;
+border-radius:50%;width:36px;height:36px;
 animation:spin 1s linear infinite;margin:auto;
 }
 
 @keyframes spin{to{transform:rotate(360deg)}}
 
 #status{
-font-size:13px;font-weight:bold;
-color:#FF9800;margin-top:10px;
+font-size:14px;font-weight:bold;
+color:#00A859;margin-top:12px;
+line-height:1.5;
 }
 
 #imagePreview{
-max-width:100%;max-height:250px;
-border-radius:10px;display:none;
-margin:10px auto;
+max-width:100%;max-height:280px;
+border-radius:12px;display:none;
+margin:12px auto;
 }
 
 input[type=file]{display:none}
+
+@media(max-width:360px){
+.title{font-size:18px}
+.tab-btn{font-size:14px}
+.total-box{font-size:28px}
+}
 </style>
 </head>
 
@@ -184,30 +203,35 @@ input[type=file]{display:none}
 <!-- TABS -->
 
 <div class="tabs">
-<button class="tab-btn active" onclick="switchTab('voice',this)">
+<button class="tab-btn active"
+onclick="switchTab('voice',this)">
 🎙️ Voice
 </button>
 
-<button class="tab-btn" onclick="switchTab('photo',this)">
+<button class="tab-btn"
+onclick="switchTab('photo',this)">
 📸 Photo
 </button>
 </div>
 
-<!-- VOICE CALCULATOR -->
+<!-- VOICE -->
 
 <div id="tab-voice" class="tab-content active">
 
 <p class="hint">
 Mic दबाएँ और लगातार नंबर बोलें।
-उदाहरण: 564 plus 54545 plus 8454 plus 55
+हर नंबर अपने आप जुड़ता जाएगा।
+<br>
+उदाहरण: 589 plus 55 plus 855 plus 100
 </p>
 
 <select id="voiceLanguage" class="language">
+<option value="hi-IN">हिंदी</option>
 <option value="en-IN">English / Indian English</option>
-<option value="hi-IN">Hindi</option>
 </select>
 
-<button class="btn btn-mic" id="micBtn" onclick="toggleVoice()">
+<button class="btn btn-mic" id="micBtn"
+onclick="toggleVoice()">
 🎙️ Start Speaking
 </button>
 
@@ -224,29 +248,33 @@ Ready to calculate
 <strong id="voiceTotalValue">₹ 0</strong>
 </div>
 
-<div class="result-area" id="voiceResult" style="display:none">
+<div class="result-area" id="voiceResult"
+style="display:none">
 
 <div class="result-header">
 <b>Recognized Numbers</b>
-<button class="btn-clear" onclick="clearVoice()">Clear</button>
+<button class="btn-clear" onclick="clearVoice()">
+Clear
+</button>
 </div>
 
 <textarea id="voiceNumbers"
-placeholder="बोले हुए नंबर यहाँ आएँगे..."
+placeholder="आपके बोले हुए नंबर..."
 oninput="updateVoiceTotal()"></textarea>
 
-<button class="btn btn-calc" onclick="calculateVoice()">
+<button class="btn btn-calc"
+onclick="calculateVoice()">
 🧮 Calculate Total
 </button>
 
 </div>
 </div>
 
-<!-- PHOTO CALCULATOR -->
+<!-- PHOTO -->
 
 <div id="tab-photo" class="tab-content">
 
-<p class="hint" style="color:#E53935;font-weight:bold">
+<p class="hint" style="color:#D84343;font-weight:bold">
 पर्ची पर नंबर साफ और गहरे पेन से लिखें।
 </p>
 
@@ -262,25 +290,31 @@ onclick="document.getElementById('imageUpload').click()">
 
 <div class="loader-container" id="loaderContainer">
 <div class="loader"></div>
-<p id="loadingText" class="hint">AI पर्ची पढ़ रहा है...</p>
+<p id="loadingText" class="hint">
+AI पर्ची पढ़ रहा है...
+</p>
 </div>
 
 </div>
 
 <!-- PHOTO RESULT -->
 
-<div class="result-area" id="photoResult" style="display:none">
+<div class="result-area" id="photoResult"
+style="display:none">
 
 <div class="result-header">
 <b>Check & Edit Numbers</b>
-<button class="btn-clear" onclick="clearPhoto()">Clear</button>
+<button class="btn-clear" onclick="clearPhoto()">
+Clear
+</button>
 </div>
 
 <textarea id="extractedText"
 placeholder="Numbers यहाँ आएँगे..."
 oninput="hidePhotoTotal()"></textarea>
 
-<button class="btn btn-calc" onclick="calculatePhoto()">
+<button class="btn btn-calc"
+onclick="calculatePhoto()">
 ✅ DONE - Calculate Total
 </button>
 
@@ -294,9 +328,9 @@ oninput="hidePhotoTotal()"></textarea>
 
 <script>
 
-// ====================================
-// COMMON FUNCTIONS
-// ====================================
+// ======================================
+// COMMON
+// ======================================
 
 const $ = id => document.getElementById(id);
 
@@ -319,17 +353,19 @@ button.classList.add("active");
 
 }
 
-// ====================================
-// VOICE CALCULATOR
-// ====================================
+// ======================================
+// VOICE CALCULATOR - DUPLICATE FIX
+// ======================================
 
 const SpeechRecognition =
 window.SpeechRecognition ||
 window.webkitSpeechRecognition;
 
-let recognition=null;
-let isRecording=false;
-let restartAllowed=false;
+let recognition = null;
+let shouldContinue = false;
+let sessionId = 0;
+let restartTimer = null;
+let isRecording = false;
 
 function updateVoiceTotal(){
 
@@ -348,224 +384,254 @@ numbers.length?"block":"none";
 
 }
 
-function parseSpeech(text){
-
-const matches=text.match(/\d+(?:\.\d+)?/g);
-
-if(matches && matches.length){
-return matches.map(Number);
-}
-
-return [];
-}
-
 function addVoiceNumbers(numbers){
 
 if(!numbers.length)return;
 
-const existing=$("voiceNumbers").value.trim();
+const current=$("voiceNumbers").value.trim();
 
-const newNumbers=numbers.join("\n");
+const newText=numbers.join("\n");
 
 $("voiceNumbers").value=
-existing?existing+"\n"+newNumbers:newNumbers;
+current?current+"\n"+newText:newText;
 
 $("voiceResult").style.display="block";
 
 updateVoiceTotal();
 
 $("voiceStatus").innerText=
-"✓ "+numbers.length+" number(s) added";
+"✓ "+numbers.length+" number(s) added successfully";
 
 }
 
-function setupRecognition(){
+function createVoiceSession(mySession){
 
-if(!SpeechRecognition){
-$("voiceStatus").innerText=
-"Voice support नहीं है। Android Chrome में खोलें।";
-return false;
-}
+const rec=new SpeechRecognition();
 
-recognition=new SpeechRecognition();
+rec.lang=$("voiceLanguage").value;
+rec.continuous=false;
+rec.interimResults=true;
+rec.maxAlternatives=1;
 
-recognition.continuous=true;
-recognition.interimResults=true;
-recognition.maxAlternatives=1;
-recognition.lang=$("voiceLanguage").value;
+let resultProcessed=false;
 
-recognition.onstart=()=>{
+rec.onstart=()=>{
+
+if(mySession!==sessionId)return;
 
 isRecording=true;
 
 $("micBtn").classList.add("recording");
 
-$("micBtn").innerText="🔴 Listening... Tap to Stop";
+$("micBtn").innerText=
+"🔴 Listening... Tap to Stop";
 
-$("voiceStatus").innerText="बोलिए, नंबर जुड़ते जाएँगे...";
+$("voiceStatus").innerText="Speak your numbers...";
 
 };
 
-recognition.onresult=(event)=>{
+rec.onresult=(event)=>{
 
-let interim="";
-let finalResults=[];
+if(mySession!==sessionId || resultProcessed)return;
 
+let finalText="";
+let interimText="";
+
+// Sirf naye final results padho
 for(let i=event.resultIndex;i<event.results.length;i++){
 
-const transcript=event.results[i][0].transcript;
+const result=event.results[i];
 
-if(event.results[i].isFinal){
-finalResults.push(transcript);
+if(result.isFinal){
+finalText+=result[0].transcript+" ";
 }else{
-interim+=transcript;
+interimText+=result[0].transcript+" ";
 }
 
 }
 
-if(finalResults.length){
+$("voiceTranscript").innerText=
+finalText.trim()||interimText.trim()||"...";
 
-const finalText=finalResults.join(" ");
+if(!finalText.trim())return;
 
-$("voiceTranscript").innerText=finalText;
+// Ek event ko sirf ek baar process karo
+resultProcessed=true;
 
-const numbers=parseSpeech(finalText);
+const numbers=finalText.match(
+/\d+(?:\.\d+)?/g
+)||[];
+
+if(numbers.length){
 
 addVoiceNumbers(numbers);
 
-}
+}else{
 
-if(interim){
-$("voiceTranscript").innerText=interim;
+$("voiceStatus").innerText=
+"Number पहचान नहीं आया। दोबारा बोलें।";
+
 }
 
 };
 
-recognition.onerror=(event)=>{
+rec.onerror=(event)=>{
 
-$("voiceStatus").innerText="Voice Error: "+event.error;
+if(mySession!==sessionId)return;
+
+$("voiceStatus").innerText=
+"Voice error: "+event.error;
 
 if(
 event.error==="not-allowed"||
-event.error==="service-not-allowed"||
-event.error==="audio-capture"
+event.error==="service-not-allowed"
 ){
-restartAllowed=false;
-stopVoice();
+
+shouldContinue=false;
+
 }
 
 };
 
-recognition.onend=()=>{
+rec.onend=()=>{
+
+if(mySession!==sessionId)return;
 
 isRecording=false;
 
-if(restartAllowed){
+if(shouldContinue){
 
-setTimeout(()=>{
+clearTimeout(restartTimer);
 
-if(restartAllowed){
+restartTimer=setTimeout(()=>{
 
-try{
-recognition.start();
-}catch(error){}
+if(
+shouldContinue &&
+mySession===sessionId
+){
+
+startOneVoiceSession(mySession);
 
 }
 
-},300);
+},400);
 
 }else{
-stopVoice();
+
+stopVoiceUI();
+
 }
 
 };
 
-return true;
+return rec;
+
+}
+
+function startOneVoiceSession(mySession){
+
+if(!shouldContinue||mySession!==sessionId)return;
+
+try{
+
+recognition=createVoiceSession(mySession);
+
+recognition.start();
+
+}catch(error){
+
+$("voiceStatus").innerText=
+"Mic start nahi hua. Dobara try karein.";
+
+}
 
 }
 
 function toggleVoice(){
 
-if(restartAllowed || isRecording){
+if(!SpeechRecognition){
 
-restartAllowed=false;
+$("voiceStatus").innerText=
+"Voice support nahi hai. Android Chrome use karein.";
 
-try{
-recognition.stop();
-}catch(error){}
-
-stopVoice();
 return;
 
 }
 
-if(!recognition ||
-recognition.lang!==$("voiceLanguage").value){
+if(shouldContinue){
 
-if(!setupRecognition())return;
+stopVoice();
+
+return;
 
 }
 
+clearTimeout(restartTimer);
+
 $("voiceNumbers").value="";
+
 $("voiceResult").style.display="block";
 $("voiceTotal").style.display="none";
 
 $("voiceTranscript").innerText="Listening...";
 
-restartAllowed=true;
+shouldContinue=true;
 
-try{
-recognition.start();
-}catch(error){
+sessionId++;
 
-restartAllowed=false;
-
-$("voiceStatus").innerText=
-"Microphone शुरू नहीं हुआ। दोबारा कोशिश करें।";
-
-}
+startOneVoiceSession(sessionId);
 
 }
 
 function stopVoice(){
 
+shouldContinue=false;
+
+sessionId++;
+
+clearTimeout(restartTimer);
+
+if(recognition){
+
+const oldRecognition=recognition;
+
+recognition=null;
+
+try{
+oldRecognition.stop();
+}catch(error){}
+
+}
+
+stopVoiceUI();
+
+}
+
+function stopVoiceUI(){
+
 isRecording=false;
-restartAllowed=false;
 
 $("micBtn").classList.remove("recording");
+
 $("micBtn").innerText="🎙️ Start Speaking";
 
 $("voiceStatus").innerText=
-"Stopped. आपके नंबर सुरक्षित हैं।";
+"Stopped. Aapke numbers safe hain.";
 
 }
 
 function calculateVoice(){
 
-const numbers=$("voiceNumbers").value.match(
-/-?\d+(?:\.\d+)?/g
-)||[];
-
-const total=numbers.reduce(
-(sum,n)=>sum+Number(n),0
-);
-
-$("voiceTotalValue").innerText=formatMoney(total);
-$("voiceTotal").style.display="block";
+updateVoiceTotal();
 
 }
 
 function clearVoice(){
 
-restartAllowed=false;
-
-if(recognition){
-try{recognition.stop();}catch(error){}
-}
-
 stopVoice();
 
 $("voiceNumbers").value="";
+
 $("voiceResult").style.display="none";
 $("voiceTotal").style.display="none";
 
@@ -574,32 +640,30 @@ $("voiceTranscript").innerText=
 
 }
 
-// ====================================
-// PHOTO OCR ENGINE
-// ====================================
+$("voiceLanguage").addEventListener("change",()=>{
+
+if(shouldContinue){
+stopVoice();
+}
+
+});
+
+// ======================================
+// PHOTO OCR
+// ======================================
 
 let ocrWorker=null;
-let ocrLoading=false;
+let workerLoading=null;
 
 async function getOCRWorker(){
 
 if(ocrWorker)return ocrWorker;
 
-if(ocrLoading){
+if(workerLoading)return workerLoading;
 
-while(ocrLoading){
-await new Promise(resolve=>setTimeout(resolve,100));
-}
+workerLoading=(async()=>{
 
-if(ocrWorker)return ocrWorker;
-
-}
-
-ocrLoading=true;
-
-try{
-
-ocrWorker=await Tesseract.createWorker("eng",1,{
+const worker=await Tesseract.createWorker("eng",1,{
 
 logger:m=>{
 
@@ -614,9 +678,9 @@ $("loadingText").innerText=
 
 });
 
-await ocrWorker.setParameters({
+await worker.setParameters({
 
-tessedit_char_whitelist:"0123456789",
+tessedit_char_whitelist:"0123456789.",
 
 tessedit_pageseg_mode:
 Tesseract.PSM.SINGLE_COLUMN,
@@ -625,19 +689,32 @@ preserve_interword_spaces:"1"
 
 });
 
-return ocrWorker;
+ocrWorker=worker;
+
+return worker;
+
+})();
+
+try{
+
+return await workerLoading;
+
+}catch(error){
+
+ocrWorker=null;
+throw error;
 
 }finally{
 
-ocrLoading=false;
+workerLoading=null;
 
 }
 
 }
 
-// ====================================
-// PHOTO UPLOAD AND PROCESSING
-// ====================================
+// ======================================
+// PHOTO PROCESSING
+// ======================================
 
 $("imageUpload").addEventListener("change",async(event)=>{
 
@@ -648,10 +725,11 @@ if(!file)return;
 $("loaderContainer").style.display="block";
 $("photoResult").style.display="none";
 
-$("status").innerText="Preparing photo...";
-$("status").style.color="#1877F2";
-
 $("totalAmount").style.display="none";
+
+$("status").innerText="Preparing photo...";
+
+$("status").style.color="#1877F2";
 
 const imageURL=URL.createObjectURL(file);
 
@@ -669,9 +747,10 @@ img.onerror=reject;
 });
 
 $("imagePreview").src=imageURL;
+
 $("imagePreview").style.display="block";
 
-// Image resize
+// Resize image
 
 const canvas=document.createElement("canvas");
 
@@ -679,7 +758,7 @@ const ctx=canvas.getContext("2d",{
 willReadFrequently:true
 });
 
-const maxWidth=1400;
+const maxWidth=1600;
 
 const scale=Math.min(1,maxWidth/img.width);
 
@@ -690,7 +769,7 @@ ctx.drawImage(
 img,0,0,canvas.width,canvas.height
 );
 
-// Image contrast enhancement
+// Contrast enhancement
 
 const imageData=ctx.getImageData(
 0,0,canvas.width,canvas.height
@@ -706,7 +785,7 @@ const gray=
 0.114*data[i+2];
 
 const enhanced=Math.max(
-0,Math.min(255,(gray-120)*1.4+120)
+0,Math.min(255,(gray-115)*1.35+115)
 );
 
 data[i]=enhanced;
@@ -717,95 +796,45 @@ data[i+2]=enhanced;
 
 ctx.putImageData(imageData,0,0);
 
+// OCR
+
 $("loadingText").innerText="AI पर्ची पढ़ रहा है...";
 
 const worker=await getOCRWorker();
 
 const result=await worker.recognize(canvas);
 
-// ====================================
-// IMPORTANT: LINE-WISE NUMBER GROUPING
-// ====================================
+// ======================================
+// LINE-WISE NUMBER READING
+// ======================================
 
-const words=(result.data.words||[])
+const lines=result.data.lines||[];
 
-.filter(w=>w.text && /\d/.test(w.text))
+let numbers=[];
 
-.sort((a,b)=>{
+if(lines.length){
 
-const ay=(a.bbox.y0+a.bbox.y1)/2;
-const by=(b.bbox.y0+b.bbox.y1)/2;
+numbers=lines
 
-return ay-by;
+.sort((a,b)=>a.bbox.y0-b.bbox.y0)
 
-});
+.map(line=>{
 
-const heights=words.map(w=>
-w.bbox.y1-w.bbox.y0
-).sort((a,b)=>a-b);
-
-const medianHeight=
-heights.length?
-heights[Math.floor(heights.length/2)]:20;
-
-const tolerance=Math.max(
-12,medianHeight*0.65
-);
-
-const rows=[];
-
-words.forEach(word=>{
-
-const centerY=
-(word.bbox.y0+word.bbox.y1)/2;
-
-let row=rows.find(r=>
-Math.abs(r.centerY-centerY)<=tolerance
-);
-
-if(!row){
-
-row={
-centerY:centerY,
-words:[]
-};
-
-rows.push(row);
-
-}else{
-
-// Update average row position
-row.centerY=
-(row.centerY*(row.words.length)+centerY)/
-(row.words.length+1);
-
-}
-
-row.words.push(word);
-
-});
-
-// Merge digits on the same horizontal line
-
-const numbers=rows
-
-.sort((a,b)=>a.centerY-b.centerY)
-
-.map(row=>{
-
-return row.words
-
-.sort((a,b)=>a.bbox.x0-b.bbox.x0)
-
-.map(w=>w.text.replace(/\D/g,""))
-
-.join("");
+// Same line ke saare digits jodo
+return line.text.replace(/[^0-9]/g,"");
 
 })
 
 .filter(n=>n.length>0);
 
-// Show result
+}else{
+
+// Fallback when OCR lines are unavailable
+numbers=(result.data.text.match(/\d+/g)||[]);
+
+}
+
+// Display editable numbers
 
 $("extractedText").value=numbers.join("\n");
 
@@ -817,14 +846,14 @@ if(numbers.length){
 
 $("status").innerText=
 numbers.length+
-" numbers मिले। Check करें और DONE दबाएँ।";
+" numbers mile. Check karein aur DONE dabayein.";
 
 $("status").style.color="#00A859";
 
 }else{
 
 $("status").innerText=
-"नंबर नहीं मिले। साफ फोटो दोबारा लें।";
+"Number nahi mile. Clear photo dobara lein.";
 
 $("status").style.color="#E53935";
 
@@ -837,7 +866,7 @@ console.error("OCR Error:",error);
 $("loaderContainer").style.display="none";
 
 $("status").innerText=
-"Photo पढ़ने में दिक्कत आई। दोबारा कोशिश करें।";
+"Photo read nahi ho payi. Dobara try karein.";
 
 $("status").style.color="#E53935";
 
@@ -851,9 +880,9 @@ $("imageUpload").value="";
 
 });
 
-// ====================================
-// PHOTO CALCULATION
-// ====================================
+// ======================================
+// PHOTO TOTAL
+// ======================================
 
 function calculatePhoto(){
 
@@ -865,7 +894,9 @@ const numbers=text.match(
 
 if(!numbers.length){
 
-$("status").innerText="पहले नंबर डालें या फोटो खींचें।";
+$("status").innerText=
+"Pehle numbers enter karein.";
+
 $("status").style.color="#E53935";
 
 return;
