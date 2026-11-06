@@ -54,7 +54,6 @@
         .header-logo-text { 
             font-size: 26px; 
             font-weight: 900; 
-            /* Original logo jaisa gradient look */
             background: linear-gradient(135deg, #0B3B5C, #1877F2); 
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent; 
@@ -279,7 +278,7 @@
             border-radius: 18px; padding: 25px 20px 20px; 
             text-align: center; position: relative; 
             animation: modalIn 0.3s ease;
-            max-height: 90vh; /* Scroll support */
+            max-height: 90vh;
             overflow-y: auto; 
         }
         @keyframes modalIn {
@@ -355,26 +354,55 @@
             animation: modalIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
+        /* Updated Header for About Modal (White BG to match theme) */
         .about-header {
-            background: #0B3B5C;
-            color: #FFD700;
+            background: #ffffff;
             padding: 20px;
             text-align: center;
             position: relative;
             border-bottom: 4px solid #FFD700;
             flex-shrink: 0;
         }
-        .about-header h1 { font-size: 24px; font-weight: 800; letter-spacing: 1px; margin: 0; }
-        .about-header p { color: #fff; font-size: 13px; font-weight: 500; margin-top: 5px; margin-bottom: 0; opacity: 0.9; }
+        
+        /* New Brand Container inside Modal */
+        .about-header-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+        .about-header-brand img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .about-header-brand h1 { 
+            font-size: 30px; 
+            font-weight: 900; 
+            background: linear-gradient(135deg, #0B3B5C, #1877F2); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            letter-spacing: 1px; 
+            margin: 0; 
+        }
+        .about-header p { 
+            color: #0B3B5C; 
+            font-size: 14px; 
+            font-weight: 600; 
+            margin: 0; 
+        }
         
         .about-exit-btn {
             position: absolute; top: 15px; right: 15px;
-            background: rgba(255,255,255,0.15); border: none; color: white;
+            background: #f1f1f1; border: none; color: #555;
             width: 30px; height: 30px; border-radius: 50%; font-size: 16px;
             display: flex; justify-content: center; align-items: center;
             cursor: pointer; transition: 0.2s;
         }
-        .about-exit-btn:hover { background: #ff4757; transform: scale(1.1); }
+        .about-exit-btn:hover { background: #ff4757; color: white; transform: scale(1.1); }
 
         .about-scroll-area {
             padding: 20px 25px;
@@ -414,7 +442,7 @@
     <div class="app-container">
         <!-- Header -->
         <div class="header">
-            <!-- UPDATED LOGO: Favicon + Premium Gradient Text -->
+            <!-- Main Header Logo -->
             <div class="header-brand">
                 <img src="favicon.jpg" alt="SEAOX Logo" class="header-logo-img">
                 <span class="header-logo-text">SEAOX</span>
@@ -528,9 +556,13 @@
     <!-- ===== SEAOX Company Introduction Modal ===== -->
     <div id="aboutModal" class="modal-overlay">
         <div class="about-modal-content">
+            <!-- UPDATED HEADER HERE (Matching the real SEAOX logo & white bg) -->
             <div class="about-header">
                 <button class="about-exit-btn" onclick="closeAboutModal()">✖</button>
-                <h1>SEAOX</h1>
+                <div class="about-header-brand">
+                    <img src="favicon.jpg" alt="SEAOX Logo">
+                    <h1>SEAOX</h1>
+                </div>
                 <p>Innovation That Makes Life Easier.</p>
             </div>
             
