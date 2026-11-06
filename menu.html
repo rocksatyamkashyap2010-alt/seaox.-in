@@ -38,24 +38,25 @@
             padding: 0 5px;
         }
         
-        /* 🟢 FIXED LOGO: Dono Images (Icon + Real Text) */
+        /* 🟢 FIXED LOGO ALIGNMENT & SIZING */
         .header-brand { 
             display: flex; 
             align-items: center; 
-            gap: 8px; 
+            gap: 0px; /* Gap removed */
             text-decoration: none;
         }
         .header-logo-img { 
-            width: 38px; 
-            height: 38px; 
+            width: 42px; /* Icon thoda bada kiya */
+            height: 42px; 
             border-radius: 50%; 
             object-fit: cover; 
         }
         .header-logo-text-img {
-            height: 24px; /* Text image ki height set ki */
+            height: 34px; /* Text ko bada kiya (pehle 24 tha) */
             width: auto;
             object-fit: contain;
             margin-top: 2px;
+            margin-left: -6px; /* Text image ke andar ka gap khatam karne ke liye negative margin */
         }
 
         .header-icons { display: flex; gap: 8px; }
@@ -359,24 +360,25 @@
             flex-shrink: 0;
         }
         
-        /* 🟢 MODAL LOGO: Icon + Real Text Image */
+        /* 🟢 MODAL LOGO ALIGNMENT & SIZING */
         .about-header-brand {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 0px; /* Gap removed */
             margin-bottom: 8px;
         }
         .about-logo-img {
-            width: 50px; 
-            height: 50px;
+            width: 55px; /* Icon bada kiya */
+            height: 55px;
             border-radius: 50%;
             object-fit: cover;
         }
         .about-logo-text-img {
-            height: 34px; /* Bada text popup ke liye */
+            height: 44px; /* Text bada kiya */
             width: auto;
             object-fit: contain;
+            margin-left: -8px; /* Gap kam kiya */
         }
         
         .about-header p { 
@@ -433,7 +435,7 @@
     <div class="app-container">
         <!-- Header -->
         <div class="header">
-            <!-- 🟢 ORIGINAL LOGO: Round Icon + Real Text Image -->
+            <!-- 🟢 FIXED LOGO: Icon + Real Text Image (Bigger & Closer) -->
             <div class="header-brand">
                 <img src="favicon.jpg" alt="SEAOX Icon" class="header-logo-img">
                 <img src="1000060185-removebg-preview.png" alt="SEAOX" class="header-logo-text-img">
@@ -550,7 +552,7 @@
             
             <div class="about-header">
                 <button class="about-exit-btn" onclick="closeAboutModal()">✖</button>
-                <!-- 🟢 ORIGINAL LOGO: Icon + Real Text Image -->
+                <!-- 🟢 FIXED MODAL LOGO -->
                 <div class="about-header-brand">
                     <img src="favicon.jpg" alt="SEAOX Icon" class="about-logo-img">
                     <img src="1000060185-removebg-preview.png" alt="SEAOX" class="about-logo-text-img">
@@ -726,4 +728,4 @@
         }
     </script>
 </body>
-                                                </html>
+</html>
