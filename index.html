@@ -1,15 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#040817">
-
-<title>SEAOX.in - Loading</title>
+<title>SEAOX.in</title>
 
 <link rel="icon" type="image/jpeg" href="favicon.jpg">
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 * {
@@ -19,144 +19,98 @@
 }
 
 body {
-    width: 100%;
     height: 100vh;
     overflow: hidden;
     font-family: 'Poppins', sans-serif;
-    background:
-    radial-gradient(ellipse at 50% 40%, #101d50 0%, #080d29 45%, #02040d 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: radial-gradient(ellipse at center, #14245a, #070d25 55%, #02040c);
     color: white;
 }
 
-/* BACKGROUND EFFECTS */
-
-.background-glow {
+.glow {
     position: absolute;
-    width: 350px;
-    height: 350px;
+    width: 300px;
+    height: 300px;
     border-radius: 50%;
     filter: blur(100px);
-    opacity: 0.35;
+    opacity: .35;
     pointer-events: none;
 }
 
-.glow-blue {
+.glow1 {
     background: #006aff;
-    top: -150px;
-    left: -120px;
+    top: -100px;
+    left: -100px;
 }
 
-.glow-purple {
+.glow2 {
     background: #a000ff;
-    bottom: -150px;
+    bottom: -100px;
     right: -100px;
 }
 
-/* STARS */
-
-.stars {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-}
-
-.star {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    background: #72eaff;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #00d9ff;
-    animation: twinkle 2s infinite alternate;
-}
-
-@keyframes twinkle {
-    from { opacity: 0.2; transform: scale(0.7); }
-    to { opacity: 1; transform: scale(1.5); }
-}
-
-/* MAIN CONTAINER */
-
-.loading-container {
-    width: 100%;
-    max-width: 430px;
+.container {
     min-height: 100vh;
-    padding: 35px 20px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 20px;
     position: relative;
     z-index: 2;
+    transition: opacity .4s, transform .4s;
 }
 
-/* S LOGO */
+/* ORIGINAL ROUND S LOGO */
 
-.logo-wrapper {
+.main-logo {
     width: 125px;
     height: 125px;
     border-radius: 50%;
-    overflow: hidden;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 2px solid #00dcff;
+    box-shadow: 0 0 20px #007bff, 0 0 40px #003bff;
+    animation: float 3s infinite alternate ease-in-out;
+}
+
+@keyframes float {
+    to { transform: translateY(-8px); }
+}
+
+/* ORIGINAL SEAOX WORDMARK */
+
+.brand-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
-
-    border: 2px solid rgba(0, 220, 255, 0.7);
-
-    box-shadow:
-    0 0 15px rgba(0, 220, 255, 0.7),
-    0 0 40px rgba(0, 100, 255, 0.4);
-
-    animation: floatLogo 3s ease-in-out infinite alternate;
+    gap: 4px;
+    margin-bottom: 8px;
+    max-width: 95%;
 }
 
-.logo-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
+.brand-image {
+    width: 230px;
+    max-width: 75vw;
+    height: auto;
+    object-fit: contain;
+    display: block;
 }
 
-@keyframes floatLogo {
-    from { transform: translateY(0); }
-    to { transform: translateY(-7px); }
-}
-
-/* BRAND NAME */
-
-.brand-name {
+.brand-in {
     font-family: 'Montserrat', sans-serif;
-    font-size: clamp(38px, 11vw, 55px);
+    font-size: clamp(20px, 6vw, 30px);
     font-weight: 900;
-    letter-spacing: 1px;
-    line-height: 1.2;
-
-    background: linear-gradient(
-        90deg,
-        #ffffff 0%,
-        #00e5ff 35%,
-        #2385ff 70%,
-        #c34cff 100%
-    );
-
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-
-    filter: drop-shadow(0 0 12px rgba(0, 180, 255, 0.35));
+    color: #00dfff;
+    text-shadow: 0 0 12px #008cff;
+    white-space: nowrap;
 }
 
-.brand-subtitle {
+.subtitle {
     color: #a8c4e8;
-    font-size: 12px;
-    letter-spacing: 5px;
-    margin-top: 8px;
-    margin-bottom: 45px;
+    font-size: 11px;
+    letter-spacing: 4px;
+    margin-bottom: 38px;
 }
 
 /* LOADING CARD */
@@ -164,193 +118,158 @@ body {
 .loading-card {
     width: 100%;
     max-width: 330px;
-    padding: 30px 15px;
+    padding: 25px 15px;
     border-radius: 25px;
-
-    background: linear-gradient(
-        145deg,
-        rgba(17, 48, 85, 0.85),
-        rgba(10, 15, 45, 0.92)
-    );
-
-    border: 1px solid rgba(0, 220, 255, 0.35);
-
-    box-shadow:
-    0 0 25px rgba(0, 130, 255, 0.15),
-    inset 0 0 25px rgba(0, 200, 255, 0.04);
-
+    background: linear-gradient(145deg, #12375b, #0a102e);
+    border: 1px solid rgba(0,220,255,.4);
+    box-shadow: 0 0 30px rgba(0,130,255,.2);
     display: flex;
-    flex-direction: column;
     align-items: center;
+    flex-direction: column;
 }
 
-/* TEXT */
-
-.loading-message {
-    font-size: 15px;
-    color: #d0e8ff;
-    margin-bottom: 25px;
-    text-align: center;
+.message {
+    font-size: 14px;
+    color: #d1eaff;
+    margin-bottom: 20px;
 }
 
-/* CIRCULAR PROGRESS */
+/* CIRCULAR LOADER */
 
 .progress-wrapper {
-    position: relative;
     width: 220px;
     height: 220px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative;
 }
 
 .progress-svg {
-    width: 220px;
-    height: 220px;
+    width: 100%;
+    height: 100%;
     transform: rotate(-90deg);
-    overflow: visible;
 }
 
-.progress-bg {
+.track {
     fill: none;
-    stroke: rgba(255,255,255,0.09);
+    stroke: rgba(255,255,255,.1);
     stroke-width: 10;
 }
 
-.progress-bar {
+.progress {
     fill: none;
-    stroke: url(#progressGradient);
+    stroke: url(#gradient);
     stroke-width: 10;
     stroke-linecap: round;
-
     stroke-dasharray: 565.49;
     stroke-dashoffset: 565.49;
-
     filter: drop-shadow(0 0 8px #00e5ff);
 }
 
 .progress-content {
     position: absolute;
+    inset: 0;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
-.percentage {
+.percent {
     font-family: 'Montserrat', sans-serif;
     font-size: 55px;
     font-weight: 900;
-    color: #ffffff;
-    text-shadow: 0 0 20px rgba(0, 220, 255, 0.5);
+    text-shadow: 0 0 20px #008cff;
 }
 
-.percent-symbol {
-    font-size: 28px;
-}
-
-.loading-status {
+.status {
     font-size: 13px;
     color: #a8eaff;
-    margin-top: 5px;
 }
 
-/* BOTTOM TEXT */
-
-.bottom-text {
-    color: #8195bb;
+.wait {
+    color: #8da6cb;
     font-size: 12px;
-    margin-top: 30px;
-    text-align: center;
-    letter-spacing: 1px;
+    margin-top: 20px;
 }
 
 .powered {
     position: absolute;
     bottom: 25px;
-    color: #7186aa;
     font-size: 11px;
     letter-spacing: 2px;
+    color: #8195bb;
 }
 
 .powered span {
-    color: #00dfff;
+    color: #00e5ff;
     font-weight: 700;
 }
 
-/* EXIT ANIMATION */
-
-.fade-out {
-    animation: fadeOut 0.4s ease forwards;
-}
-
-@keyframes fadeOut {
-    to {
-        opacity: 0;
-        transform: scale(1.05);
-    }
+.fade {
+    opacity: 0;
+    transform: scale(1.04);
 }
 
 @media(max-height: 650px) {
-    .loading-container {
-        padding: 15px;
-    }
-
-    .logo-wrapper {
+    .main-logo {
         width: 85px;
         height: 85px;
-        margin-bottom: 12px;
     }
 
-    .brand-subtitle {
-        margin-bottom: 20px;
+    .subtitle {
+        margin-bottom: 18px;
     }
 
-    .progress-wrapper,
-    .progress-svg {
-        width: 175px;
-        height: 175px;
+    .progress-wrapper {
+        width: 170px;
+        height: 170px;
     }
 
-    .percentage {
-        font-size: 45px;
+    .percent {
+        font-size: 43px;
     }
 
     .loading-card {
         padding: 15px;
     }
 }
-
 </style>
 </head>
 
 <body>
 
-<div class="background-glow glow-blue"></div>
-<div class="background-glow glow-purple"></div>
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
 
-<div class="stars" id="stars"></div>
+<div class="container" id="main">
 
-<div class="loading-container" id="mainScreen">
+    <!-- 1. FAVICON S LOGO -->
+    <img
+        src="favicon.jpg"
+        class="main-logo"
+        alt="SEAOX Logo"
+    >
 
-    <!-- ORIGINAL S LOGO -->
-    <div class="logo-wrapper">
+    <!-- 2. ORIGINAL SEAOX NAME IMAGE + .IN -->
+    <div class="brand-row">
+
         <img
-            src="IMG_20261019_105230.jpg"
-            alt="SEAOX S Logo"
+            src="IMG_20261006_211924.png"
+            class="brand-image"
+            alt="SEAOX"
         >
+
+        <span class="brand-in">.in</span>
+
     </div>
 
-    <!-- BRAND NAME -->
-    <div class="brand-name">SEAOX.in</div>
-
-    <div class="brand-subtitle">
+    <div class="subtitle">
         SMART TOOLS & DIGITAL SOLUTIONS
     </div>
 
-    <!-- LOADING CARD -->
+    <!-- 3. LOADING ANIMATION -->
     <div class="loading-card">
 
-        <div class="loading-message">
+        <div class="message">
             हमारी सामग्री लोड की जा रही है...
         </div>
 
@@ -359,51 +278,35 @@ body {
             <svg class="progress-svg" viewBox="0 0 200 200">
 
                 <defs>
-                    <linearGradient
-                        id="progressGradient"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                    >
+                    <linearGradient id="gradient">
                         <stop offset="0%" stop-color="#00e5ff"/>
                         <stop offset="50%" stop-color="#1685ff"/>
                         <stop offset="100%" stop-color="#c000ff"/>
                     </linearGradient>
                 </defs>
 
-                <circle
-                    class="progress-bg"
-                    cx="100"
-                    cy="100"
-                    r="90"
-                />
+                <circle class="track"
+                    cx="100" cy="100" r="90"/>
 
-                <circle
-                    class="progress-bar"
+                <circle class="progress"
                     id="progressBar"
-                    cx="100"
-                    cy="100"
-                    r="90"
-                />
+                    cx="100" cy="100" r="90"/>
 
             </svg>
 
             <div class="progress-content">
-
-                <div class="percentage">
-                    <span id="percent">1</span><span class="percent-symbol">%</span>
+                <div class="percent">
+                    <span id="percent">1</span>%
                 </div>
 
-                <div class="loading-status" id="status">
+                <div class="status" id="status">
                     लोड हो रहा है...
                 </div>
-
             </div>
 
         </div>
 
-        <div class="bottom-text">
+        <div class="wait">
             कृपया प्रतीक्षा करें
         </div>
 
@@ -417,78 +320,48 @@ body {
 
 <script>
 
-/* CREATE BACKGROUND STARS */
-
-const stars = document.getElementById("stars");
-
-for(let i = 0; i < 45; i++) {
-
-    const star = document.createElement("div");
-
-    star.className = "star";
-
-    star.style.left = Math.random() * 100 + "%";
-    star.style.top = Math.random() * 100 + "%";
-
-    star.style.animationDelay = Math.random() * 2 + "s";
-
-    stars.appendChild(star);
-}
-
-/* 3 SECOND LOADING */
-
 const duration = 3000;
-
 const circumference = 2 * Math.PI * 90;
 
-const progressBar = document.getElementById("progressBar");
-const percentText = document.getElementById("percent");
-const statusText = document.getElementById("status");
-const mainScreen = document.getElementById("mainScreen");
+const bar = document.getElementById("progressBar");
+const number = document.getElementById("percent");
+const status = document.getElementById("status");
+const main = document.getElementById("main");
 
-let startTime = null;
+let start = null;
 
-function updateProgress(timestamp) {
+function loading(timestamp) {
 
-    if(!startTime) {
-        startTime = timestamp;
-    }
+    if (!start) start = timestamp;
 
-    const elapsed = timestamp - startTime;
-
+    const elapsed = timestamp - start;
     const progress = Math.min(elapsed / duration, 1);
 
-    const percentage = Math.min(
-        100,
-        Math.max(1, Math.floor(progress * 100))
-    );
+    const value = Math.max(1, Math.floor(progress * 100));
 
-    percentText.textContent = percentage;
+    number.textContent = value;
 
-    progressBar.style.strokeDashoffset =
-        circumference - (progress * circumference);
+    bar.style.strokeDashoffset =
+        circumference * (1 - progress);
 
-    if(percentage >= 100) {
-
-        statusText.textContent = "लोडिंग पूरी हुई!";
+    if (progress < 1) {
+        requestAnimationFrame(loading);
+    } else {
+        number.textContent = 100;
+        status.textContent = "लोडिंग पूरी हुई!";
 
         setTimeout(() => {
-
-            mainScreen.classList.add("fade-out");
+            main.classList.add("fade");
 
             setTimeout(() => {
                 window.location.replace("menu.html");
             }, 400);
 
         }, 100);
-
-        return;
     }
-
-    requestAnimationFrame(updateProgress);
 }
 
-requestAnimationFrame(updateProgress);
+requestAnimationFrame(loading);
 
 </script>
 
