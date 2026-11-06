@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SEAOX - Tools</title>
-    <!-- Favicon update -->
-    <link rel="icon" type="image/png" href="1000060185-removebg-preview.png">
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -38,17 +37,30 @@
             padding: 0 5px;
         }
         
-        /* 🟢 REAL SEAOX LOGO (Header) */
+        /* 🟢 LOGO FIX: Favicon + SEAOX Text */
         .header-brand { 
             display: flex; 
             align-items: center; 
+            gap: 8px; 
             text-decoration: none;
         }
         .header-logo-img { 
-            width: 130px; /* Logo ko bada kiya hai */
-            height: auto; 
-            object-fit: contain;
-            /* Box shadow hata diya kyunki white bg nahi hai */
+            width: 38px; 
+            height: 38px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            /* White background hatane ke liye koi extra border nahi */
+            box-shadow: 0 2px 8px rgba(24, 119, 242, 0.3); 
+        }
+        .header-logo-text { 
+            font-size: 26px; 
+            font-weight: 900; 
+            background: linear-gradient(135deg, #0B3B5C, #1877F2); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            letter-spacing: -0.5px; 
+            text-transform: uppercase;
+            margin-top: 2px;
         }
 
         .header-icons { display: flex; gap: 8px; }
@@ -352,17 +364,29 @@
             flex-shrink: 0;
         }
         
-        /* 🟢 REAL SEAOX LOGO (Modal Header) */
+        /* 🟢 MODAL LOGO FIX: Favicon + Text */
         .about-header-brand {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 8px;
+            gap: 12px;
+            margin-bottom: 5px;
         }
         .about-header-brand img {
-            width: 180px; /* Popup me bada aur clear */
-            height: auto;
-            object-fit: contain;
+            width: 50px; 
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3);
+        }
+        .about-header-brand h1 { 
+            font-size: 32px; 
+            font-weight: 900; 
+            background: linear-gradient(135deg, #0B3B5C, #1877F2); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            letter-spacing: 1px; 
+            margin: 0; 
         }
         
         .about-header p { 
@@ -419,9 +443,10 @@
     <div class="app-container">
         <!-- Header -->
         <div class="header">
-            <!-- 🟢 ORIGINAL SEAOX LOGO -->
+            <!-- 🟢 FIXED LOGO: favicon.jpg + SEAOX Text -->
             <div class="header-brand">
-                <img src="1000060185-removebg-preview.png" alt="SEAOX Logo" class="header-logo-img">
+                <img src="favicon.jpg" alt="SEAOX Logo" class="header-logo-img">
+                <span class="header-logo-text">SEAOX</span>
             </div>
             
             <div class="header-icons">
@@ -535,9 +560,10 @@
             
             <div class="about-header">
                 <button class="about-exit-btn" onclick="closeAboutModal()">✖</button>
-                <!-- 🟢 ORIGINAL SEAOX LOGO (Modal) -->
+                <!-- 🟢 FIXED MODAL LOGO -->
                 <div class="about-header-brand">
-                    <img src="1000060185-removebg-preview.png" alt="SEAOX Logo">
+                    <img src="favicon.jpg" alt="SEAOX Logo">
+                    <h1>SEAOX</h1>
                 </div>
                 <p>Innovation That Makes Life Easier.</p>
             </div>
@@ -691,24 +717,20 @@
             const idea   = document.getElementById('cIdea').value.trim();
             const number = document.getElementById('cNumber').value.trim();
 
-            // Check if form is filled
             if (!name || !type || !idea || !number) {
                 alert("Please fill all the details first before sending via email.");
                 return;
             }
 
-            const emailAddress = "seaoxseaox@gmail.com"; // Aapki Email ID
+            const emailAddress = "seaoxseaox@gmail.com"; 
             const subject = `New Enquiry from ${name} - SEAOX Website`;
             
             const body = `*🚀 New Enquiry — SEAOX Website*\n\n👤 Name: ${name}\n💼 Development Type: ${type}\n💡 Idea: ${idea}\n📞 Contact: ${number}`;
 
-            // Create mailto link
             const mailtoLink = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             
-            // Open default email app
             window.location.href = mailtoLink;
             
-            // Reset and close modal after a short delay
             document.getElementById('contactForm').reset();
             setTimeout(closeModal, 1000);
         }
