@@ -1,97 +1,210 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#040817">
-<title>SEAOX.in</title>
+<meta name="theme-color" content="#050817">
+
+<title>SEAOX.in | Innovation that makes life easier</title>
 
 <link rel="icon" type="image/jpeg" href="favicon.jpg">
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
 
 <style>
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    height: 100vh;
+:root {
+    --cyan: #00e5ff;
+    --blue: #1685ff;
+    --purple: #a855f7;
+    --bg: #050817;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
     overflow: hidden;
-    font-family: 'Poppins', sans-serif;
-    background: radial-gradient(ellipse at center, #14245a, #070d25 55%, #02040c);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
     color: white;
+    background: var(--bg);
+}
+
+/* ===== PREMIUM BACKGROUND ===== */
+
+.background {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 50% 28%,
+        #132b65 0%,
+        #0a1539 35%,
+        #050817 75%,
+        #02040c 100%);
 }
 
 .glow {
     position: absolute;
-    width: 300px;
-    height: 300px;
+    width: 420px;
+    height: 420px;
     border-radius: 50%;
-    filter: blur(100px);
-    opacity: .35;
+    filter: blur(110px);
+    opacity: .25;
     pointer-events: none;
 }
 
-.glow1 {
-    background: #006aff;
-    top: -100px;
-    left: -100px;
+.glow-one {
+    background: #007bff;
+    top: -200px;
+    left: -170px;
 }
 
-.glow2 {
-    background: #a000ff;
-    bottom: -100px;
-    right: -100px;
+.glow-two {
+    background: #791aff;
+    bottom: -230px;
+    right: -170px;
 }
 
-.container {
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+.glow-three {
+    background: #00d9ff;
+    top: 40%;
+    left: 60%;
+    width: 250px;
+    height: 250px;
+    opacity: .09;
+}
+
+/* Subtle grid */
+
+.grid-background {
+    position: absolute;
+    inset: 0;
+    opacity: .12;
+
+    background-image:
+        linear-gradient(rgba(80,150,255,.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(80,150,255,.12) 1px, transparent 1px);
+
+    background-size: 45px 45px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent 90%
+    );
+}
+
+/* Particles */
+
+.particles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #69eaff;
+    box-shadow: 0 0 12px #00cfff;
+    animation: particleFloat 4s ease-in-out infinite alternate;
+}
+
+@keyframes particleFloat {
+    from {
+        transform: translateY(0) scale(.7);
+        opacity: .2;
+    }
+    to {
+        transform: translateY(-25px) scale(1.4);
+        opacity: .9;
+    }
+}
+
+/* ===== MAIN CONTENT ===== */
+
+.main-container {
     position: relative;
     z-index: 2;
-    transition: opacity .4s, transform .4s;
+
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+
+    margin: auto;
+    padding: 30px 22px 65px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    transition: opacity .5s ease, transform .5s ease;
 }
 
-/* ORIGINAL ROUND S LOGO */
+/* ===== ORIGINAL S LOGO ===== */
 
-.main-logo {
-    width: 125px;
-    height: 125px;
+.logo-box {
+    width: 116px;
+    height: 116px;
     border-radius: 50%;
-    object-fit: cover;
+    overflow: hidden;
+
     margin-bottom: 20px;
-    border: 2px solid #00dcff;
-    box-shadow: 0 0 20px #007bff, 0 0 40px #003bff;
-    animation: float 3s infinite alternate ease-in-out;
+
+    border: 1px solid rgba(0,225,255,.85);
+
+    box-shadow:
+        0 0 12px rgba(0,225,255,.6),
+        0 0 35px rgba(0,100,255,.35),
+        inset 0 0 15px rgba(0,225,255,.2);
+
+    animation: logoFloat 4s ease-in-out infinite alternate;
 }
 
-@keyframes float {
-    to { transform: translateY(-8px); }
+.logo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 50%;
 }
 
-/* ORIGINAL SEAOX WORDMARK */
+@keyframes logoFloat {
+    to {
+        transform: translateY(-6px);
+    }
+}
 
-.brand-row {
+/* ===== SEAOX BRAND ===== */
+
+.brand {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    margin-bottom: 8px;
-    max-width: 95%;
+    gap: 3px;
+    width: 100%;
+    margin-bottom: 13px;
 }
 
 .brand-image {
-    width: 230px;
-    max-width: 75vw;
+    width: 235px;
+    max-width: 70%;
     height: auto;
     object-fit: contain;
     display: block;
@@ -99,178 +212,345 @@ body {
 
 .brand-in {
     font-family: 'Montserrat', sans-serif;
-    font-size: clamp(20px, 6vw, 30px);
+    font-size: clamp(21px, 6vw, 29px);
     font-weight: 900;
-    color: #00dfff;
-    text-shadow: 0 0 12px #008cff;
-    white-space: nowrap;
+    color: #bd8aff;
+
+    background: linear-gradient(
+        120deg,
+        #00e5ff,
+        #3885ff,
+        #c16aff
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.subtitle {
-    color: #a8c4e8;
-    font-size: 11px;
-    letter-spacing: 4px;
-    margin-bottom: 38px;
+/* ===== TAGLINE ===== */
+
+.tagline {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    line-height: 1.6;
+
+    color: #b7c9e8;
+
+    margin-bottom: 43px;
 }
 
-/* LOADING CARD */
+/* ===== LOADING CARD ===== */
 
 .loading-card {
+    position: relative;
     width: 100%;
-    max-width: 330px;
-    padding: 25px 15px;
-    border-radius: 25px;
-    background: linear-gradient(145deg, #12375b, #0a102e);
-    border: 1px solid rgba(0,220,255,.4);
-    box-shadow: 0 0 30px rgba(0,130,255,.2);
+    max-width: 370px;
+
+    padding: 32px 18px 29px;
+
+    border-radius: 28px;
+
+    background: linear-gradient(
+        145deg,
+        rgba(22,52,91,.72),
+        rgba(9,16,43,.82)
+    );
+
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+
+    border: 1px solid rgba(0,210,255,.24);
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.3),
+        0 0 35px rgba(0,130,255,.09),
+        inset 0 1px 0 rgba(255,255,255,.08);
+
     display: flex;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
 }
 
-.message {
-    font-size: 14px;
-    color: #d1eaff;
-    margin-bottom: 20px;
+/* Top glowing line */
+
+.loading-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 15%;
+    width: 70%;
+    height: 1px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #00e5ff,
+        #a855f7,
+        transparent
+    );
+
+    box-shadow: 0 0 12px #00cfff;
 }
 
-/* CIRCULAR LOADER */
+.loading-heading {
+    color: #e1edff;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: .2px;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.loading-description {
+    font-size: 12px;
+    color: #829bc4;
+    margin-top: 7px;
+    text-align: center;
+}
+
+/* ===== CIRCULAR PROGRESS ===== */
 
 .progress-wrapper {
-    width: 220px;
-    height: 220px;
+    width: 225px;
+    height: 225px;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .progress-svg {
     width: 100%;
     height: 100%;
+    overflow: visible;
     transform: rotate(-90deg);
 }
 
-.track {
+.progress-track {
     fill: none;
-    stroke: rgba(255,255,255,.1);
-    stroke-width: 10;
+    stroke: rgba(255,255,255,.09);
+    stroke-width: 9;
 }
 
-.progress {
+.progress-ring {
     fill: none;
-    stroke: url(#gradient);
-    stroke-width: 10;
+    stroke: url(#ringGradient);
+    stroke-width: 9;
     stroke-linecap: round;
+
     stroke-dasharray: 565.49;
     stroke-dashoffset: 565.49;
-    filter: drop-shadow(0 0 8px #00e5ff);
+
+    filter:
+        drop-shadow(0 0 5px #00dfff)
+        drop-shadow(0 0 13px rgba(0,130,255,.5));
 }
 
-.progress-content {
+.progress-center {
     position: absolute;
-    inset: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.percent {
+.percentage {
     font-family: 'Montserrat', sans-serif;
-    font-size: 55px;
+    font-size: 64px;
     font-weight: 900;
-    text-shadow: 0 0 20px #008cff;
+    line-height: 1;
+
+    background: linear-gradient(
+        180deg,
+        #ffffff,
+        #a9dfff
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    filter: drop-shadow(0 0 15px rgba(0,180,255,.3));
+}
+
+.percent-symbol {
+    font-size: 30px;
 }
 
 .status {
+    color: #a9d9ff;
     font-size: 13px;
-    color: #a8eaff;
+    font-weight: 500;
+    margin-top: 12px;
+    letter-spacing: .3px;
 }
 
-.wait {
-    color: #8da6cb;
+/* ===== BOTTOM AREA ===== */
+
+.wait-text {
+    color: #8499bc;
     font-size: 12px;
-    margin-top: 20px;
+    letter-spacing: .6px;
+    margin-top: 29px;
+    text-align: center;
 }
 
 .powered {
     position: absolute;
-    bottom: 25px;
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: #8195bb;
+    bottom: 24px;
+
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    color: #7187ac;
+    font-weight: 600;
 }
 
 .powered span {
-    color: #00e5ff;
-    font-weight: 700;
+    color: #48dfff;
 }
 
-.fade {
+/* ===== TRANSITION ===== */
+
+.exit {
     opacity: 0;
-    transform: scale(1.04);
+    transform: scale(1.035);
 }
 
-@media(max-height: 650px) {
-    .main-logo {
-        width: 85px;
-        height: 85px;
+/* ===== RESPONSIVE ===== */
+
+@media (max-height: 750px) {
+
+    .main-container {
+        padding-top: 15px;
+        padding-bottom: 48px;
     }
 
-    .subtitle {
-        margin-bottom: 18px;
+    .logo-box {
+        width: 88px;
+        height: 88px;
+        margin-bottom: 13px;
     }
 
-    .progress-wrapper {
-        width: 170px;
-        height: 170px;
-    }
-
-    .percent {
-        font-size: 43px;
+    .tagline {
+        margin-bottom: 24px;
     }
 
     .loading-card {
-        padding: 15px;
+        padding: 20px 15px;
+    }
+
+    .progress-wrapper {
+        width: 180px;
+        height: 180px;
+    }
+
+    .percentage {
+        font-size: 51px;
+    }
+
+    .loading-heading {
+        margin-bottom: 15px;
+    }
+
+    .wait-text {
+        margin-top: 15px;
     }
 }
+
+@media (max-height: 600px) {
+
+    .logo-box {
+        width: 65px;
+        height: 65px;
+        margin-bottom: 8px;
+    }
+
+    .brand-image {
+        width: 175px;
+    }
+
+    .tagline {
+        margin-bottom: 12px;
+        font-size: 11px;
+    }
+
+    .progress-wrapper {
+        width: 135px;
+        height: 135px;
+    }
+
+    .percentage {
+        font-size: 40px;
+    }
+
+    .loading-card {
+        padding: 12px;
+    }
+
+    .loading-heading {
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+
+    .wait-text {
+        margin-top: 8px;
+    }
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="glow glow1"></div>
-<div class="glow glow2"></div>
+<!-- BACKGROUND -->
 
-<div class="container" id="main">
+<div class="background">
+    <div class="glow glow-one"></div>
+    <div class="glow glow-two"></div>
+    <div class="glow glow-three"></div>
+    <div class="grid-background"></div>
+    <div class="particles" id="particles"></div>
+</div>
 
-    <!-- 1. FAVICON S LOGO -->
-    <img
-        src="favicon.jpg"
-        class="main-logo"
-        alt="SEAOX Logo"
-    >
+<!-- MAIN SCREEN -->
 
-    <!-- 2. ORIGINAL SEAOX NAME IMAGE + .IN -->
-    <div class="brand-row">
+<main class="main-container" id="main">
+
+    <!-- ORIGINAL S LOGO -->
+
+    <div class="logo-box">
+        <img src="favicon.jpg" alt="SEAOX Logo">
+    </div>
+
+    <!-- ORIGINAL BRAND IMAGE -->
+
+    <div class="brand">
 
         <img
             src="IMG_20261006_211924.png"
-            class="brand-image"
             alt="SEAOX"
+            class="brand-image"
         >
 
         <span class="brand-in">.in</span>
 
     </div>
 
-    <div class="subtitle">
-        SMART TOOLS & DIGITAL SOLUTIONS
+    <!-- TAGLINE -->
+
+    <div class="tagline">
+        Innovation that makes life easier.
     </div>
 
-    <!-- 3. LOADING ANIMATION -->
-    <div class="loading-card">
+    <!-- LOADING CARD -->
 
-        <div class="message">
-            हमारी सामग्री लोड की जा रही है...
+    <section class="loading-card">
+
+        <div class="loading-heading">
+            Preparing your experience
         </div>
 
         <div class="progress-wrapper">
@@ -278,92 +558,156 @@ body {
             <svg class="progress-svg" viewBox="0 0 200 200">
 
                 <defs>
-                    <linearGradient id="gradient">
+                    <linearGradient
+                        id="ringGradient"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%"
+                    >
                         <stop offset="0%" stop-color="#00e5ff"/>
-                        <stop offset="50%" stop-color="#1685ff"/>
-                        <stop offset="100%" stop-color="#c000ff"/>
+                        <stop offset="50%" stop-color="#2585ff"/>
+                        <stop offset="100%" stop-color="#a855f7"/>
                     </linearGradient>
                 </defs>
 
-                <circle class="track"
-                    cx="100" cy="100" r="90"/>
+                <circle
+                    class="progress-track"
+                    cx="100"
+                    cy="100"
+                    r="90"
+                />
 
-                <circle class="progress"
-                    id="progressBar"
-                    cx="100" cy="100" r="90"/>
+                <circle
+                    class="progress-ring"
+                    id="progressRing"
+                    cx="100"
+                    cy="100"
+                    r="90"
+                />
 
             </svg>
 
-            <div class="progress-content">
-                <div class="percent">
-                    <span id="percent">1</span>%
+            <div class="progress-center">
+
+                <div class="percentage">
+                    <span id="percent">1</span><span class="percent-symbol">%</span>
                 </div>
 
                 <div class="status" id="status">
-                    लोड हो रहा है...
+                    Loading...
                 </div>
+
             </div>
 
         </div>
 
-        <div class="wait">
-            कृपया प्रतीक्षा करें
+        <div class="wait-text" id="waitText">
+            Please wait while we get things ready.
         </div>
 
-    </div>
+    </section>
+
+    <!-- FOOTER -->
 
     <div class="powered">
         POWERED BY <span>SEAOX</span>
     </div>
 
-</div>
+</main>
 
 <script>
+
+/* ===== PARTICLES ===== */
+
+const particleBox = document.getElementById("particles");
+
+for(let i = 0; i < 40; i++) {
+
+    const particle = document.createElement("span");
+
+    particle.className = "particle";
+
+    particle.style.left = Math.random() * 100 + "%";
+    particle.style.top = Math.random() * 100 + "%";
+
+    particle.style.animationDelay =
+        Math.random() * 4 + "s";
+
+    particle.style.animationDuration =
+        (3 + Math.random() * 3) + "s";
+
+    particleBox.appendChild(particle);
+}
+
+/* ===== 3 SECOND LOADING ===== */
 
 const duration = 3000;
 const circumference = 2 * Math.PI * 90;
 
-const bar = document.getElementById("progressBar");
-const number = document.getElementById("percent");
+const ring = document.getElementById("progressRing");
+const percent = document.getElementById("percent");
 const status = document.getElementById("status");
+const waitText = document.getElementById("waitText");
 const main = document.getElementById("main");
 
-let start = null;
+let startTime = null;
+let redirected = false;
 
-function loading(timestamp) {
+function updateLoading(timestamp) {
 
-    if (!start) start = timestamp;
+    if(startTime === null) {
+        startTime = timestamp;
+    }
 
-    const elapsed = timestamp - start;
+    const elapsed = timestamp - startTime;
+
     const progress = Math.min(elapsed / duration, 1);
 
-    const value = Math.max(1, Math.floor(progress * 100));
+    const value = Math.min(
+        100,
+        Math.max(1, Math.floor(progress * 100))
+    );
 
-    number.textContent = value;
+    percent.textContent = value;
 
-    bar.style.strokeDashoffset =
+    ring.style.strokeDashoffset =
         circumference * (1 - progress);
 
-    if (progress < 1) {
-        requestAnimationFrame(loading);
-    } else {
-        number.textContent = 100;
-        status.textContent = "लोडिंग पूरी हुई!";
+    if(progress < 1) {
 
-        setTimeout(() => {
-            main.classList.add("fade");
+        requestAnimationFrame(updateLoading);
+
+    } else {
+
+        percent.textContent = "100";
+        status.textContent = "Ready!";
+        waitText.textContent = "Welcome to SEAOX";
+
+        if(!redirected) {
+
+            redirected = true;
 
             setTimeout(() => {
-                window.location.replace("menu.html");
-            }, 400);
 
-        }, 100);
+                main.classList.add("exit");
+
+                setTimeout(() => {
+
+                    window.location.replace("menu.html");
+
+                }, 500);
+
+            }, 250);
+
+        }
     }
 }
 
-requestAnimationFrame(loading);
+requestAnimationFrame(updateLoading);
 
 </script>
 
 </body>
 </html>
+
