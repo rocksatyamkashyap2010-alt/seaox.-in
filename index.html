@@ -1,32 +1,30 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#050817">
 
-<title>SEAOX.in | Innovation that makes life easier</title>
+<title>SEAOX.in | Innovation That Makes Life Easier</title>
+
+<meta name="description" content="SEAOX.in brings innovative digital tools, smart apps and simple technology solutions that make life easier.">
+
+<meta name="theme-color" content="#06132d">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://seaox.in/">
 
 <link rel="icon" type="image/jpeg" href="favicon.jpg">
+<link rel="apple-touch-icon" href="favicon.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-:root {
-    --cyan: #00e5ff;
-    --blue: #1685ff;
-    --purple: #a855f7;
-    --bg: #050817;
 }
 
 html, body {
@@ -37,466 +35,273 @@ html, body {
 
 body {
     font-family: 'Inter', sans-serif;
+    background: #050b1c;
     color: white;
-    background: var(--bg);
 }
 
-/* ===== PREMIUM BACKGROUND ===== */
-
-.background {
+.splash {
     position: fixed;
     inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
     background:
-        radial-gradient(ellipse at 50% 28%,
-        #132b65 0%,
-        #0a1539 35%,
-        #050817 75%,
-        #02040c 100%);
+        radial-gradient(ellipse at 50% 20%, #102e65 0%, transparent 48%),
+        radial-gradient(ellipse at 90% 90%, #25094b 0%, transparent 40%),
+        linear-gradient(145deg, #030817, #091b3d 55%, #08091c);
 }
 
 .glow {
     position: absolute;
-    width: 420px;
-    height: 420px;
+    width: 350px;
+    height: 350px;
     border-radius: 50%;
-    filter: blur(110px);
+    filter: blur(100px);
     opacity: .25;
     pointer-events: none;
 }
 
-.glow-one {
-    background: #007bff;
-    top: -200px;
-    left: -170px;
-}
-
-.glow-two {
-    background: #791aff;
-    bottom: -230px;
-    right: -170px;
-}
-
-.glow-three {
+.glow.one {
     background: #00d9ff;
-    top: 40%;
-    left: 60%;
-    width: 250px;
-    height: 250px;
-    opacity: .09;
+    top: -180px;
+    left: -100px;
 }
 
-/* Subtle grid */
-
-.grid-background {
-    position: absolute;
-    inset: 0;
-    opacity: .12;
-
-    background-image:
-        linear-gradient(rgba(80,150,255,.12) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(80,150,255,.12) 1px, transparent 1px);
-
-    background-size: 45px 45px;
-
-    mask-image: linear-gradient(
-        to bottom,
-        black,
-        transparent 90%
-    );
+.glow.two {
+    background: #a000ff;
+    bottom: -180px;
+    right: -100px;
 }
 
-/* Particles */
-
-.particles {
+.stars {
     position: absolute;
     inset: 0;
-    overflow: hidden;
     pointer-events: none;
 }
 
-.particle {
+.star {
     position: absolute;
     width: 3px;
     height: 3px;
     border-radius: 50%;
-    background: #69eaff;
-    box-shadow: 0 0 12px #00cfff;
-    animation: particleFloat 4s ease-in-out infinite alternate;
+    background: #48eaff;
+    box-shadow: 0 0 9px #00d9ff;
+    animation: twinkle 2.5s infinite alternate;
 }
 
-@keyframes particleFloat {
-    from {
-        transform: translateY(0) scale(.7);
-        opacity: .2;
-    }
-    to {
-        transform: translateY(-25px) scale(1.4);
-        opacity: .9;
-    }
+@keyframes twinkle {
+    from { opacity: .2; transform: scale(.7); }
+    to { opacity: 1; transform: scale(1.5); }
 }
 
-/* ===== MAIN CONTENT ===== */
-
-.main-container {
+.main-content {
     position: relative;
     z-index: 2;
-
     width: 100%;
-    max-width: 480px;
-    min-height: 100vh;
-
-    margin: auto;
-    padding: 30px 22px 65px;
-
+    max-width: 520px;
+    padding: 25px;
+    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-
-    transition: opacity .5s ease, transform .5s ease;
+    animation: appear .8s ease both;
 }
 
-/* ===== ORIGINAL S LOGO ===== */
+@keyframes appear {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-.logo-box {
+/* LOGO */
+
+.logo-wrap {
     width: 116px;
     height: 116px;
     border-radius: 50%;
-    overflow: hidden;
-
-    margin-bottom: 20px;
-
-    border: 1px solid rgba(0,225,255,.85);
-
+    padding: 4px;
+    background: linear-gradient(135deg, #00eaff, #176aff, #bd22ff);
     box-shadow:
-        0 0 12px rgba(0,225,255,.6),
-        0 0 35px rgba(0,100,255,.35),
-        inset 0 0 15px rgba(0,225,255,.2);
-
-    animation: logoFloat 4s ease-in-out infinite alternate;
+        0 0 15px rgba(0,225,255,.65),
+        0 0 45px rgba(0,100,255,.35);
+    margin-bottom: 23px;
 }
 
-.logo-box img {
+.logo-wrap img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
     border-radius: 50%;
+    background: #03091c;
 }
 
-@keyframes logoFloat {
-    to {
-        transform: translateY(-6px);
-    }
-}
-
-/* ===== SEAOX BRAND ===== */
+/* BRAND NAME */
 
 .brand {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    width: 100%;
-    margin-bottom: 13px;
-}
-
-.brand-image {
-    width: 235px;
-    max-width: 70%;
-    height: auto;
-    object-fit: contain;
-    display: block;
-}
-
-.brand-in {
-    font-family: 'Montserrat', sans-serif;
-    font-size: clamp(21px, 6vw, 29px);
+    font-size: clamp(39px, 10vw, 59px);
+    line-height: 1;
     font-weight: 900;
-    color: #bd8aff;
-
+    letter-spacing: -2px;
     background: linear-gradient(
-        120deg,
-        #00e5ff,
-        #3885ff,
-        #c16aff
+        100deg,
+        #ffffff,
+        #43eaff 35%,
+        #2683ff 65%,
+        #d34dff
     );
-
     -webkit-background-clip: text;
     background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(0 0 15px rgba(0,200,255,.2));
 }
 
-/* ===== TAGLINE ===== */
+.brand .in {
+    font-size: .78em;
+    letter-spacing: -2px;
+}
 
 .tagline {
-    text-align: center;
+    margin-top: 17px;
     font-size: 13px;
     font-weight: 600;
-    letter-spacing: 1.5px;
-    line-height: 1.6;
-
-    color: #b7c9e8;
-
-    margin-bottom: 43px;
+    letter-spacing: 3px;
+    line-height: 1.8;
+    color: #b9c9e8;
+    text-transform: uppercase;
 }
 
-/* ===== LOADING CARD ===== */
+/* LOADING CARD */
 
 .loading-card {
-    position: relative;
     width: 100%;
-    max-width: 370px;
-
-    padding: 32px 18px 29px;
-
+    margin-top: 48px;
+    padding: 30px 18px 27px;
+    border: 1px solid rgba(0,220,255,.28);
     border-radius: 28px;
-
     background: linear-gradient(
         145deg,
-        rgba(22,52,91,.72),
-        rgba(9,16,43,.82)
+        rgba(20,52,91,.72),
+        rgba(12,22,54,.78)
     );
-
-    backdrop-filter: blur(22px);
-    -webkit-backdrop-filter: blur(22px);
-
-    border: 1px solid rgba(0,210,255,.24);
-
     box-shadow:
-        0 20px 60px rgba(0,0,0,.3),
-        0 0 35px rgba(0,130,255,.09),
+        0 15px 50px rgba(0,0,0,.25),
         inset 0 1px 0 rgba(255,255,255,.08);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 }
 
-/* Top glowing line */
-
-.loading-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 15%;
-    width: 70%;
-    height: 1px;
-
-    background: linear-gradient(
-        90deg,
-        transparent,
-        #00e5ff,
-        #a855f7,
-        transparent
-    );
-
-    box-shadow: 0 0 12px #00cfff;
+.loading-title {
+    font-size: 19px;
+    font-weight: 700;
+    color: #eaf5ff;
+    margin-bottom: 26px;
 }
 
-.loading-heading {
-    color: #e1edff;
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: .2px;
-    text-align: center;
-    margin-bottom: 28px;
-}
+/* PROGRESS RING */
 
-.loading-description {
-    font-size: 12px;
-    color: #829bc4;
-    margin-top: 7px;
-    text-align: center;
-}
-
-/* ===== CIRCULAR PROGRESS ===== */
-
-.progress-wrapper {
-    width: 225px;
-    height: 225px;
+.progress-area {
     position: relative;
+    width: 220px;
+    height: 220px;
+    margin: 0 auto;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
 .progress-svg {
+    position: absolute;
     width: 100%;
     height: 100%;
-    overflow: visible;
     transform: rotate(-90deg);
+    overflow: visible;
 }
 
-.progress-track {
+.track {
     fill: none;
-    stroke: rgba(255,255,255,.09);
+    stroke: rgba(255,255,255,.10);
     stroke-width: 9;
 }
 
-.progress-ring {
+.progress {
     fill: none;
-    stroke: url(#ringGradient);
+    stroke: url(#gradient);
     stroke-width: 9;
     stroke-linecap: round;
-
     stroke-dasharray: 565.49;
     stroke-dashoffset: 565.49;
-
-    filter:
-        drop-shadow(0 0 5px #00dfff)
-        drop-shadow(0 0 13px rgba(0,130,255,.5));
-}
-
-.progress-center {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    filter: drop-shadow(0 0 9px #00d9ff);
 }
 
 .percentage {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 64px;
+    font-size: 59px;
     font-weight: 900;
-    line-height: 1;
-
-    background: linear-gradient(
-        180deg,
-        #ffffff,
-        #a9dfff
-    );
-
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    filter: drop-shadow(0 0 15px rgba(0,180,255,.3));
+    letter-spacing: -3px;
+    color: #ffffff;
+    text-shadow: 0 0 20px rgba(0,200,255,.25);
 }
 
-.percent-symbol {
-    font-size: 30px;
+.percent-sign {
+    font-size: 26px;
 }
 
-.status {
-    color: #a9d9ff;
-    font-size: 13px;
-    font-weight: 500;
-    margin-top: 12px;
-    letter-spacing: .3px;
-}
-
-/* ===== BOTTOM AREA ===== */
-
-.wait-text {
-    color: #8499bc;
-    font-size: 12px;
-    letter-spacing: .6px;
-    margin-top: 29px;
-    text-align: center;
-}
-
-.powered {
-    position: absolute;
-    bottom: 24px;
-
-    font-size: 10px;
-    letter-spacing: 2.5px;
-    color: #7187ac;
+.loading-status {
+    margin-top: 18px;
+    font-size: 16px;
+    color: #9ceaff;
     font-weight: 600;
 }
 
-.powered span {
-    color: #48dfff;
+.bottom-message {
+    margin-top: 32px;
+    color: #8498bc;
+    font-size: 13px;
+    letter-spacing: .7px;
 }
 
-/* ===== TRANSITION ===== */
-
-.exit {
-    opacity: 0;
-    transform: scale(1.035);
+.powered {
+    margin-top: 25px;
+    font-size: 10px;
+    color: #60799f;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
-/* ===== RESPONSIVE ===== */
+/* SMALL SCREENS */
 
 @media (max-height: 750px) {
-
-    .main-container {
-        padding-top: 15px;
-        padding-bottom: 48px;
+    .main-content {
+        padding: 12px 22px;
     }
 
-    .logo-box {
-        width: 88px;
-        height: 88px;
-        margin-bottom: 13px;
-    }
-
-    .tagline {
-        margin-bottom: 24px;
-    }
-
-    .loading-card {
-        padding: 20px 15px;
-    }
-
-    .progress-wrapper {
-        width: 180px;
-        height: 180px;
-    }
-
-    .percentage {
-        font-size: 51px;
-    }
-
-    .loading-heading {
+    .logo-wrap {
+        width: 85px;
+        height: 85px;
         margin-bottom: 15px;
     }
 
-    .wait-text {
-        margin-top: 15px;
-    }
-}
-
-@media (max-height: 600px) {
-
-    .logo-box {
-        width: 65px;
-        height: 65px;
-        margin-bottom: 8px;
-    }
-
-    .brand-image {
-        width: 175px;
-    }
-
     .tagline {
-        margin-bottom: 12px;
+        margin-top: 10px;
         font-size: 11px;
     }
 
-    .progress-wrapper {
-        width: 135px;
-        height: 135px;
+    .loading-card {
+        margin-top: 25px;
+        padding: 20px 15px;
+    }
+
+    .progress-area {
+        width: 175px;
+        height: 175px;
     }
 
     .percentage {
-        font-size: 40px;
+        font-size: 49px;
     }
 
-    .loading-card {
-        padding: 12px;
-    }
-
-    .loading-heading {
-        margin-bottom: 8px;
-        font-size: 13px;
-    }
-
-    .wait-text {
-        margin-top: 8px;
+    .bottom-message {
+        margin-top: 20px;
     }
 }
 
@@ -505,209 +310,159 @@ body {
 
 <body>
 
-<!-- BACKGROUND -->
+<div class="splash">
 
-<div class="background">
-    <div class="glow glow-one"></div>
-    <div class="glow glow-two"></div>
-    <div class="glow glow-three"></div>
-    <div class="grid-background"></div>
-    <div class="particles" id="particles"></div>
-</div>
+    <div class="glow one"></div>
+    <div class="glow two"></div>
 
-<!-- MAIN SCREEN -->
+    <div class="stars" id="stars"></div>
 
-<main class="main-container" id="main">
+    <main class="main-content">
 
-    <!-- ORIGINAL S LOGO -->
-
-    <div class="logo-box">
-        <img src="favicon.jpg" alt="SEAOX Logo">
-    </div>
-
-    <!-- ORIGINAL BRAND IMAGE -->
-
-    <div class="brand">
-
-        <img
-            src="IMG_20261006_211924.png"
-            alt="SEAOX"
-            class="brand-image"
-        >
-
-        <span class="brand-in">.in</span>
-
-    </div>
-
-    <!-- TAGLINE -->
-
-    <div class="tagline">
-        Innovation that makes life easier.
-    </div>
-
-    <!-- LOADING CARD -->
-
-    <section class="loading-card">
-
-        <div class="loading-heading">
-            Preparing your experience
+        <!-- ORIGINAL ROUND FAVICON LOGO -->
+        <div class="logo-wrap">
+            <img src="favicon.jpg" alt="SEAOX Logo">
         </div>
 
-        <div class="progress-wrapper">
+        <!-- BRAND NAME -->
+        <div class="brand">
+            SEAOX<span class="in">.in</span>
+        </div>
 
-            <svg class="progress-svg" viewBox="0 0 200 200">
+        <div class="tagline">
+            Innovation That Makes Life Easier.
+        </div>
 
-                <defs>
-                    <linearGradient
-                        id="ringGradient"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                    >
-                        <stop offset="0%" stop-color="#00e5ff"/>
-                        <stop offset="50%" stop-color="#2585ff"/>
-                        <stop offset="100%" stop-color="#a855f7"/>
-                    </linearGradient>
-                </defs>
+        <!-- LOADING CARD -->
+        <section class="loading-card">
 
-                <circle
-                    class="progress-track"
-                    cx="100"
-                    cy="100"
-                    r="90"
-                />
+            <div class="loading-title">
+                Preparing Your Experience
+            </div>
 
-                <circle
-                    class="progress-ring"
-                    id="progressRing"
-                    cx="100"
-                    cy="100"
-                    r="90"
-                />
+            <div class="progress-area">
 
-            </svg>
+                <svg class="progress-svg" viewBox="0 0 200 200">
+                    <defs>
+                        <linearGradient id="gradient"
+                            x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00eaff"/>
+                            <stop offset="50%" stop-color="#2478ff"/>
+                            <stop offset="100%" stop-color="#bd22ff"/>
+                        </linearGradient>
+                    </defs>
 
-            <div class="progress-center">
+                    <circle class="track"
+                        cx="100" cy="100" r="90"/>
+
+                    <circle class="progress"
+                        id="progress"
+                        cx="100" cy="100" r="90"/>
+                </svg>
 
                 <div class="percentage">
-                    <span id="percent">1</span><span class="percent-symbol">%</span>
-                </div>
-
-                <div class="status" id="status">
-                    Loading...
+                    <span id="number">0</span><span class="percent-sign">%</span>
                 </div>
 
             </div>
 
+            <div class="loading-status" id="status">
+                Initializing...
+            </div>
+
+            <div class="bottom-message">
+                Please wait while we get things ready.
+            </div>
+
+        </section>
+
+        <div class="powered">
+            Powered by SEAOX
         </div>
 
-        <div class="wait-text" id="waitText">
-            Please wait while we get things ready.
-        </div>
-
-    </section>
-
-    <!-- FOOTER -->
-
-    <div class="powered">
-        POWERED BY <span>SEAOX</span>
-    </div>
-
-</main>
+    </main>
+</div>
 
 <script>
 
-/* ===== PARTICLES ===== */
+/* STAR BACKGROUND */
 
-const particleBox = document.getElementById("particles");
+const stars = document.getElementById('stars');
 
-for(let i = 0; i < 40; i++) {
+for (let i = 0; i < 45; i++) {
+    const star = document.createElement('span');
+    star.className = 'star';
 
-    const particle = document.createElement("span");
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    star.style.opacity = Math.random();
 
-    particle.className = "particle";
-
-    particle.style.left = Math.random() * 100 + "%";
-    particle.style.top = Math.random() * 100 + "%";
-
-    particle.style.animationDelay =
-        Math.random() * 4 + "s";
-
-    particle.style.animationDuration =
-        (3 + Math.random() * 3) + "s";
-
-    particleBox.appendChild(particle);
+    stars.appendChild(star);
 }
 
-/* ===== 3 SECOND LOADING ===== */
+/* LOADING SYSTEM */
 
-const duration = 3000;
+const number = document.getElementById('number');
+const progress = document.getElementById('progress');
+const status = document.getElementById('status');
+
 const circumference = 2 * Math.PI * 90;
 
-const ring = document.getElementById("progressRing");
-const percent = document.getElementById("percent");
-const status = document.getElementById("status");
-const waitText = document.getElementById("waitText");
-const main = document.getElementById("main");
+progress.style.strokeDasharray = circumference;
+progress.style.strokeDashoffset = circumference;
 
-let startTime = null;
+const messages = [
+    { limit: 20, text: 'Initializing...' },
+    { limit: 45, text: 'Loading Smart Tools...' },
+    { limit: 70, text: 'Preparing Digital Experience...' },
+    { limit: 90, text: 'Almost Ready...' },
+    { limit: 100, text: 'Welcome to SEAOX!' }
+];
+
+const startTime = performance.now();
+const duration = 3000;
+
 let redirected = false;
 
-function updateLoading(timestamp) {
+function updateLoading(currentTime) {
 
-    if(startTime === null) {
-        startTime = timestamp;
+    if (redirected) return;
+
+    const elapsed = currentTime - startTime;
+    const percent = Math.min(100, Math.floor((elapsed / duration) * 100));
+
+    number.textContent = percent;
+
+    progress.style.strokeDashoffset =
+        circumference - (percent / 100) * circumference;
+
+    const currentMessage = messages.find(item => percent <= item.limit);
+    if (currentMessage) {
+        status.textContent = currentMessage.text;
     }
 
-    const elapsed = timestamp - startTime;
+    if (percent >= 100) {
+        redirected = true;
 
-    const progress = Math.min(elapsed / duration, 1);
-
-    const value = Math.min(
-        100,
-        Math.max(1, Math.floor(progress * 100))
-    );
-
-    percent.textContent = value;
-
-    ring.style.strokeDashoffset =
-        circumference * (1 - progress);
-
-    if(progress < 1) {
-
-        requestAnimationFrame(updateLoading);
-
-    } else {
-
-        percent.textContent = "100";
-        status.textContent = "Ready!";
-        waitText.textContent = "Welcome to SEAOX";
-
-        if(!redirected) {
-
-            redirected = true;
-
-            setTimeout(() => {
-
-                main.classList.add("exit");
-
-                setTimeout(() => {
-
-                    window.location.replace("menu.html");
-
-                }, 500);
-
-            }, 250);
-
-        }
+        // Open menu immediately after loading
+        window.location.replace('menu.html');
+        return;
     }
+
+    requestAnimationFrame(updateLoading);
 }
 
+/* Preload next page */
+const nextPage = document.createElement('link');
+nextPage.rel = 'prefetch';
+nextPage.href = 'menu.html';
+document.head.appendChild(nextPage);
+
+/* Start loading */
 requestAnimationFrame(updateLoading);
 
 </script>
 
 </body>
 </html>
-
