@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SEAOX - Tools</title>
     <!-- Favicon Update -->
-    <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/rocksatyamkashyap2010-alt/seaox.-in/main/favicon.jpg">
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -38,7 +38,7 @@
             padding: 0 5px;
         }
         
-        /* 🟢 FIXED LOGO: Direct link use kiya hai taaki load ho */
+        /* 🟢 FIXED LOGO: Dono Images (Icon + Real Text) */
         .header-brand { 
             display: flex; 
             align-items: center; 
@@ -50,18 +50,11 @@
             height: 38px; 
             border-radius: 50%; 
             object-fit: cover; 
-            /* White background hatane ke liye */
-            background: transparent; 
-            box-shadow: 0 2px 8px rgba(24, 119, 242, 0.3); 
         }
-        .header-logo-text { 
-            font-size: 26px; 
-            font-weight: 900; 
-            background: linear-gradient(135deg, #0B3B5C, #1877F2); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            letter-spacing: -0.5px; 
-            text-transform: uppercase;
+        .header-logo-text-img {
+            height: 24px; /* Text image ki height set ki */
+            width: auto;
+            object-fit: contain;
             margin-top: 2px;
         }
 
@@ -358,37 +351,32 @@
         }
 
         .about-header {
-            background: transparent; /* White background remove kar diya */
+            background: #ffffff;
             padding: 25px 20px 15px;
             text-align: center;
             position: relative;
+            border-bottom: 4px solid #FFD700;
             flex-shrink: 0;
         }
         
-        /* 🟢 FIXED MODAL LOGO */
+        /* 🟢 MODAL LOGO: Icon + Real Text Image */
         .about-header-brand {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 5px;
+            gap: 10px;
+            margin-bottom: 8px;
         }
-        .about-header-brand img {
+        .about-logo-img {
             width: 50px; 
             height: 50px;
             border-radius: 50%;
             object-fit: cover;
-            background: transparent;
-            box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3);
         }
-        .about-header-brand h1 { 
-            font-size: 32px; 
-            font-weight: 900; 
-            background: linear-gradient(135deg, #0B3B5C, #1877F2); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            letter-spacing: 1px; 
-            margin: 0; 
+        .about-logo-text-img {
+            height: 34px; /* Bada text popup ke liye */
+            width: auto;
+            object-fit: contain;
         }
         
         .about-header p { 
@@ -414,7 +402,6 @@
             color: #333;
             font-size: 14px;
             line-height: 1.6;
-            border-top: 4px solid #FFD700; /* Border top pe shift kiya */
         }
         
         .about-scroll-area::-webkit-scrollbar { width: 6px; }
@@ -446,10 +433,10 @@
     <div class="app-container">
         <!-- Header -->
         <div class="header">
-            <!-- 🟢 FIXED LOGO: Direct link (No broken image) -->
+            <!-- 🟢 ORIGINAL LOGO: Round Icon + Real Text Image -->
             <div class="header-brand">
-                <img src="https://raw.githubusercontent.com/rocksatyamkashyap2010-alt/seaox.-in/main/favicon.jpg" alt="SEAOX Logo" class="header-logo-img">
-                <span class="header-logo-text">SEAOX</span>
+                <img src="favicon.jpg" alt="SEAOX Icon" class="header-logo-img">
+                <img src="1000060185-removebg-preview.png" alt="SEAOX" class="header-logo-text-img">
             </div>
             
             <div class="header-icons">
@@ -563,10 +550,10 @@
             
             <div class="about-header">
                 <button class="about-exit-btn" onclick="closeAboutModal()">✖</button>
-                <!-- 🟢 FIXED MODAL LOGO -->
+                <!-- 🟢 ORIGINAL LOGO: Icon + Real Text Image -->
                 <div class="about-header-brand">
-                    <img src="https://raw.githubusercontent.com/rocksatyamkashyap2010-alt/seaox.-in/main/favicon.jpg" alt="SEAOX Logo">
-                    <h1>SEAOX</h1>
+                    <img src="favicon.jpg" alt="SEAOX Icon" class="about-logo-img">
+                    <img src="1000060185-removebg-preview.png" alt="SEAOX" class="about-logo-text-img">
                 </div>
                 <p>Innovation That Makes Life Easier.</p>
             </div>
@@ -739,4 +726,4 @@
         }
     </script>
 </body>
-</html>
+                                                </html>
