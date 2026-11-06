@@ -105,14 +105,13 @@
             z-index: 1;
         }
 
-        /* Image slides */
         .slide.image-slide {
             padding: 0;
             background: #ffffff; 
             display: flex; 
             justify-content: center;
             align-items: center;
-            height: 220px; /* Height set for images */
+            height: 220px;
         }
         .slide.image-slide::after { display: none; }
         .slide.image-slide img { 
@@ -241,13 +240,134 @@
         .card-title { font-size: 14px; font-weight: 700; color: #111; line-height: 1.2; }
         .card-arrow { color: #1877F2; font-size: 16px; font-weight: bold; }
 
-        /* Modal */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: #fff; width: 85%; max-width: 350px; border-radius: 15px; padding: 25px 20px; text-align: center; position: relative; }
-        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: bold; color: #888; cursor: pointer; }
-        .modal-content h2 { margin-top: 0; color: #333; font-size: 22px; margin-bottom: 10px;}
-        .modal-content p { color: #666; font-size: 14px; margin-bottom: 20px; font-weight: 500; line-height: 1.4; }
-        .send-msg-btn { display: block; background-color: #1877F2; color: white; text-decoration: none; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3); }
+        /* ===== Modals Common ===== */
+        .modal-overlay { 
+            display: none; position: fixed; top: 0; left: 0; 
+            width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); 
+            z-index: 1000; justify-content: center; align-items: center; 
+            padding: 15px; backdrop-filter: blur(3px);
+        }
+        
+        .modal-content { 
+            background: #fff; width: 100%; max-width: 380px; 
+            border-radius: 18px; padding: 25px 20px 20px; 
+            text-align: center; position: relative; 
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* ===== Contact Form Modal ===== */
+        .close-btn { 
+            position: absolute; top: 8px; right: 14px; 
+            font-size: 26px; font-weight: bold; color: #999; 
+            cursor: pointer; line-height: 1; border: none; background: none;
+        }
+        .modal-content h2 { color: #111; font-size: 22px; margin-bottom: 6px; }
+        .modal-content p { color: #666; font-size: 14px; margin-bottom: 16px; font-weight: 500; line-height: 1.5; }
+
+        .support-link {
+            color: #1877F2;
+            font-weight: 800;
+            text-decoration: underline;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        /* Form Styles */
+        #contactForm { display: flex; flex-direction: column; gap: 10px; text-align: left; margin-top: 15px;}
+        #contactForm label { font-size: 12px; font-weight: 700; color: #444; margin-bottom: -4px; margin-left: 2px; }
+        #contactForm input, #contactForm select, #contactForm textarea {
+            width: 100%; padding: 12px 14px; border: 1.5px solid #e3e6ea; border-radius: 10px;
+            font-family: 'Inter', sans-serif; font-size: 14px; outline: none; background: #f9fafb;
+            color: #111; transition: 0.2s;
+        }
+        #contactForm input:focus, #contactForm select:focus, #contactForm textarea:focus {
+            border-color: #1877F2; background: #fff; box-shadow: 0 0 0 3px rgba(24,119,242,0.12);
+        }
+        #contactForm textarea { resize: none; min-height: 72px; line-height: 1.4; }
+        #contactForm select { 
+            cursor: pointer; appearance: none; 
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23666'><path d='M7 10l5 5 5-5z'/></svg>");
+            background-repeat: no-repeat; background-position: right 14px center; padding-right: 34px;
+        }
+        .send-msg-btn { 
+            display: block; width: 100%; background: linear-gradient(135deg, #25D366, #128C7E); 
+            color: white; text-decoration: none; padding: 14px; border-radius: 12px; 
+            font-size: 15px; font-weight: 700; border: none; cursor: pointer; margin-top: 6px;
+            font-family: 'Inter', sans-serif; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35); transition: 0.2s;
+        }
+        .send-msg-btn:active { transform: scale(0.97); box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3); }
+
+        /* ===== Premium About Modal (SEAOX Intro) ===== */
+        .about-modal-content {
+            background: #ffffff;
+            width: 100%; max-width: 420px; 
+            border-radius: 20px; 
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            display: flex; flex-direction: column;
+            max-height: 90vh; 
+            overflow: hidden;
+            animation: modalIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .about-header {
+            background: #0B3B5C;
+            color: #FFD700;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            border-bottom: 4px solid #FFD700;
+            flex-shrink: 0;
+        }
+        .about-header h1 { font-size: 24px; font-weight: 800; letter-spacing: 1px; margin: 0; }
+        .about-header p { color: #fff; font-size: 13px; font-weight: 500; margin-top: 5px; margin-bottom: 0; opacity: 0.9; }
+        
+        .about-exit-btn {
+            position: absolute; top: 15px; right: 15px;
+            background: rgba(255,255,255,0.15); border: none; color: white;
+            width: 30px; height: 30px; border-radius: 50%; font-size: 16px;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; transition: 0.2s;
+        }
+        .about-exit-btn:hover { background: #ff4757; transform: scale(1.1); }
+
+        .about-scroll-area {
+            padding: 20px 25px;
+            overflow-y: auto;
+            text-align: left;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* Scrollbar Styling */
+        .about-scroll-area::-webkit-scrollbar { width: 6px; }
+        .about-scroll-area::-webkit-scrollbar-track { background: #f1f1f1; }
+        .about-scroll-area::-webkit-scrollbar-thumb { background: #FFD700; border-radius: 10px; }
+
+        .about-scroll-area h2 { font-size: 18px; color: #0B3B5C; margin: 20px 0 10px; border-bottom: 2px solid #FFF8B0; padding-bottom: 5px; display: inline-block; }
+        .about-scroll-area h3 { font-size: 15px; color: #0B3B5C; margin: 15px 0 5px; }
+        .about-scroll-area p { margin-bottom: 12px; }
+        .about-scroll-area ul { margin-left: 20px; margin-bottom: 15px; }
+        .about-scroll-area li { margin-bottom: 6px; font-weight: 500; }
+        .about-scroll-area strong { color: #0B3B5C; }
+        
+        .highlight-box {
+            background: #FFF8B0;
+            border-left: 4px solid #FFD700;
+            padding: 10px 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+            font-weight: 600;
+            color: #0B3B5C;
+            font-style: italic;
+        }
+
     </style>
 </head>
 <body>
@@ -268,7 +388,6 @@
         <div class="slider-container">
             <div class="slider-track" id="sliderTrack">
                 
-                <!-- 1. Tractor Book Main App (Yellow Banner) -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide">
                     <div class="slide-content">
                         <div class="slide-icon" style="padding: 0; background: white; overflow: hidden;">
@@ -283,44 +402,33 @@
                     <div class="slide-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 </a>
 
-                <!-- New Images Slides -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
                     <img src="Budhau.png" alt="Tractor Book Feature">
                 </a>
-                
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
                     <img src="Diesel.png" alt="Tractor Book Feature">
                 </a>
-
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
                     <img src="Impliments.png" alt="Tractor Book Feature">
                 </a>
-
-                <!-- Space encoded as %20 for safe loading -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
                     <img src="Live%20calculator.png" alt="Tractor Book Feature">
                 </a>
-
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
                     <img src="Pushpa.png" alt="Tractor Book Feature">
                 </a>
-
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
                     <img src="Recipt.png" alt="Tractor Book Feature">
                 </a>
-
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
                     <img src="Reports.png" alt="Tractor Book Feature">
                 </a>
-
-                <!-- Space and brackets encoded for safe loading -->
                 <a href="https://github.com/rocksatyamkashyap2010-alt/seaox.-in/releases/download/v1.0/TractorBook-1.0.0.1.apk" download class="slide image-slide">
                     <img src="Website%20(1).png" alt="Tractor Book Feature">
                 </a>
 
             </div>
             
-            <!-- Slider Dots -->
             <div class="slider-dots" id="sliderDots"></div>
         </div>
 
@@ -337,17 +445,107 @@
         </div>
     </div>
 
-    <!-- Modal (Contact Us) -->
+    <!-- ===== Contact Form Modal ===== -->
     <div id="contactModal" class="modal-overlay">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">×</span>
+            <button class="close-btn" onclick="closeModal()">×</button>
             <h2>Contact Us</h2>
-            <p>Want to build a website, app, or software? Let's talk!</p>
-            <a href="mailto:seaoxseaox@gmail.com?subject=New Message from SEAOX Website&body=Hello SEAOX Team," class="send-msg-btn">📩 Send Message</a>
+            <p>Want to build a website, app, or software? Let's talk! <br> <span class="support-link" onclick="openAboutModal()">Click Support</span></p>
+            
+            <form id="contactForm" onsubmit="sendToWhatsApp(event)">
+                <label for="cName">Name</label>
+                <input type="text" id="cName" placeholder="Enter your name" required>
+
+                <label for="cType">Development Type</label>
+                <select id="cType" required>
+                    <option value="" disabled selected>Select what you need</option>
+                    <option value="Website">🌐 Website</option>
+                    <option value="Android App">📱 Android App</option>
+                    <option value="Software">💻 Software</option>
+                    <option value="Graphic Design">🎨 Graphic Design</option>
+                    <option value="Video Editing">🎬 Video Editing</option>
+                    <option value="Other">✨ Other</option>
+                </select>
+
+                <label for="cIdea">Explain Your Idea (easy words)</label>
+                <textarea id="cIdea" placeholder="Example: I want a website for my shop..." required></textarea>
+
+                <label for="cNumber">Contact 📞 Number</label>
+                <input type="tel" id="cNumber" placeholder="e.g. 9876543210" pattern="[0-9+\s-]{7,15}" required>
+
+                <button type="submit" class="send-msg-btn">📩 Send on WhatsApp</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== SEAOX Company Introduction Modal ===== -->
+    <div id="aboutModal" class="modal-overlay">
+        <div class="about-modal-content">
+            <div class="about-header">
+                <button class="about-exit-btn" onclick="closeAboutModal()">✖</button>
+                <h1>SEAOX</h1>
+                <p>Innovation That Makes Life Easier.</p>
+            </div>
+            
+            <div class="about-scroll-area">
+                <h2>🌐 About SEAOX</h2>
+                <p>SEAOX is a technology and digital solutions company that creates smart, simple, and useful digital products to make everyday life and business activities easier.</p>
+                <p>We turn ideas into practical digital solutions that help people save time, reduce effort, and work smarter.</p>
+
+                <h2>🚀 What We Do</h2>
+                
+                <h3>📱 Mobile App Development</h3>
+                <p>We create useful mobile applications for businesses, organizations, and everyday users.</p>
+                
+                <h3>🌍 Website Development</h3>
+                <p>We build modern, professional, and user-friendly websites to help businesses grow online.</p>
+                
+                <h3>🤖 AI Solutions</h3>
+                <p>We develop smart AI-powered tools and chatbots that make work faster and customer support easier.</p>
+                
+                <h3>🛠️ Smart Digital Tools</h3>
+                <p>We provide useful tools such as:</p>
+                <ul>
+                    <li>PDF Maker</li>
+                    <li>Photo Compressor</li>
+                    <li>Screenshot Editor</li>
+                    <li>Invoice Generator</li>
+                    <li>Video Editor</li>
+                    <li>PDF Protector</li>
+                    <li>Smart Calculator</li>
+                </ul>
+
+                <h3>📊 Business Management Solutions</h3>
+                <p>We create digital solutions for billing, customer records, business calculations, expense tracking, and reporting.</p>
+                
+                <h3>💡 Digital Innovation</h3>
+                <p>We continuously explore new ideas and technologies to solve real-world problems.</p>
+
+                <h2>⭐ Why SEAOX?</h2>
+                <ul>
+                    <li>⚡ Simple and smart solutions.</li>
+                    <li>🔒 Focus on reliable digital experiences.</li>
+                    <li>🎯 Designed around customer needs.</li>
+                    <li>📲 Easy-to-use technology.</li>
+                    <li>🚀 Innovation for a smarter future.</li>
+                </ul>
+
+                <h2>🔮 Our Vision</h2>
+                <p>Our vision is to make modern technology accessible to everyone — from individuals and small businesses to growing companies.</p>
+                <p>We believe technology should not make life complicated. It should make everything easier.</p>
+
+                <h2>❤️ Our Promise</h2>
+                <p>Every idea has the potential to become something useful. At SEAOX, we work to turn those ideas into meaningful digital solutions.</p>
+
+                <div class="highlight-box">
+                    SEAOX – Innovation That Makes Life Easier.
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
+        /* ===== Slider ===== */
         const track = document.getElementById('sliderTrack');
         const dotsContainer = document.getElementById('sliderDots');
         const slides = document.querySelectorAll('.slide');
@@ -373,10 +571,7 @@
             updateSlider();
         }
 
-        function startAutoSlide() {
-            slideInterval = setInterval(nextSlide, 3000); 
-        }
-
+        function startAutoSlide() { slideInterval = setInterval(nextSlide, 3000); }
         function stopAutoSlide() { clearInterval(slideInterval); }
 
         startAutoSlide();
@@ -385,12 +580,54 @@
         track.addEventListener('touchstart', stopAutoSlide);
         track.addEventListener('touchend', startAutoSlide);
 
-        function openModal() { document.getElementById('contactModal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('contactModal').style.display = 'none'; }
+        /* ===== Modals Logic ===== */
+        function openModal() { 
+            document.getElementById('contactModal').style.display = 'flex'; 
+        }
+        function closeModal() { 
+            document.getElementById('contactModal').style.display = 'none'; 
+        }
+        
+        function openAboutModal() {
+            closeModal(); // Close contact modal
+            document.getElementById('aboutModal').style.display = 'flex'; 
+        }
+        function closeAboutModal() {
+            document.getElementById('aboutModal').style.display = 'none'; 
+        }
+
         window.onclick = function(event) {
-            var modal = document.getElementById('contactModal');
-            if (event.target == modal) { modal.style.display = 'none'; }
+            var contactModal = document.getElementById('contactModal');
+            var aboutModal = document.getElementById('aboutModal');
+            if (event.target == contactModal) { contactModal.style.display = 'none'; }
+            if (event.target == aboutModal) { aboutModal.style.display = 'none'; }
+        }
+
+        /* ===== Contact Form → WhatsApp ===== */
+        function sendToWhatsApp(e) {
+            e.preventDefault();
+
+            const name   = document.getElementById('cName').value.trim();
+            const type   = document.getElementById('cType').value;
+            const idea   = document.getElementById('cIdea').value.trim();
+            const number = document.getElementById('cNumber').value.trim();
+
+            const message =
+`*🚀 New Enquiry — SEAOX Website*
+
+👤 *Name:* ${name}
+💼 *Development Type:* ${type}
+💡 *Idea:* ${idea}
+📞 *Contact:* ${number}`;
+
+            const phone = "919473991699";
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+            window.open(url, '_blank');
+
+            document.getElementById('contactForm').reset();
+            setTimeout(closeModal, 800);
         }
     </script>
 </body>
-</html>
+                                                                                                                                                  </html>
