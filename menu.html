@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SEAOX - Tools</title>
-    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <!-- Favicon update -->
+    <link rel="icon" type="image/png" href="1000060185-removebg-preview.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -37,29 +38,17 @@
             padding: 0 5px;
         }
         
-        /* Updated Premium Logo CSS */
+        /* 🟢 REAL SEAOX LOGO (Header) */
         .header-brand { 
             display: flex; 
             align-items: center; 
-            gap: 8px; 
             text-decoration: none;
         }
         .header-logo-img { 
-            width: 38px; 
-            height: 38px; 
-            border-radius: 50%; 
-            object-fit: cover; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-        }
-        .header-logo-text { 
-            font-size: 26px; 
-            font-weight: 900; 
-            background: linear-gradient(135deg, #0B3B5C, #1877F2); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            letter-spacing: -0.5px; 
-            text-transform: uppercase;
-            margin-top: 2px;
+            width: 130px; /* Logo ko bada kiya hai */
+            height: auto; 
+            object-fit: contain;
+            /* Box shadow hata diya kyunki white bg nahi hai */
         }
 
         .header-icons { display: flex; gap: 8px; }
@@ -354,40 +343,28 @@
             animation: modalIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        /* Updated Header for About Modal (White BG to match theme) */
         .about-header {
             background: #ffffff;
-            padding: 20px;
+            padding: 25px 20px 15px;
             text-align: center;
             position: relative;
             border-bottom: 4px solid #FFD700;
             flex-shrink: 0;
         }
         
-        /* New Brand Container inside Modal */
+        /* 🟢 REAL SEAOX LOGO (Modal Header) */
         .about-header-brand {
             display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 5px;
+            align-items: center;
+            margin-bottom: 8px;
         }
         .about-header-brand img {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 180px; /* Popup me bada aur clear */
+            height: auto;
+            object-fit: contain;
         }
-        .about-header-brand h1 { 
-            font-size: 30px; 
-            font-weight: 900; 
-            background: linear-gradient(135deg, #0B3B5C, #1877F2); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            letter-spacing: 1px; 
-            margin: 0; 
-        }
+        
         .about-header p { 
             color: #0B3B5C; 
             font-size: 14px; 
@@ -442,10 +419,9 @@
     <div class="app-container">
         <!-- Header -->
         <div class="header">
-            <!-- Main Header Logo -->
+            <!-- 🟢 ORIGINAL SEAOX LOGO -->
             <div class="header-brand">
-                <img src="favicon.jpg" alt="SEAOX Logo" class="header-logo-img">
-                <span class="header-logo-text">SEAOX</span>
+                <img src="1000060185-removebg-preview.png" alt="SEAOX Logo" class="header-logo-img">
             </div>
             
             <div class="header-icons">
@@ -556,12 +532,12 @@
     <!-- ===== SEAOX Company Introduction Modal ===== -->
     <div id="aboutModal" class="modal-overlay">
         <div class="about-modal-content">
-            <!-- UPDATED HEADER HERE (Matching the real SEAOX logo & white bg) -->
+            
             <div class="about-header">
                 <button class="about-exit-btn" onclick="closeAboutModal()">✖</button>
+                <!-- 🟢 ORIGINAL SEAOX LOGO (Modal) -->
                 <div class="about-header-brand">
-                    <img src="favicon.jpg" alt="SEAOX Logo">
-                    <h1>SEAOX</h1>
+                    <img src="1000060185-removebg-preview.png" alt="SEAOX Logo">
                 </div>
                 <p>Innovation That Makes Life Easier.</p>
             </div>
